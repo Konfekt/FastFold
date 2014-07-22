@@ -14,9 +14,9 @@ augroup FastFold
   " for :loadview
   autocmd SessionLoadPost ?* call s:Enter()
   " nonmodifiable buffers do not need fold updates
-  autocmd BufWinEnter ?* if s:Check() | call s:Enter() | endif
+  autocmd BufWinEnter,TabEnter ?* if s:Check() | call s:Enter() | endif
   " for :makeview autocmd in BufWinLeave
-  autocmd BufWinLeave ?* if s:Check() | call s:Leave() | endif
+  autocmd BufWinLeave,TabLeave ?* if s:Check() | call s:Leave() | endif
   " Default to last foldmethod of current buffer.
   autocmd WinLeave ?* if  exists('w:last')                         | let b:last=w:last | endif
   autocmd WinEnter ?* if !exists('w:last') && exists('b:last') | let w:last=b:last | endif

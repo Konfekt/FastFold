@@ -27,9 +27,10 @@ edited buffer, unless you either
 - explicitly tell this plugin to refrain from it via `g:fastfold_skipfiles`, or
 - the local and global `foldmethod` is set to `manual`.
 
-IMPORTANT:
+There is a fork of the `restore_view.vim` plugin at
 
-Preferably load this plugin before other BufWinEnter autocommand that use :mkview to save
-folds. This way, the fold method stored in the view file is set to the last automatic one,
-and not to `manual`.
+http://www.github.com/Konfekt/restore_view
 
+that stores and restores the last folds by the `:mkview` and `:loadview` command and
+interplays well with this plugin if `restore_view` is loaded AFTER(!) `fastfold`.
+(To ensure the correct autocmd execution order.)
