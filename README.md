@@ -18,7 +18,6 @@ set foldmethod=syntax
 let g:vimsyn_folding='af'
 let g:tex_fold_enabled=1
 let g:xml_syntax_folding = 1
-
 ```
 to your .vimrc, the folds in your TeX, Vim or XML file are updated by
 the `syntax` foldmethod when saving.
@@ -27,3 +26,10 @@ As a drawback, this plugin will overwrite your manual folds when saving the curr
 edited buffer, unless you either
 - explicitly tell this plugin to refrain from it via `g:fastfold_skipfiles`, or
 - the local and global `foldmethod` is set to `manual`.
+
+IMPORTANT:
+
+Preferably load this plugin before other BufWinEnter autocommand that use :mkview to save
+folds. This way, the fold method stored in the view file is set to the last automatic one,
+and not to `manual`.
+

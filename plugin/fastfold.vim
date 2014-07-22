@@ -12,16 +12,17 @@ endif
 augroup FastFold
   autocmd!
   " for :loadview
-  autocmd SessionLoadPost ?* call s:FastFoldEnter()
+  autocmd SessionLoadPost ?* call s:Enter()
   " nonmodifiable buffers do not need fold updates
-  autocmd BufWinEnter ?* if s:FastFoldCheck() | call s:FastFoldEnter() | endif
-  autocmd BufWinLeave ?* if s:FastFoldCheck() | call s:FastFoldLeave() | endif
-  " update folds on saving...
-  autocmd BufWritePost    ?* call s:FastFoldEnterAll()
-  autocmd BufWritePre     ?* call s:FastFoldLeaveAll()
-  " ... and default to last foldmethod of current buffer.
+  autocmd BufWinEnter ?* if s:Check() | call s:Enter() | endif
+  " for :makeview autocmd in BufWinLeave
+  autocmd BufWinLeave ?* if s:Check() | call s:Leave() | endif
+  " Default to last foldmethod of current buffer.
   autocmd WinLeave ?* if  exists('w:last')                         | let b:last=w:last | endif
   autocmd WinEnter ?* if !exists('w:last') && exists('b:last') | let w:last=b:last | endif
+  " update folds on saving
+  autocmd BufWritePost    ?* call s:EnterAll()
+  autocmd BufWritePre     ?* call s:LeaveAll()
 augroup end
 
 function! s:locfdm()
@@ -48,26 +49,26 @@ function! s:lastfdm()
   return &g:foldmethod
 endfunction
 
-function! s:FastFoldEnter()
+function! s:Enter()
   let w:lastfdm = s:locfdm()
   setlocal foldmethod=manual
 endfunction
 
-function! s:FastFoldLeave()
+function! s:Leave()
   let &l:foldmethod=s:lastfdm()
 endfunction
 
-function! s:FastFoldEnterAll()
+function! s:EnterAll()
   let s:curbuf = bufnr('%')
-  windo if bufnr('%') == s:curbuf | call s:FastFoldEnter() | endif
+  windo if bufnr('%') == s:curbuf | call s:Enter() | endif
 endfunction
 
-function! s:FastFoldLeaveAll()
+function! s:LeaveAll()
   let s:curbuf = bufnr('%')
-  windo if bufnr('%') == s:curbuf | call s:FastFoldLeave() | endif
+  windo if bufnr('%') == s:curbuf | call s:Leave() | endif
 endfunction
 
-function! s:FastFoldCheck()
+function! s:Check()
     if has('quickfix') && &buftype =~ 'nofile' | return 0 | endif
     if expand('%') =~ '\[.*\]' | return 0 | endif
     if empty(glob(expand('%:p'))) | return 0 | endif
