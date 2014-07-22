@@ -14,15 +14,48 @@ augroup FastFold
   " for :loadview
   autocmd SessionLoadPost ?* call s:FastFoldEnter()
   " nonmodifiable buffers do not need fold updates
-  autocmd BufNew,BufReadPost ?* if s:FastFoldCheck() | call s:FastFoldEnter() | endif
+  autocmd BufWinEnter ?* if s:FastFoldCheck() | call s:FastFoldEnter() | endif
   autocmd BufWinLeave ?* if s:FastFoldCheck() | call s:FastFoldLeave() | endif
   " update folds on saving...
   autocmd BufWritePost    ?* call s:FastFoldEnterAll()
   autocmd BufWritePre     ?* call s:FastFoldLeaveAll()
   " ... and default to last foldmethod of current buffer.
-  autocmd WinLeave ?* if  exists('w:last_fdm')                         | let b:last_fdm=w:last_fdm | endif
-  autocmd WinEnter ?* if !exists('w:last_fdm') && exists('b:last_fdm') | let w:last_fdm=b:last_fdm | endif
+  autocmd WinLeave ?* if  exists('w:last')                         | let b:last=w:last | endif
+  autocmd WinEnter ?* if !exists('w:last') && exists('b:last') | let w:last=b:last | endif
 augroup end
+
+function! s:locfdm()
+  if !(&l:foldmethod ==# 'manual')
+    return &l:foldmethod
+  endif
+
+  if exists('w:lastfdm') && !(w:lastfdm ==#'manual')
+    return w:lastfdm
+  endif
+
+  return &g:foldmethod
+endfunction
+
+function! s:lastfdm()
+  if exists('w:lastfdm') && !(w:lastfdm ==#'manual')
+    return w:lastfdm
+  endif
+
+  if !(&l:foldmethod ==# 'manual')
+    return &l:foldmethod
+  endif
+
+  return &g:foldmethod
+endfunction
+
+function! s:FastFoldEnter()
+  let w:lastfdm = s:locfdm()
+  setlocal foldmethod=manual
+endfunction
+
+function! s:FastFoldLeave()
+  let &l:foldmethod=s:lastfdm()
+endfunction
 
 function! s:FastFoldEnterAll()
   let s:curbuf = bufnr('%')
@@ -32,24 +65,6 @@ endfunction
 function! s:FastFoldLeaveAll()
   let s:curbuf = bufnr('%')
   windo if bufnr('%') == s:curbuf | call s:FastFoldLeave() | endif
-endfunction
-
-function! s:FastFoldEnter()
-  if exists('w:last_fdm') && (&foldmethod ==# 'manual')
-    return
-  endif
-
-  let w:last_fdm=&foldmethod
-  setlocal foldmethod=manual
-endfunction
-
-function! s:FastFoldLeave()
-  if !(exists('w:last_fdm') && (&foldmethod ==# 'manual'))
-    return
-  endif
-
-  let &foldmethod=w:last_fdm
-  unlet w:last_fdm
 endfunction
 
 function! s:FastFoldCheck()
