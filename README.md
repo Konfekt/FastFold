@@ -11,6 +11,9 @@ To overcome this slowdown and premature updating of folds, with this plugin, the
 in your currently edited buffer are updated by your preferred foldmethod when saving the
 buffer, and kept as is otherwise (by keeping the foldmethod set to `manual`).
 
+You can also update the folds manually by a normal mode mapping that defaults to `zuz`
+(and can be disabled by `let g:fastfold_no_mappings = 1` or mapped by `<Plug>FastFoldUpdate`)
+
 For example, by adding
 ```
 set foldmethod=syntax
@@ -32,5 +35,5 @@ There is a fork of the `restore_view.vim` plugin at
 http://www.github.com/Konfekt/restore_view
 
 that stores and restores the last folds by the `:mkview` and `:loadview` command and
-interplays well with this plugin if `restore_view` is loaded AFTER(!) `fastfold`.
+interplays well with this plugin if `restore_view` is loaded *AFTER* `fastfold`.
 (To ensure the correct autocmd execution order.)

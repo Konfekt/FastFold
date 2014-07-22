@@ -4,26 +4,9 @@ endif
 
 let g:loaded_fastfold = 1
 
-if !exists("g:fastfold_skipfiles")
-    let g:fastfold_skipfiles = []
+if !exists('g:fastfold_no_mappings')
+ let g:fastfold_no_mappings = 0
 endif
-
-" Update folds when entering a Buffer and Saving it.
-augroup FastFold
-  autocmd!
-  " for :loadview
-  autocmd SessionLoadPost ?* call s:Enter()
-  " nonmodifiable buffers do not need fold updates
-  autocmd BufWinEnter,TabEnter ?* if s:Check() | call s:Enter() | endif
-  " for :makeview autocmd in BufWinLeave
-  autocmd BufWinLeave,TabLeave ?* if s:Check() | call s:Leave() | endif
-  " Default to last foldmethod of current buffer.
-  autocmd WinLeave ?* if  exists('w:last')                         | let b:last=w:last | endif
-  autocmd WinEnter ?* if !exists('w:last') && exists('b:last') | let w:last=b:last | endif
-  " update folds on saving
-  autocmd BufWritePost    ?* call s:EnterAll()
-  autocmd BufWritePre     ?* call s:LeaveAll()
-augroup end
 
 function! s:locfdm()
   if !(&l:foldmethod ==# 'manual')
@@ -85,3 +68,31 @@ function! s:Check()
 
     return 1
 endfunction
+
+" Update folds when entering a Buffer and Saving it.
+augroup FastFold
+  autocmd!
+  " for :loadview
+  autocmd SessionLoadPost ?* call s:Enter()
+  " nonmodifiable buffers do not need fold updates
+  autocmd BufWinEnter,TabEnter ?* if s:Check() | call s:Enter() | endif
+  " for :makeview autocmd in BufWinLeave
+  autocmd BufWinLeave,TabLeave ?* if s:Check() | call s:Leave() | endif
+  " Default to last foldmethod of current buffer.
+  autocmd WinLeave ?* if  exists('w:last')                         | let b:last=w:last | endif
+  autocmd WinEnter ?* if !exists('w:last') && exists('b:last') | let w:last=b:last | endif
+  " update folds on saving
+  autocmd BufWritePost    ?* call s:EnterAll()
+  autocmd BufWritePre     ?* call s:LeaveAll()
+augroup end
+
+nnoremap <Plug>FastFoldUpdate :call <SID>LeaveAll() <BAR> call <SID>EnterAll()<CR>:echo "folds updated"<CR>
+
+if g:fastfold_no_mappings == 0 && !hasmapto('<Plug>FastFoldUpdate, 'n') && mapcheck('zuz', 'n') ==# ''
+  nmap zuz <Plug>FastFoldUpdate
+endif
+
+if !exists("g:fastfold_skipfiles")
+    let g:fastfold_skipfiles = []
+endif
+
