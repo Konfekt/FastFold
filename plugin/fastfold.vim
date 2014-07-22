@@ -79,8 +79,8 @@ augroup FastFold
   " for :makeview autocmd in BufWinLeave
   autocmd BufWinLeave,TabLeave ?* if s:Check() | call s:Leave() | endif
   " Default to last foldmethod of current buffer.
-  autocmd WinLeave ?* if  exists('w:last')                         | let b:last=w:last | endif
-  autocmd WinEnter ?* if !exists('w:last') && exists('b:last') | let w:last=b:last | endif
+  autocmd WinLeave ?* if  exists('w:lastfdm')                        | let b:lastfdm=w:lastfdm | endif
+  autocmd WinEnter ?* if !exists('w:lastfdm') && exists('b:lastfdm') | let w:lastfdm=b:lastfdm | endif
   " update folds on saving
   autocmd BufWritePost    ?* call s:EnterAll()
   autocmd BufWritePre     ?* call s:LeaveAll()
