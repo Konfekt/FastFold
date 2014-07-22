@@ -88,7 +88,7 @@ augroup end
 
 nnoremap <Plug>FastFoldUpdate :call <SID>LeaveAll() <BAR> call <SID>EnterAll()<CR>:echo "folds updated"<CR>
 
-if g:fastfold_no_mappings == 0 && !hasmapto('<Plug>FastFoldUpdate, 'n') && mapcheck('zuz', 'n') ==# ''
+if g:fastfold_no_mappings == 0 && !hasmapto('<Plug>FastFoldUpdate', 'n') && mapcheck('zuz', 'n') ==# ''
   nmap zuz <Plug>FastFoldUpdate
 endif
 
