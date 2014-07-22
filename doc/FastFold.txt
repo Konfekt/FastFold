@@ -19,11 +19,16 @@ defaults to `zuz` (and which can be disabled by `let
 g:fastfold_no_mappings = 1` or remapped to your liking by
 `<Plug>FastFoldUpdate`)
 
-For example, by adding ``` set foldmethod=syntax
+For example, by adding
+```
+set foldmethod=syntax
 
-let g:vimsyn_folding='af' let g:tex_fold_enabled=1 let
-g:xml_syntax_folding = 1 ``` to your .vimrc, the folds in your TeX, Vim
-or XML file are updated by the `syntax` foldmethod when saving.
+let g:vimsyn_folding='af'
+let g:tex_fold_enabled=1
+let g:xml_syntax_folding = 1
+```
+to your .vimrc, the folds in your TeX, Vim or XML file are updated by
+the `syntax` foldmethod when saving.
 
 As a drawback, this plugin will overwrite your manual folds when saving
 the currently edited buffer, unless you either
