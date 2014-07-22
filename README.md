@@ -30,6 +30,10 @@ edited buffer, unless you either
 - explicitly tell this plugin to refrain from it via `g:fastfold_skipfiles`, or
 - the local and global `foldmethod` is set to `manual`.
 
+
+===
+
+
 There is a fork of the `restore_view.vim` plugin at
 
 http://www.github.com/Konfekt/restore_view
