@@ -22,8 +22,8 @@ let g:vimsyn_folding='af'
 let g:xml_syntax_folding = 1
 ```
 to your .vimrc, the folds in your TeX, Vim or XML file are updated by the
-`syntax` fold method when saving (or typing `zuz` in normal mode) and are kept as is
-otherwise.
+`syntax` fold method when saving the buffer (or typing `zuz` in normal mode)
+and are kept as is otherwise.
 
 ==
 
