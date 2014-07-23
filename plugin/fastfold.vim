@@ -51,6 +51,20 @@ function! s:LeaveAll()
   windo if bufnr('%') == s:curbuf | call s:Leave() | endif
 endfunction
 
+function! s:ManualUpdate()
+  if !s:Check()
+    return
+  endif
+  if !exists('w:lastfdm') || (w:lastfdm ==# 'manual')
+    return
+  endif
+
+  call s:LeaveAll()
+  call s:EnterAll()
+  echo "updated '".w:lastfdm."' folds"
+endfunction
+
+" Copy of MakeViewCheck() in restore_view.vim by Yichao Zhou
 function! s:Check()
     if has('quickfix') && &buftype =~ 'nofile' | return 0 | endif
     if expand('%') =~ '\[.*\]' | return 0 | endif
@@ -75,9 +89,9 @@ augroup FastFold
   " for :loadview
   autocmd SessionLoadPost ?* call s:Enter()
   " nonmodifiable buffers do not need fold updates
-  autocmd BufWinEnter,TabEnter ?* if s:Check() | call s:Enter() | endif
+  autocmd BufWinEnter ?* if s:Check() | call s:Enter() | endif
   " for :makeview autocmd in BufWinLeave
-  autocmd BufWinLeave,TabLeave ?* if s:Check() | call s:Leave() | endif
+  autocmd BufWinLeave ?* if s:Check() | call s:Leave() | endif
   " Default to last foldmethod of current buffer.
   autocmd WinLeave ?* if  exists('w:lastfdm')                        | let b:lastfdm=w:lastfdm | endif
   autocmd WinEnter ?* if !exists('w:lastfdm') && exists('b:lastfdm') | let w:lastfdm=b:lastfdm | endif
@@ -86,7 +100,7 @@ augroup FastFold
   autocmd BufWritePre     ?* call s:LeaveAll()
 augroup end
 
-nnoremap <silent> <Plug>FastFoldUpdate :call <SID>LeaveAll() <BAR> call <SID>EnterAll()<CR>:echo "folds updated"<CR>
+nnoremap <silent> <Plug>FastFoldUpdate :call <SID>ManualUpdate()<CR>
 
 if g:fastfold_no_mappings == 0 && !hasmapto('<Plug>FastFoldUpdate', 'n') && mapcheck('zuz', 'n') ==# ''
   nmap zuz <Plug>FastFoldUpdate
