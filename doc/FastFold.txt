@@ -37,10 +37,9 @@ buffer, unless you either
 
 - explicitly tell this plug-in to refrain from it via `g:fastfold_skipfiles`, a
   list of regular expressions against which the current file name is matched, or
-- the local and global `foldmethod` is set to `manual` since entering the
-  buffer window and since then either
-  - the local and global `foldmethod` have remained unchanged, or
-  - you did not save the buffer (or typed `zuz` in normal mode).
+-  since entering the buffer
+  * the local and global `foldmethod` has been equal to `manual`, and
+  * you have not saved the buffer (or typed `zuz` in normal mode).
 
 ===
 
