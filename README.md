@@ -35,10 +35,12 @@ The normal mode mapping `zuz` to force an update of folds can be disabled by
 This plug-in will overwrite your manual folds when saving the currently edited
 buffer, unless you either
 
-- explicitly tell this plug-in to refrain from it via `g:fastfold_skipfiles`, or
-- the local and global `fold method` is set to `manual` since entering the buffer
-window and in the meanwhile you did not switch either of these and saved the buffer
-(or typed `zuz` in normal mode).
+- explicitly tell this plug-in to refrain from it via `g:fastfold_skipfiles`, a
+  list of regular expressions against which the current file name is matched, or
+- the local and global `foldmethod` is set to `manual` since entering the
+  buffer window and since then either
+  - the local and global `foldmethod` have remained unchanged, or
+  - you did not save the buffer (or typed `zuz` in normal mode).
 
 ===
 
