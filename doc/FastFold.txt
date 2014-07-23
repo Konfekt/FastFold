@@ -30,8 +30,8 @@ currently edited buffer, unless you either
 - the local and global `foldmethod` is set to `manual`.
 
 The normal mode mapping `zuz` to force an update of folds can be disabled by
-`let g:fastfold_no_mappings = 1` or remapped to your liking by
-`<Plug>FastFoldUpdate`.
+`let g:fastfold_no_mappings = 1` or remapped to your liking by `<Plug>FastFoldUpdate`.
+
 ===
 
 `FastFold.vim` integrates with version 1.2 and above of the `restore_view.vim`
