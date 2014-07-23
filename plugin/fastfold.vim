@@ -33,11 +33,18 @@ function! s:lastfdm()
 endfunction
 
 function! s:Enter()
+  if s:Skip()
+    return
+  endif
+
   let w:lastfdm = s:locfdm()
   setlocal foldmethod=manual
 endfunction
 
 function! s:Leave()
+  if s:Skip()
+    return
+  endif
   let &l:foldmethod=s:lastfdm()
 endfunction
 
@@ -73,14 +80,17 @@ function! s:Check()
     if len($TEMP) && expand('%:p:h') == $TEMP | return 0 | endif
     if len($TMP) && expand('%:p:h') == $TMP | return 0 | endif
 
+    return 1
+endfunction
+
+function! s:Skip()
     let file_name = expand('%:p')
     for ifiles in g:fastfold_skipfiles
         if file_name =~ ifiles
-            return 0
+            return 1
         endif
     endfor
-
-    return 1
+    return 0
 endfunction
 
 " Update folds when entering a Buffer and Saving it.
