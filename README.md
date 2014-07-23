@@ -39,9 +39,9 @@ buffer, unless you either
   list of regular expressions against which the current file name is matched,
   or
 -  when entering the buffer the local and global `foldmethod` were equal to
-   `manual` and since then either
-  * the local and global `foldmethod` have remained equal to `manual`, or
-  * you have not saved the buffer (or typed `zuz` in normal mode) in the meanwhile.
+   `manual` and
+  * since then the local and global `foldmethod` have remained equal to `manual`, or
+  * since then you did not save the buffer (or typed `zuz` in normal mode) in the meanwhile.
 
 ===
 
