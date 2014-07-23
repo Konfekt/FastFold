@@ -86,7 +86,7 @@ endfunction
 function! s:Skip()
     let file_name = expand('%:p')
     for ifiles in g:fastfold_skipfiles
-        if file_name =~ ifiles
+        if file_name =~? ifiles
             return 1
         endif
     endfor
