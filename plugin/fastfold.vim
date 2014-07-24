@@ -110,10 +110,10 @@ augroup FastFold
   autocmd BufWritePre     ?* call s:LeaveAll()
 augroup end
 
-nnoremap <silent> <Plug>FastFoldUpdate :call <SID>ManualUpdate()<CR>
+nnoremap <silent> <Plug>(FastFoldUpdate) :call <SID>ManualUpdate()<CR>
 
-if g:fastfold_no_mappings == 0 && !hasmapto('<Plug>FastFoldUpdate', 'n') && mapcheck('zuz', 'n') ==# ''
-  nmap zuz <Plug>FastFoldUpdate
+if g:fastfold_no_mappings == 0 && !hasmapto('<Plug>(FastFoldUpdate)', 'n') && mapcheck('zuz', 'n') ==# ''
+  nmap zuz <Plug>(FastFoldUpdate)
 endif
 
 if !exists("g:fastfold_skipfiles")

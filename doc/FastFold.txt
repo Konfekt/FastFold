@@ -27,8 +27,9 @@ and are kept as is otherwise.
 
 ==
 
-The normal mode mapping `zuz` to force an update of folds can be disabled by
-`let g:fastfold_no_mappings = 1` or remapped to your liking by `<Plug>FastFoldUpdate`.
+The normal mode mapping `zuz` that updates the folds can be disabled by `let
+g:Fastfold_no_mappings = 1` or remapped to your favorite keystroke, say `<F5>`,
+by adding `nmap <F5> <Plug>(FastFoldUpdate)` to your `.Vimrc`.
 
 ==
 
