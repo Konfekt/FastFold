@@ -58,7 +58,7 @@ function! s:LeaveAll()
   windo if bufnr('%') == s:curbuf | call s:Leave() | endif
 endfunction
 
-function! s:ManualUpdate()
+function! s:Update()
   if !s:Check()
     return
   endif
@@ -93,6 +93,16 @@ function! s:Skip()
     return 0
 endfunction
 
+function! s:OverwriteMaps()
+  for mapsuffix in g:mapsuffixes
+    " execute 'nnoremap <silent> <SID>z'.mapsuffix.' '.(hasmapto('z'.mapsuffix,'n') ? maparg('z'.mapsuffix, 'n') : 'z'.mapsuffix)
+    " execute 'nnoremap <silent> z'.mapsuffix.' :FastFoldUpdate<CR>:normal <SID>z'.mapsuffix.'<CR>'
+    execute 'nnoremap <silent> z'.mapsuffix.' :FastFoldUpdate<CR>:normal! z'.mapsuffix.'<CR>'
+  endfor
+endfunction
+
+command! FastFoldUpdate call s:Update()
+
 " Update folds when entering a Buffer and Saving it.
 augroup FastFold
   autocmd!
@@ -110,7 +120,7 @@ augroup FastFold
   autocmd BufWritePre     ?* call s:LeaveAll()
 augroup end
 
-nnoremap <silent> <Plug>(FastFoldUpdate) :call <SID>ManualUpdate()<CR>
+nnoremap <silent> <Plug>(FastFoldUpdate) :FastFoldUpdate<CR>
 
 if g:fastfold_no_mappings == 0 && !hasmapto('<Plug>(FastFoldUpdate)', 'n') && mapcheck('zuz', 'n') ==# ''
   nmap zuz <Plug>(FastFoldUpdate)
@@ -120,3 +130,9 @@ if !exists("g:fastfold_skipfiles")
     let g:fastfold_skipfiles = []
 endif
 
+if exists('g:fastfold_overwrite_maps') && g:fastfold_overwrite_maps == 1
+  if !exists('g:mapsuffixes')
+    let g:mapsuffixes = ['x','a','A','o','O','c','C','r','R','m','M','i']
+  endif
+  call s:OverwriteMaps()
+endif
