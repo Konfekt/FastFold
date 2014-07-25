@@ -13,15 +13,15 @@ With this plug-in, the folds in the currently edited buffer are updated by an
 automatic fold method only
 
 - when saving the buffer, or
-- when typing `zuz` in normal mode, or
-- when closing or opening folds
+- when closing or opening folds, or
+- when typing `zuz` in normal mode
 
 and are kept as is otherwise (by keeping the fold method set to `manual`). Each
-of these update methods can be disabled by
+of these update hooks can be disabled by
 
 - `let g:fastfold_savehook = 0`, or
-- `let g:fastfold_map = 0`, or
-- `let g:fastfold_togglehook = 0` (which is the default).
+- `let g:fastfold_togglehook = 0` (which is the default), or
+- `let g:fastfold_map = 0`.
 
 For example, by adding
 ```
@@ -31,36 +31,40 @@ let g:tex_fold_enabled=1
 let g:vimsyn_folding='af'
 let g:xml_syntax_folding = 1
 ```
-to your .vimrc, the folds in your TeX, Vim or XML file are updated by the
-`syntax` fold method when saving the buffer (or typing `zuz` in normal mode)
-and are kept as is otherwise.
+to your `.vimrc` and installing this plug-in, the folds in your TeX, Vim or XML
+file are updated by the `syntax` fold method when saving the buffer or typing
+`zuz` in normal mode and are kept as is otherwise.
 
 ==
 
-If you prefer to update folds only manually but not on saving the document,
-add `let g:fastfold_savehook = 0` to your `.vimrc`.
+- If you prefer that folds are only updated manually but not when saving the buffer,
+then add `let g:fastfold_savehook = 0` to your `.vimrc`.
+
+- If you prefer that this plug-in does not add a normal mode mapping that updates
+  folds (that defaults to `zuz`), then add `let g:fastfold_map = 0` to your
+  `.vimrc`.
+
+  You can remap `zuz` to your favorite keystroke, say `<F5>`, by adding `nmap
+  <F5> <Plug>(FastFoldUpdate)` to your `.Vimrc`.
+
+  There is also a command `FastFoldUpdate` that updates folds.
+
+- If you prefer that folds are updated whenever you close or open folds by a
+  standard keystroke such as `zx`,`zo` or `zc`, then add `let
+  g:fastfold_togglehook = 1` to your `.vimrc`.
+
+  The exact list of standard keystrokes is
+  `zx,zX,za,zA,zo,zO,zc,zC,zr,zR,zm,zM,zi` and it can be customized by changing
+  the global variable `g:mapsuffixes` (that defaults to `let g:mapsuffixes =
+  ['x','X','a','A','o','O','c','C','r','R','m','M','i']`).
+
+  The command `FastFoldUpdate` can be used to update folds whenever you close
+  or open folds by other mappings such as `zi` by adding `nnoremap zi
+  :FastFoldUpdate<CR>zx` to your `.vimrc`.
 
 ==
 
-The normal mode mapping `zuz` that updates the folds can be disabled by `let
-g:Fastfold_no_mappings = 1` or remapped to your favorite keystroke, say `<F5>`,
-by adding `nmap <F5> <Plug>(FastFoldUpdate)` to your `.Vimrc`.
-
-==
-
-There is a command `FastFoldUpdate` that updates the folds. It can be
-used to update folds whenever you close or open folds by a standard mapping such
-as `zx` by adding `nnoremap zx :FastFoldUpdate<CR>zx` to your `.vimrc`.
-
-For convenience, there is the option `g:fastfolde_overwrite_maps` that, when set
-to `1` by adding `let g:fastfolde_overwrite_maps = 1` to your `.vimrc`, hooks
-`FastFoldUpdate` to the standard mappings `zx,zX,za,zA,zo,zO,zc,zC,zr,zR,zm,zM,zi`
-and can be customized by the global variable `g:mapsuffixes` (that defaults to
-`let g:mapsuffixes = ['x','X','a','A','o','O','c','C','r','R','m','M','i']`).
-
-==
-
-This plug-in will overwrite your manual folds when saving the currently edited
+Note that this plug-in will overwrite your manual folds when saving the currently edited
 buffer, unless you either
 
 - explicitly tell this plug-in to refrain from it via `g:fastfold_skipfiles`, a
@@ -78,7 +82,13 @@ plug-in that stores and restores the last folds by the `:mkview` and `:loadview`
 if `restore_view.vim` is loaded *AFTER* `FastFold.vim`. (To ensure the correct
 autocmd execution order.)
 
-You can find a recent fork of it at
+A recent fork of it can be found at
 
 http://www.github.com/Konfekt/restore_view
+
+==
+
+A `CustomFoldText()` function that displays the percentage of the buffer content that is the folded text takes up and indents folds according to their nesting level can be found at
+
+http://www.github.com/Konfekt/FastFold
 
