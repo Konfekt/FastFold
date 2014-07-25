@@ -35,13 +35,13 @@ by adding `nmap <F5> <Plug>(FastFoldUpdate)` to your `.Vimrc`.
 
 There is also a command `FastFoldUpdate` to update the folds. This can be
 used to update folds whenever you close or open folds by a standard mapping such
-as `zx`,`za`,`zo` or `zc` by `nnoremap zx :FastFoldUpdate<CR>zx`.
+as `zx` by adding `nnoremap zx :FastFoldUpdate<CR>zx` to your `.vimrc`.
 
 For convenience, there is an option `g:fastfolde_overwrite_maps` that, when set
 to `1` by adding `let g:fastfolde_overwrite_maps = 1` to your `.vimrc`, hooks
-`FastFoldUpdate` to the standard mappings `zx,za,zA,zo,zO,zc,zC,zr,zR,zm,zM,zi`
+`FastFoldUpdate` to the standard mappings `zx,zX,za,zA,zo,zO,zc,zC,zr,zR,zm,zM,zi`
 and can be customized by the global variable `g:mapsuffixes` (and that defaults to
-`let g:mapsuffixes = ['x','a','A','o','O','c','C','r','R','m','M','i']`).
+`let g:mapsuffixes = ['x','X','a','A','o','O','c','C','r','R','m','M','i']`).
 
 ==
 
