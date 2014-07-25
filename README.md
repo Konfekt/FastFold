@@ -10,8 +10,18 @@ See http://vim.wikia.com/wiki/Keep_folds_closed_while_inserting_text
 for a discussion.
 
 With this plug-in, the folds in the currently edited buffer are updated by an
-automatic fold method only when saving the buffer (or typing `zuz` in normal
-mode), and are kept as is otherwise (by keeping the fold method set to `manual`).
+automatic fold method only
+
+- when saving the buffer, or
+- when typing `zuz` in normal mode, or
+- when closing or opening folds
+
+and are kept as is otherwise (by keeping the fold method set to `manual`). Each
+of these update methods can be disabled by
+
+- `let g:fastfold_savehook = 0`, or
+- `let g:fastfold_map = 0`, or
+- `let g:fastfold_togglehook = 0` (which is the default).
 
 For example, by adding
 ```
@@ -27,20 +37,25 @@ and are kept as is otherwise.
 
 ==
 
+If you prefer to update folds only manually but not on saving the document,
+add `let g:fastfold_savehook = 0` to your `.vimrc`.
+
+==
+
 The normal mode mapping `zuz` that updates the folds can be disabled by `let
 g:Fastfold_no_mappings = 1` or remapped to your favorite keystroke, say `<F5>`,
 by adding `nmap <F5> <Plug>(FastFoldUpdate)` to your `.Vimrc`.
 
 ==
 
-There is also a command `FastFoldUpdate` to update the folds. This can be
+There is a command `FastFoldUpdate` that updates the folds. It can be
 used to update folds whenever you close or open folds by a standard mapping such
 as `zx` by adding `nnoremap zx :FastFoldUpdate<CR>zx` to your `.vimrc`.
 
-For convenience, there is an option `g:fastfolde_overwrite_maps` that, when set
+For convenience, there is the option `g:fastfolde_overwrite_maps` that, when set
 to `1` by adding `let g:fastfolde_overwrite_maps = 1` to your `.vimrc`, hooks
 `FastFoldUpdate` to the standard mappings `zx,zX,za,zA,zo,zO,zc,zC,zr,zR,zm,zM,zi`
-and can be customized by the global variable `g:mapsuffixes` (and that defaults to
+and can be customized by the global variable `g:mapsuffixes` (that defaults to
 `let g:mapsuffixes = ['x','X','a','A','o','O','c','C','r','R','m','M','i']`).
 
 ==

@@ -4,8 +4,20 @@ endif
 
 let g:loaded_fastfold = 1
 
-if !exists('g:fastfold_no_mappings')
- let g:fastfold_no_mappings = 0
+if !exists('g:fastfold_map')
+ let g:fastfold_map = 1
+endif
+
+if !exists('g:fastfold_togglehook')
+ let g:fastfold_togglehook = 0
+endif
+
+if !exists('g:fastfold_savehook')
+ let g:fastfold_savehook = 1
+endif
+
+if !exists("g:fastfold_skipfiles")
+    let g:fastfold_skipfiles = []
 endif
 
 function! s:locfdm()
@@ -115,22 +127,22 @@ augroup FastFold
   " Default to last foldmethod of current buffer.
   autocmd WinLeave ?* if  exists('w:lastfdm')                        | let b:lastfdm=w:lastfdm | endif
   autocmd WinEnter ?* if !exists('w:lastfdm') && exists('b:lastfdm') | let w:lastfdm=b:lastfdm | endif
-  " update folds on saving
-  autocmd BufWritePost    ?* call s:EnterAll()
-  autocmd BufWritePre     ?* call s:LeaveAll()
+
+  if g:fastfold_savehook == 1
+    " update folds on saving
+    autocmd BufWritePost    ?* call s:EnterAll()
+    autocmd BufWritePre     ?* call s:LeaveAll()
+  endif
+
 augroup end
 
 nnoremap <silent> <Plug>(FastFoldUpdate) :FastFoldUpdate<CR>
 
-if g:fastfold_no_mappings == 0 && !hasmapto('<Plug>(FastFoldUpdate)', 'n') && mapcheck('zuz', 'n') ==# ''
+if g:fastfold_map == 1 && !hasmapto('<Plug>(FastFoldUpdate)', 'n') && mapcheck('zuz', 'n') ==# ''
   nmap zuz <Plug>(FastFoldUpdate)
 endif
 
-if !exists("g:fastfold_skipfiles")
-    let g:fastfold_skipfiles = []
-endif
-
-if exists('g:fastfold_overwrite_maps') && g:fastfold_overwrite_maps == 1
+if g:fastfold_togglehook == 1
   if !exists('g:mapsuffixes')
     let g:mapsuffixes = ['x','a','A','o','O','c','C','r','R','m','M','i']
   endif
