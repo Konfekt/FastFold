@@ -70,7 +70,7 @@ function! s:LeaveAll()
   windo if bufnr('%') == s:curbuf | call s:Leave() | endif
 endfunction
 
-function! s:Update()
+function! s:Update(feedback)
   if !s:Check()
     return
   endif
@@ -80,7 +80,9 @@ function! s:Update()
 
   call s:LeaveAll()
   call s:EnterAll()
-  echo "updated '".w:lastfdm."' folds"
+  if a:feedback
+    echo "updated '".w:lastfdm."' folds"
+  endif
 endfunction
 
 " Copy of MakeViewCheck() in restore_view.vim by Yichao Zhou
@@ -109,11 +111,11 @@ function! s:OverwriteMaps()
   for mapsuffix in g:mapsuffixes
     " execute 'nnoremap <silent> <SID>z'.mapsuffix.' '.(hasmapto('z'.mapsuffix,'n') ? maparg('z'.mapsuffix, 'n') : 'z'.mapsuffix)
     " execute 'nnoremap <silent> z'.mapsuffix.' :FastFoldUpdate<CR>:normal <SID>z'.mapsuffix.'<CR>'
-    execute 'nnoremap <silent> z'.mapsuffix.' :FastFoldUpdate<CR>:normal! z'.mapsuffix.'<CR>'
+    execute 'nnoremap <silent> z'.mapsuffix.' :FastFoldUpdate<CR>z'.mapsuffix
   endfor
 endfunction
 
-command! FastFoldUpdate call s:Update()
+command! -bang FastFoldUpdate call s:Update(<bang>0)
 
 " Update folds when entering a Buffer and Saving it.
 augroup FastFold
@@ -136,7 +138,7 @@ augroup FastFold
 
 augroup end
 
-nnoremap <silent> <Plug>(FastFoldUpdate) :FastFoldUpdate<CR>
+nnoremap <silent> <Plug>(FastFoldUpdate) :FastFoldUpdate!<CR>
 
 if g:fastfold_map == 1 && !hasmapto('<Plug>(FastFoldUpdate)', 'n') && mapcheck('zuz', 'n') ==# ''
   nmap zuz <Plug>(FastFoldUpdate)
@@ -144,7 +146,7 @@ endif
 
 if g:fastfold_togglehook == 1
   if !exists('g:mapsuffixes')
-    let g:mapsuffixes = ['x','a','A','o','O','c','C','r','R','m','M','i']
+    let g:mapsuffixes = ['x','X','a','A','o','O','c','C','r','R','m','M','i']
   endif
   call s:OverwriteMaps()
 endif

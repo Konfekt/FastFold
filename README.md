@@ -51,10 +51,19 @@ file are updated by the `syntax` fold method when saving the buffer or typing
   the global variable `g:mapsuffixes` (that defaults to `let g:mapsuffixes =
   ['x','X','a','A','o','O','c','C','r','R','m','M','i']`).
 
+  A suggested setting is to add
+  ```
+  let g:fastfold_togglehook = 1
+  let g:mapsuffixes = ['x','X']
+  ```
+  to your `.vimrc` file.
+
   There is also a command `FastFoldUpdate` that updates folds and which can be
   used to update folds whenever you close or open folds by other mappings such
   as `<Ctrl-Z>` by adding `nnoremap <Ctrl-Z> :FastFoldUpdate<CR><Ctrl-Z>` to
   your `.vimrc`.
+  The variant `FastFoldUpdate!` (with a bang) gives a echo line that shows by which
+  fold method the folds were updated.
 
 - If you prefer that this plug-in does not add a normal mode mapping that updates
   folds (that defaults to `zuz`), then add `let g:fastfold_map = 0` to your
