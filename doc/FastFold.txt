@@ -17,7 +17,7 @@ automatic fold method only
 - when typing `zuz` in normal mode
 
 and are kept as is otherwise (by keeping the fold method set to `manual`). Each
-of these update hooks can be disabled by adding
+of these triggers for updating folds can be disabled by adding
 
 - `let g:fastfold_savehook = 0`, or
 - `let g:fastfold_togglehook = 0` (which is the default), or
@@ -40,7 +40,21 @@ file are updated by the `syntax` fold method when saving the buffer or typing
 ==
 
 - If you prefer that folds are only updated manually but not when saving the buffer,
-then add `let g:fastfold_savehook = 0` to your `.vimrc`.
+  then add `let g:fastfold_savehook = 0` to your `.vimrc`.
+
+- If you prefer that folds are updated whenever you close or open folds by a
+  standard keystroke such as `zx`,`zo` or `zc`, then add `let
+  g:fastfold_togglehook = 1` to your `.vimrc`.
+
+  The exact list of these standard keystrokes is
+  `zx,zX,za,zA,zo,zO,zc,zC,zr,zR,zm,zM,zi` and it can be customized by changing
+  the global variable `g:mapsuffixes` (that defaults to `let g:mapsuffixes =
+  ['x','X','a','A','o','O','c','C','r','R','m','M','i']`).
+
+  There is also a command `FastFoldUpdate` that updates folds and which can be
+  used to update folds whenever you close or open folds by other mappings such
+  as `<Ctrl-Z>` by adding `nnoremap <Ctrl-Z> :FastFoldUpdate<CR><Ctrl-Z>` to
+  your `.vimrc`.
 
 - If you prefer that this plug-in does not add a normal mode mapping that updates
   folds (that defaults to `zuz`), then add `let g:fastfold_map = 0` to your
@@ -49,20 +63,6 @@ then add `let g:fastfold_savehook = 0` to your `.vimrc`.
   You can remap `zuz` to your favorite keystroke, say `<F5>`, by adding `nmap
   <F5> <Plug>(FastFoldUpdate)` to your `.Vimrc`.
 
-  There is also a command `FastFoldUpdate` that updates folds.
-
-- If you prefer that folds are updated whenever you close or open folds by a
-  standard keystroke such as `zx`,`zo` or `zc`, then add `let
-  g:fastfold_togglehook = 1` to your `.vimrc`.
-
-  The exact list of standard keystrokes is
-  `zx,zX,za,zA,zo,zO,zc,zC,zr,zR,zm,zM,zi` and it can be customized by changing
-  the global variable `g:mapsuffixes` (that defaults to `let g:mapsuffixes =
-  ['x','X','a','A','o','O','c','C','r','R','m','M','i']`).
-
-  The command `FastFoldUpdate` can be used to update folds whenever you close
-  or open folds by other mappings such as `gs` by adding `nnoremap <Ctrl-Z>
-  :FastFoldUpdate<CR><Ctrl-Z>` to your `.vimrc`.
 
 ==
 
