@@ -17,11 +17,13 @@ automatic fold method only
 - when typing `zuz` in normal mode
 
 and are kept as is otherwise (by keeping the fold method set to `manual`). Each
-of these update hooks can be disabled by
+of these update hooks can be disabled by adding
 
 - `let g:fastfold_savehook = 0`, or
 - `let g:fastfold_togglehook = 0` (which is the default), or
-- `let g:fastfold_map = 0`.
+- `let g:fastfold_map = 0`
+
+to the `.vimrc` file.
 
 For example, by adding
 ```
@@ -31,7 +33,7 @@ let g:tex_fold_enabled=1
 let g:vimsyn_folding='af'
 let g:xml_syntax_folding = 1
 ```
-to your `.vimrc` and installing this plug-in, the folds in your TeX, Vim or XML
+to the `.vimrc` file and installing this plug-in, the folds in a TeX, Vim or XML
 file are updated by the `syntax` fold method when saving the buffer or typing
 `zuz` in normal mode and are kept as is otherwise.
 
@@ -59,8 +61,8 @@ then add `let g:fastfold_savehook = 0` to your `.vimrc`.
   ['x','X','a','A','o','O','c','C','r','R','m','M','i']`).
 
   The command `FastFoldUpdate` can be used to update folds whenever you close
-  or open folds by other mappings such as `zi` by adding `nnoremap zi
-  :FastFoldUpdate<CR>zx` to your `.vimrc`.
+  or open folds by other mappings such as `gs` by adding `nnoremap <Ctrl-Z>
+  :FastFoldUpdate<CR><Ctrl-Z>` to your `.vimrc`.
 
 ==
 
@@ -73,7 +75,7 @@ buffer, unless you either
 -  when entering the buffer the local and global `foldmethod` were equal to
    `manual` and
   * since then the local and global `foldmethod` have remained equal to `manual`, or
-  * since then you did not save the buffer (or typed `zuz` in normal mode) in the meanwhile.
+  * since then the buffer has not been saved (if `let g:fastfold_savehook = 1`) and no fold has been toggled (if `let g:fastfold_savehook = 1`) and `zuz` (if `let g:fastfold_map = 1`) has not been typed in normal mode.
 
 ===
 
@@ -82,13 +84,13 @@ plug-in that stores and restores the last folds by the `:mkview` and `:loadview`
 if `restore_view.vim` is loaded *AFTER* `FastFold.vim`. (To ensure the correct
 autocmd execution order.)
 
-A recent fork of it can be found at
+A recent fork of it is available at
 
 http://www.github.com/Konfekt/restore_view
 
 ==
 
-A `CustomFoldText()` function that displays the percentage of the buffer content that is the folded text takes up and indents folds according to their nesting level can be found at
+A `CustomFoldText()` function that displays the percentage of the number of buffer lines that the folded text takes up and indents folds according to their nesting level is available at
 
-http://www.github.com/Konfekt/FastFold
+http://www.github.com/Konfekt/FoldText
 
