@@ -49,7 +49,7 @@ file are updated by the `syntax` fold method when saving the buffer or typing
   The exact list of these standard keystrokes is
   `zx,zX,za,zA,zo,zO,zc,zC,zr,zR,zm,zM,zi` and it can be customized by changing
   the global variable `g:mapsuffixes` (that defaults to `let g:mapsuffixes =
-  ['x','X','a','A','o','O','c','C','r','R','m','M','i']`).
+  ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']`).
 
   A suggested setting is to add
   ```
@@ -58,13 +58,6 @@ file are updated by the `syntax` fold method when saving the buffer or typing
   ```
   to your `.vimrc` file.
 
-  There is also a command `FastFoldUpdate` that updates folds and which can be
-  used to update folds whenever you close or open folds by other mappings such
-  as `<Ctrl-Z>` by adding `nnoremap <Ctrl-Z> :FastFoldUpdate<CR><Ctrl-Z>` to
-  your `.vimrc`.
-  The variant `FastFoldUpdate!` (with a bang) gives a echo line that shows by which
-  fold method the folds were updated.
-
 - If you prefer that this plug-in does not add a normal mode mapping that updates
   folds (that defaults to `zuz`), then add `let g:fastfold_map = 0` to your
   `.vimrc`.
@@ -72,6 +65,9 @@ file are updated by the `syntax` fold method when saving the buffer or typing
   You can remap `zuz` to your favorite keystroke, say `<F5>`, by adding `nmap
   <F5> <Plug>(FastFoldUpdate)` to your `.Vimrc`.
 
+  There is also a command `FastFoldUpdate` that updates all folds and its
+  variant `FastFoldUpdate!` that updates all folds and echos by which fold
+  method the folds were updated.
 
 ==
 

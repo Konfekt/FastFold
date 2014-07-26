@@ -146,7 +146,7 @@ endif
 
 if g:fastfold_togglehook == 1
   if !exists('g:mapsuffixes')
-    let g:mapsuffixes = ['x','X','a','A','o','O','c','C','r','R','m','M','i']
+    let g:mapsuffixes = ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']
   endif
   call s:OverwriteMaps()
 endif
