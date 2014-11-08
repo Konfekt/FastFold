@@ -27,7 +27,11 @@ to the `.vimrc` file.
 
 For example, by adding
 ```
-set foldmethod=syntax
+if &diff
+  set foldmethod=diff
+else
+  set foldmethod=syntax
+endif
 
 let g:tex_fold_enabled=1
 let g:vimsyn_folding='af'

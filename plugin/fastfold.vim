@@ -1,3 +1,5 @@
+" TODO: Correctly save fdm=diff in vimdiff!
+
 if exists("g:loaded_fastfold")
     finish
 endif
@@ -91,8 +93,6 @@ function! s:Check()
     if expand('%') =~ '\[.*\]' | return 0 | endif
     if empty(glob(expand('%:p'))) | return 0 | endif
     if &modifiable == 0 | return 0 | endif
-    if len($TEMP) && expand('%:p:h') == $TEMP | return 0 | endif
-    if len($TMP) && expand('%:p:h') == $TMP | return 0 | endif
 
     return 1
 endfunction
