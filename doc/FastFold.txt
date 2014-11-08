@@ -52,13 +52,13 @@ file are updated by the `syntax` fold method when saving the buffer or typing
 
   The exact list of these standard keystrokes is
   `zx,zX,za,zA,zo,zO,zc,zC,zr,zR,zm,zM,zi,zn,zN` and it can be customized by changing
-  the global variable `g:mapsuffixes` (that defaults to `let g:mapsuffixes =
+  the global variable `g:fastfold_mapsuffixes` (that defaults to `let g:fastfold_mapsuffixes =
   ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']`).
 
   A suggested setting is to add
   ```
   let g:fastfold_togglehook = 1
-  let g:mapsuffixes = ['x','X']
+  let g:fastfold_mapsuffixes = ['x','X']
   ```
   to your `.vimrc` file.
 
