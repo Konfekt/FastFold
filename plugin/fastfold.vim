@@ -108,7 +108,7 @@ function! s:Skip()
 endfunction
 
 function! s:OverwriteMaps()
-  for mapsuffix in g:mapsuffixes
+  for mapsuffix in g:fastfold_mapsuffixes
     " execute 'nnoremap <silent> <SID>z'.mapsuffix.' '.(hasmapto('z'.mapsuffix,'n') ? maparg('z'.mapsuffix, 'n') : 'z'.mapsuffix)
     " execute 'nnoremap <silent> z'.mapsuffix.' :FastFoldUpdate<CR>:normal <SID>z'.mapsuffix.'<CR>'
     execute 'nnoremap <silent> z'.mapsuffix.' :FastFoldUpdate<CR>z'.mapsuffix
@@ -145,8 +145,8 @@ if g:fastfold_map == 1 && !hasmapto('<Plug>(FastFoldUpdate)', 'n') && mapcheck('
 endif
 
 if g:fastfold_togglehook == 1
-  if !exists('g:mapsuffixes')
-    let g:mapsuffixes = ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']
+  if !exists('g:fastfold_mapsuffixes')
+    let g:fastfold_mapsuffixes = ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']
   endif
   call s:OverwriteMaps()
 endif
