@@ -97,7 +97,7 @@ function! s:Update(feedback)
   if !s:Check()
     return
   endif
-  if exists('w:lastfdm') && w:lastfdm !=#'manual'
+  if exists('w:lastfdm') && w:lastfdm ==#'manual'
     return
   endif
 
