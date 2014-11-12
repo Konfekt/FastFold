@@ -57,14 +57,11 @@ function! s:reasonable()
   if &l:foldmethod ==# 'syntax' || &l:foldmethod ==# 'expr'
     return 1
   endif
-  return 0
+  return s:Skip()
 endfunction
 
 function! s:Enter()
   if !s:reasonable()
-    return
-  endif
-  if s:Skip()
     return
   endif
 
@@ -74,9 +71,6 @@ endfunction
 
 function! s:Leave()
   if !s:reasonable()
-    return
-  endif
-  if s:Skip()
     return
   endif
 
