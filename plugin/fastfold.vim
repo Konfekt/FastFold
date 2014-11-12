@@ -61,9 +61,6 @@ function! s:reasonable()
 endfunction
 
 function! s:Enter()
-  if !s:reasonable()
-    return
-  endif
   if s:Skip()
     return
   endif
@@ -73,9 +70,6 @@ function! s:Enter()
 endfunction
 
 function! s:Leave()
-  if !s:reasonable()
-    return
-  endif
   if s:Skip()
     return
   endif
@@ -119,6 +113,10 @@ function! s:Check()
 endfunction
 
 function! s:Skip()
+    if !s:reasonable()
+        return 1
+    endif
+
     let file_name = expand('%:p')
     for ifiles in g:fastfold_skipfiles
         if file_name =~? ifiles
