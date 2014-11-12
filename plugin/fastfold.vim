@@ -40,11 +40,11 @@ function! s:BufDo(command)
 endfunction
 
 function! s:locfdm()
-  if !(&l:foldmethod ==# 'manual')
+  if &l:foldmethod !=# 'manual'
     return &l:foldmethod
   endif
 
-  if exists('w:lastfdm') && !(w:lastfdm ==#'manual')
+  if exists('w:lastfdm') && w:lastfdm !=#'manual'
     return w:lastfdm
   endif
 
@@ -52,11 +52,11 @@ function! s:locfdm()
 endfunction
 
 function! s:lastfdm()
-  if exists('w:lastfdm') && !(w:lastfdm ==#'manual')
+  if exists('w:lastfdm') && w:lastfdm !=#'manual'
     return w:lastfdm
   endif
 
-  if !(&l:foldmethod ==# 'manual')
+  if &l:foldmethod !=# 'manual'
     return &l:foldmethod
   endif
 
@@ -104,7 +104,7 @@ function! s:Update(feedback)
   if !s:Check()
     return
   endif
-  if !exists('w:lastfdm') || (w:lastfdm ==# 'manual')
+  if exists('w:lastfdm') && w:lastfdm !=#'manual'
     return
   endif
 
