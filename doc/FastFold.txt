@@ -81,11 +81,11 @@ You will:
 
 The option
 >
-let g:fastfold_force = 0
+  let g:fastfold_force = 0
 <
 when set to 1, enables FastFold even for foldmethods other than 'syntax' and
 'expr'. Because these other fold methods require little computation, there is
-little benefit, thence its default value '0'
+little benefit in forcing manual folds by FastFold, thence the default value '0'.
 
 
 ===========================================================================
