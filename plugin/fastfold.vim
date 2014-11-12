@@ -1,5 +1,3 @@
-" TODO: Correctly save fdm=diff in vimdiff!
-
 if exists("g:loaded_fastfold")
   finish
 endif
@@ -25,6 +23,21 @@ endif
 if !exists("g:fastfold_skipfiles")
   let g:fastfold_skipfiles = []
 endif
+
+" See http://vim.wikia.com/wiki/Run_a_command_in_multiple_buffers#Restoring_position
+" Like windo but restore the current buffer.
+function! s:WinDo(command)
+  let currwin=winnr()
+  execute 'windo ' . a:command
+  execute currwin . 'wincmd w'
+endfunction
+
+" Like bufdo but restore the current buffer.
+function! s:BufDo(command)
+  let currBuff=bufnr("%")
+  execute 'bufdo ' . a:command
+  execute 'buffer ' . currBuff
+endfunction
 
 function! s:locfdm()
   if !(&l:foldmethod ==# 'manual')
@@ -79,12 +92,12 @@ endfunction
 
 function! s:EnterAllWinOfBuf()
   let s:curbuf = bufnr('%')
-  windo if bufnr('%') == s:curbuf | call s:Enter() | endif
+  call s:WinDo("if bufnr('%') == s:curbuf | call s:Enter() | endif")
 endfunction
 
 function! s:LeaveAllWinOfBuf()
   let s:curbuf = bufnr('%')
-  windo if bufnr('%') == s:curbuf | call s:Leave() | endif
+  call s:WinDo("if bufnr('%') == s:curbuf | call s:Leave() | endif")
 endfunction
 
 function! s:Update(feedback)
@@ -132,7 +145,19 @@ endfunction
 
 command! -bang FastFoldUpdate call s:Update(<bang>0)
 
-" Update folds when entering a Buffer and Saving it.
+nnoremap <silent> <Plug>(FastFoldUpdate) :FastFoldUpdate!<CR>
+
+if g:fastfold_map == 1 && !hasmapto('<Plug>(FastFoldUpdate)', 'n') && mapcheck('zuz', 'n') ==# ''
+  nmap zuz <Plug>(FastFoldUpdate)
+endif
+
+if g:fastfold_togglehook == 1
+  if !exists('g:fastfold_mapsuffixes')
+    let g:fastfold_mapsuffixes = ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']
+  endif
+  call s:OverwriteMaps()
+endif
+
 augroup FastFold
   autocmd!
   " for :loadview
@@ -151,17 +176,6 @@ augroup FastFold
     autocmd BufWritePre     ?* call s:LeaveAllWinOfBuf()
   endif
 
-  augroup end
+  autocmd TabEnter          ?* call s:BufDo("call s:EnterAllWinOfBuf()")
+augroup end
 
-    nnoremap <silent> <Plug>(FastFoldUpdate) :FastFoldUpdate!<CR>
-
-    if g:fastfold_map == 1 && !hasmapto('<Plug>(FastFoldUpdate)', 'n') && mapcheck('zuz', 'n') ==# ''
-      nmap zuz <Plug>(FastFoldUpdate)
-    endif
-
-    if g:fastfold_togglehook == 1
-      if !exists('g:fastfold_mapsuffixes')
-        let g:fastfold_mapsuffixes = ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']
-      endif
-      call s:OverwriteMaps()
-    endif
