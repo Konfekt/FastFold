@@ -1,7 +1,7 @@
 " TODO: Correctly save fdm=diff in vimdiff!
 
 if exists("g:loaded_fastfold")
-    finish
+  finish
 endif
 
 let g:loaded_fastfold = 1
@@ -11,19 +11,19 @@ if !exists('g:fastfold_force')
 endif
 
 if !exists('g:fastfold_map')
- let g:fastfold_map = 1
+  let g:fastfold_map = 1
 endif
 
 if !exists('g:fastfold_togglehook')
- let g:fastfold_togglehook = 0
+  let g:fastfold_togglehook = 0
 endif
 
 if !exists('g:fastfold_savehook')
- let g:fastfold_savehook = 1
+  let g:fastfold_savehook = 1
 endif
 
 if !exists("g:fastfold_skipfiles")
-    let g:fastfold_skipfiles = []
+  let g:fastfold_skipfiles = []
 endif
 
 function! s:locfdm()
@@ -110,22 +110,22 @@ endfunction
 
 " Copy of MakeViewCheck() in restore_view.vim by Yichao Zhou
 function! s:Check()
-    if has('quickfix') && &buftype =~ 'nofile' | return 0 | endif
-    if expand('%') =~ '\[.*\]' | return 0 | endif
-    if empty(glob(expand('%:p'))) | return 0 | endif
-    if &modifiable == 0 | return 0 | endif
+  if has('quickfix') && &buftype =~ 'nofile' | return 0 | endif
+  if expand('%') =~ '\[.*\]' | return 0 | endif
+  if empty(glob(expand('%:p'))) | return 0 | endif
+  if &modifiable == 0 | return 0 | endif
 
-    return 1
+  return 1
 endfunction
 
 function! s:Skip()
-    let file_name = expand('%:p')
-    for ifiles in g:fastfold_skipfiles
-        if file_name =~? ifiles
-            return 1
-        endif
-    endfor
-    return 0
+  let file_name = expand('%:p')
+  for ifiles in g:fastfold_skipfiles
+    if file_name =~? ifiles
+      return 1
+    endif
+  endfor
+  return 0
 endfunction
 
 function! s:OverwriteMaps()
@@ -157,17 +157,17 @@ augroup FastFold
     autocmd BufWritePre     ?* call s:LeaveAll()
   endif
 
-augroup end
+  augroup end
 
-nnoremap <silent> <Plug>(FastFoldUpdate) :FastFoldUpdate!<CR>
+    nnoremap <silent> <Plug>(FastFoldUpdate) :FastFoldUpdate!<CR>
 
-if g:fastfold_map == 1 && !hasmapto('<Plug>(FastFoldUpdate)', 'n') && mapcheck('zuz', 'n') ==# ''
-  nmap zuz <Plug>(FastFoldUpdate)
-endif
+    if g:fastfold_map == 1 && !hasmapto('<Plug>(FastFoldUpdate)', 'n') && mapcheck('zuz', 'n') ==# ''
+      nmap zuz <Plug>(FastFoldUpdate)
+    endif
 
-if g:fastfold_togglehook == 1
-  if !exists('g:fastfold_mapsuffixes')
-    let g:fastfold_mapsuffixes = ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']
-  endif
-  call s:OverwriteMaps()
-endif
+    if g:fastfold_togglehook == 1
+      if !exists('g:fastfold_mapsuffixes')
+        let g:fastfold_mapsuffixes = ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']
+      endif
+      call s:OverwriteMaps()
+    endif
