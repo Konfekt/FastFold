@@ -125,4 +125,9 @@ their nesting level is available at
 
 http://www.github.com/Konfekt/FoldText
 
+3.3 Thanks go to... ~
+
+- Jeremy Pallats (starcraftman) for providing the FastFold documentation, and
+- Daniel Hahler (blueyed) for code improvements.
+
 vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl
