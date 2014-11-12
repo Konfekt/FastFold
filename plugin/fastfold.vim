@@ -169,13 +169,12 @@ augroup FastFold
   " Default to last foldmethod of current buffer.
   autocmd WinLeave ?* if  exists('w:lastfdm')                        | let b:lastfdm=w:lastfdm | endif
   autocmd WinEnter ?* if !exists('w:lastfdm') && exists('b:lastfdm') | let w:lastfdm=b:lastfdm | endif
+  autocmd TabEnter ?* call s:BufDo("call s:EnterAllWinOfBuf()")
 
   if g:fastfold_savehook == 1
     " update folds on saving
     autocmd BufWritePost    ?* call s:EnterAllWinOfBuf()
     autocmd BufWritePre     ?* call s:LeaveAllWinOfBuf()
   endif
-
-  autocmd TabEnter          ?* call s:BufDo("call s:EnterAllWinOfBuf()")
 augroup end
 
