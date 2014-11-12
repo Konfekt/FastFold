@@ -77,12 +77,12 @@ function! s:Leave()
   let &l:foldmethod=s:lastfdm()
 endfunction
 
-function! s:EnterAll()
+function! s:EnterAllWinOfBuf()
   let s:curbuf = bufnr('%')
   windo if bufnr('%') == s:curbuf | call s:Enter() | endif
 endfunction
 
-function! s:LeaveAll()
+function! s:LeaveAllWinOfBuf()
   let s:curbuf = bufnr('%')
   windo if bufnr('%') == s:curbuf | call s:Leave() | endif
 endfunction
@@ -95,8 +95,8 @@ function! s:Update(feedback)
     return
   endif
 
-  call s:LeaveAll()
-  call s:EnterAll()
+  call s:LeaveAllWinOfBuf()
+  call s:EnterAllWinOfBuf()
   if a:feedback
     echo "updated '".w:lastfdm."' folds"
   endif
@@ -147,8 +147,8 @@ augroup FastFold
 
   if g:fastfold_savehook == 1
     " update folds on saving
-    autocmd BufWritePost    ?* call s:EnterAll()
-    autocmd BufWritePre     ?* call s:LeaveAll()
+    autocmd BufWritePost    ?* call s:EnterAllWinOfBuf()
+    autocmd BufWritePre     ?* call s:LeaveAllWinOfBuf()
   endif
 
   augroup end
