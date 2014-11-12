@@ -44,11 +44,13 @@ For example, by adding the following  to your `.vimrc`
   let g:tex_fold_enabled=1
   let g:vimsyn_folding='af'
   let g:xml_syntax_folding = 1
+  let g:php_folding = 1
+  let g:perl_fold = 1
   let g:fastfold_map = 0
 <
 You will:
 - Enable diff folding for diffs, & syntax folding elsewhere.
-- Enable tex, vim and xml syntax folding.
+- Enable tex, vim, xml, php and perl syntax folding.
 - Diable the zuz refresh so that only saving evaluates folds.
 
 -----------------------------
@@ -75,6 +77,17 @@ You will:
 >
   nmap <F5> <Plug>(FastFoldUpdate)
 <
+-----------------------------
+
+The option
+>
+let g:fastfold_force = 0
+<
+when set to 1, enables FastFold even for foldmethods other than 'syntax' and
+'expr'. Because these other fold methods require little computation, there is
+little benefit, thence its default value '0'
+
+
 ===========================================================================
 3. Extra Notes ~
 

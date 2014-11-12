@@ -6,6 +6,10 @@ endif
 
 let g:loaded_fastfold = 1
 
+if !exists('g:fastfold_force')
+  let g:fastfold_force = 0
+endif
+
 if !exists('g:fastfold_map')
  let g:fastfold_map = 1
 endif
@@ -46,7 +50,20 @@ function! s:lastfdm()
   return &g:foldmethod
 endfunction
 
+function! s:reasonable()
+  if g:fastfold_force
+    return 1
+  endif
+  if &l:foldmethod ==# 'syntax' || &l:foldmethod ==# 'expr'
+    return 1
+  endif
+  return 0
+endfunction
+
 function! s:Enter()
+  if !s:reasonable()
+    return
+  endif
   if s:Skip()
     return
   endif
@@ -56,9 +73,13 @@ function! s:Enter()
 endfunction
 
 function! s:Leave()
+  if !s:reasonable()
+    return
+  endif
   if s:Skip()
     return
   endif
+
   let &l:foldmethod=s:lastfdm()
 endfunction
 
