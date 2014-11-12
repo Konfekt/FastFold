@@ -37,7 +37,7 @@ function! s:locfdm()
     return &l:foldmethod
   endif
 
-  if exists('w:lastfdm') && w:lastfdm !=#'manual'
+  if exists('w:lastfdm') && w:lastfdm !=# 'manual'
     return w:lastfdm
   endif
 
@@ -45,7 +45,7 @@ function! s:locfdm()
 endfunction
 
 function! s:lastfdm()
-  if exists('w:lastfdm') && w:lastfdm !=#'manual'
+  if exists('w:lastfdm') && w:lastfdm !=# 'manual'
     return w:lastfdm
   endif
 
@@ -63,7 +63,7 @@ function! s:reasonable()
   if &l:foldmethod ==# 'syntax' || &l:foldmethod ==# 'expr'
     return 1
   endif
-  return s:Skip()
+  return !s:Skip()
 endfunction
 
 function! s:Enter()
