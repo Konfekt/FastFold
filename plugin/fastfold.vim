@@ -24,14 +24,6 @@ if !exists("g:fastfold_skipfiles")
   let g:fastfold_skipfiles = []
 endif
 
-" See http://vim.wikia.com/wiki/Run_a_command_in_multiple_buffers#Restoring_position
-" Like windo but restore the current buffer.
-function! s:WinDo(command)
-  let currwin=winnr()
-  execute 'windo ' . a:command
-  execute currwin . 'wincmd w'
-endfunction
-
 function! s:locfdm()
   if &l:foldmethod !=# 'manual'
     return &l:foldmethod
@@ -81,6 +73,18 @@ function! s:Leave()
   endif
 
   let &l:foldmethod=s:lastfdm()
+endfunction
+
+" See http://vim.wikia.com/wiki/Run_a_command_in_multiple_buffers#Restoring_position
+" Like windo but restore the current buffer.
+function! s:WinDo(command)
+  let currwin=winnr()
+  execute 'windo ' . a:command
+  execute currwin . 'wincmd w'
+endfunction
+
+function! s:EnterAllWinOfTab()
+  call s:WinDo("call s:Enter()")
 endfunction
 
 function! s:EnterAllWinOfBuf()
@@ -162,7 +166,7 @@ augroup FastFold
   " Default to last foldmethod of current buffer.
   autocmd WinLeave ?* if  exists('w:lastfdm')                        | let b:lastfdm=w:lastfdm | endif
   autocmd WinEnter ?* if !exists('w:lastfdm') && exists('b:lastfdm') | let w:lastfdm=b:lastfdm | endif
-  autocmd TabEnter ?* call s:EnterAllWinOfBuf()
+  autocmd TabEnter ?* call s:EnterAllWinOfTab()
 
   if g:fastfold_savehook == 1
     " update folds on saving
