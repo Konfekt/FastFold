@@ -49,11 +49,12 @@ function! s:lastfdm()
 endfunction
 
 function! s:Enter()
+  let w:lastfdm = s:locfdm()
+
   if s:Skip()
     return
   endif
 
-  let w:lastfdm = s:locfdm()
   setlocal foldmethod=manual
 endfunction
 
@@ -74,7 +75,11 @@ function! s:WinDo( command )
 endfunction
 
 function! s:EnterAllWinOfTab()
-  call s:WinDo("call s:Enter()")
+  " Because TabEnter triggers BEFORE the FileType (that sets local fdm) and
+  " BufWinEnter (that sets mode line fdm) are executed, check if window fdm
+  " already set up. But TabEnter triggers AFTER WinEnter, so w:Lastfdm check
+  " sufficient. (No b:Lastfdm).
+  call s:WinDo("if exists('w:lastfdm') | call s:Enter() | endif")
 endfunction
 
 function! s:EnterAllWinOfBuf()
@@ -88,9 +93,13 @@ function! s:LeaveAllWinOfBuf()
 endfunction
 
 function! s:Update(feedback)
-  if !s:Check()
+  if !s:isValidBuffer()
     return
   endif
+  if s:Skip()
+    return
+  endif
+
   if exists('w:lastfdm') && w:lastfdm ==#'manual'
     return
   endif
@@ -106,7 +115,7 @@ function! s:isReasonable()
   if g:fastfold_force
     return 1
   endif
-  if &l:foldmethod ==# 'syntax' || &l:foldmethod ==# 'expr'
+  if w:lastfdm ==# 'syntax' || w:lastfdm ==# 'expr'
     return 1
   endif
   return 0
@@ -133,7 +142,7 @@ function! s:Skip()
 endfunction
 
 " Copy of MakeViewCheck() in restore_view.vim by Yichao Zhou
-function! s:Check()
+function! s:isValidBuffer()
   if has('quickfix') && &buftype =~ 'nofile' | return 0 | endif
   if expand('%') =~ '\[.*\]' | return 0 | endif
   if empty(glob(expand('%:p'))) | return 0 | endif
@@ -170,9 +179,9 @@ augroup FastFold
   " for :loadview
   autocmd SessionLoadPost ?* call s:Enter()
   " nonmodifiable buffers do not need fold updates
-  autocmd BufWinEnter ?* if s:Check() | call s:Enter() | endif
+  autocmd BufWinEnter ?* if s:isValidBuffer() |  call s:Enter() | endif
   " for :makeview autocmd in BufWinLeave
-  autocmd BufWinLeave ?* if s:Check() | call s:Leave() | endif
+  autocmd BufWinLeave ?* if s:isValidBuffer() | call s:Leave() | endif
   " Default to last foldmethod of current buffer.
   autocmd WinLeave ?* if  exists('w:lastfdm')                        | let b:lastfdm=w:lastfdm | endif
   autocmd WinEnter ?* if !exists('w:lastfdm') && exists('b:lastfdm') | let w:lastfdm=b:lastfdm | endif
