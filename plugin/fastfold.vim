@@ -117,7 +117,8 @@ function! s:isReasonable()
   if g:fastfold_force
     return 1
   endif
-  if w:lastfdm ==# 'syntax' || w:lastfdm ==# 'expr'
+  " to avoid mysterious error in some situations
+  if exists('w:lastfdm') && (w:lastfdm ==# 'syntax' || w:lastfdm ==# 'expr')
     return 1
   endif
   return 0
