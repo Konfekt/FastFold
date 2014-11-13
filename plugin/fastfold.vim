@@ -48,18 +48,8 @@ function! s:lastfdm()
   return &g:foldmethod
 endfunction
 
-function! s:reasonable()
-  if g:fastfold_force
-    return 1
-  endif
-  if &l:foldmethod ==# 'syntax' || &l:foldmethod ==# 'expr'
-    return 1
-  endif
-  return !s:Skip()
-endfunction
-
 function! s:Enter()
-  if !s:reasonable()
+  if s:Skip()
     return
   endif
 
@@ -68,7 +58,7 @@ function! s:Enter()
 endfunction
 
 function! s:Leave()
-  if !s:reasonable()
+  if s:Skip()
     return
   endif
 
@@ -77,7 +67,7 @@ endfunction
 
 " See http://vim.wikia.com/wiki/Run_a_command_in_multiple_buffers#Restoring_position
 " Like windo but restore the current buffer.
-function! s:WinDo(command)
+function! s:WinDo( command )
   let currwin=winnr()
   execute 'windo ' . a:command
   execute currwin . 'wincmd w'
@@ -112,6 +102,36 @@ function! s:Update(feedback)
   endif
 endfunction
 
+function! s:isReasonable()
+  if g:fastfold_force
+    return 1
+  endif
+  if &l:foldmethod ==# 'syntax' || &l:foldmethod ==# 'expr'
+    return 1
+  endif
+  return 0
+endfunction
+
+function! s:inSkipList()
+  let file_name = expand('%:p')
+  for ifiles in g:fastfold_skipfiles
+    if file_name =~? ifiles
+      return 1
+    endif
+  endfor
+  return 0
+endfunction
+
+function! s:Skip()
+  if !s:isReasonable()
+    return 1
+  endif
+  if s:inSkipList()
+    return 1
+  endif
+  return 0
+endfunction
+
 " Copy of MakeViewCheck() in restore_view.vim by Yichao Zhou
 function! s:Check()
   if has('quickfix') && &buftype =~ 'nofile' | return 0 | endif
@@ -120,16 +140,6 @@ function! s:Check()
   if &modifiable == 0 | return 0 | endif
 
   return 1
-endfunction
-
-function! s:Skip()
-  let file_name = expand('%:p')
-  for ifiles in g:fastfold_skipfiles
-    if file_name =~? ifiles
-      return 1
-    endif
-  endfor
-  return 0
 endfunction
 
 function! s:OverwriteMaps()
