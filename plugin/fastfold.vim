@@ -63,7 +63,9 @@ function! s:Leave()
     return
   endif
 
-  let &l:foldmethod=s:lastfdm()
+  if &l:foldmethod == 'manual'
+    let &l:foldmethod= s:lastfdm()
+  endif
 endfunction
 
 " See http://vim.wikia.com/wiki/Run_a_command_in_multiple_buffers#Restoring_position
