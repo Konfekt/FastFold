@@ -77,11 +77,20 @@ function! s:WinDo( command )
 endfunction
 
 function! s:EnterAllWinOfTab()
+  call s:WinDo("if exists('w:lastfdm') | call s:Enter() | endif")
+endfunction
+
+function! s:LeaveAllWinOfTab()
   " Because TabEnter triggers BEFORE the FileType (that sets local fdm) and
   " BufWinEnter (that sets mode line fdm) are executed, check if window fdm
   " already set up. But TabEnter triggers AFTER WinEnter, so w:Lastfdm check
   " sufficient. (No b:Lastfdm).
-  call s:WinDo("if exists('w:lastfdm') | call s:Enter() | endif")
+  call s:WinDo("if exists('w:lastfdm') | call s:Leave() | endif")
+endfunction
+
+function! s:UpdateTab()
+  call s:LeaveAllWinOfTab()
+  call s:EnterAllWinOfTab()
 endfunction
 
 function! s:EnterAllWinOfBuf()
@@ -94,21 +103,17 @@ function! s:LeaveAllWinOfBuf()
   call s:WinDo("if bufnr('%') == s:curbuf | call s:Leave() | endif")
 endfunction
 
-function! s:Update(feedback)
-  if !s:isValidBuffer()
-    return
-  endif
-  if s:Skip()
-    return
-  endif
-
-  if exists('w:lastfdm') && w:lastfdm ==#'manual'
+function! s:UpdateBuf(feedback)
+  " !exists(w:lastfdm) => no valid buffer.
+  if !exists('w:lastfdm')
     return
   endif
 
   call s:LeaveAllWinOfBuf()
   call s:EnterAllWinOfBuf()
-  if a:feedback
+
+
+  if !s:Skip() && a:feedback
     echo "updated '".w:lastfdm."' folds"
   endif
 endfunction
@@ -117,7 +122,7 @@ function! s:isReasonable()
   if g:fastfold_force
     return 1
   endif
-  " to avoid mysterious error in some situations
+  " if !isValidBuf() then not exists('w:lastfdm')
   if exists('w:lastfdm') && (w:lastfdm ==# 'syntax' || w:lastfdm ==# 'expr')
     return 1
   endif
@@ -162,7 +167,7 @@ function! s:OverwriteMaps()
   endfor
 endfunction
 
-command! -bang FastFoldUpdate call s:Update(<bang>0)
+command! -bang FastFoldUpdate call s:UpdateBuf(<bang>0)
 
 nnoremap <silent> <Plug>(FastFoldUpdate) :FastFoldUpdate!<CR>
 
@@ -180,15 +185,15 @@ endif
 augroup FastFold
   autocmd!
   " for :loadview
-  autocmd SessionLoadPost ?* call s:Enter()
+  autocmd SessionLoadPost * call s:Enter()
   " nonmodifiable buffers do not need fold updates
   autocmd BufWinEnter ?* if s:isValidBuffer() |  call s:Enter() | endif
   " for :makeview autocmd in BufWinLeave
   autocmd BufWinLeave ?* if s:isValidBuffer() | call s:Leave() | endif
   " Default to last foldmethod of current buffer.
-  autocmd WinLeave ?* if  exists('w:lastfdm')                        | let b:lastfdm=w:lastfdm | endif
-  autocmd WinEnter ?* if !exists('w:lastfdm') && exists('b:lastfdm') | let w:lastfdm=b:lastfdm | endif
-  autocmd TabEnter ?* call s:EnterAllWinOfTab()
+  autocmd WinLeave * if  exists('w:lastfdm')                        | let b:lastfdm=w:lastfdm | endif
+  autocmd WinEnter * if !exists('w:lastfdm') && exists('b:lastfdm') | let w:lastfdm=b:lastfdm | endif
+  autocmd TabEnter * call s:UpdateTab()
 
   if g:fastfold_savehook == 1
     " update folds on saving
