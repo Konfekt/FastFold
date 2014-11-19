@@ -35,11 +35,7 @@ matching global flags in your `.vimrc`. Default values are shown.
 <
 For example, by adding the following  to your `.vimrc`
 >
-  if &diff
-    set foldmethod=diff
-  else
-    set foldmethod=syntax
-  endif
+  set foldmethod=syntax
 
   let g:tex_fold_enabled=1
   let g:vimsyn_folding='af'
@@ -49,7 +45,7 @@ For example, by adding the following  to your `.vimrc`
   let g:fastfold_map = 0
 <
 You will:
-- Enable diff folding for diffs, & syntax folding elsewhere.
+- Enable syntax folding by default.
 - Enable tex, vim, xml, php and perl syntax folding.
 - Diable the zuz refresh so that only saving evaluates folds.
 

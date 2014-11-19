@@ -27,19 +27,17 @@ to the `.vimrc` file.
 
 For example, by adding
 ```
-if &diff
-  set foldmethod=diff
-else
-  set foldmethod=syntax
-endif
+set foldmethod=syntax
 
 let g:tex_fold_enabled=1
 let g:vimsyn_folding='af'
 let g:xml_syntax_folding = 1
+let g:php_folding = 1
+let g:perl_fold = 1
 ```
-to the `.vimrc` file and installing this plug-in, the folds in a TeX, Vim or XML
-file are updated by the `syntax` fold method when saving the buffer or typing
-`zuz` in normal mode and are kept as is otherwise.
+to the `.vimrc` file and installing this plug-in, the folds in a TeX, Vim, XML,
+PHP or Perl file are updated by the `syntax` fold method when saving the buffer
+or typing `zuz` in normal mode and are kept as is otherwise.
 
 ==
 
