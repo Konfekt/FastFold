@@ -71,8 +71,10 @@ endfunction
 " See http://vim.wikia.com/wiki/Run_a_command_in_multiple_buffers#Restoring_position
 " Like windo but restore the current buffer.
 function! s:WinDo( command )
+  let curaltwin = winnr('#')
   let currwin=winnr()
   execute 'windo ' . a:command
+  execute curaltwin . 'wincmd w'
   execute currwin . 'wincmd w'
 endfunction
 
