@@ -13,14 +13,14 @@ With this plug-in, the folds in the currently edited buffer are updated by an
 automatic fold method only
 
 - when saving the buffer, or
-- when closing or opening folds, or
+- when closing or opening folds (off by default), or
 - when typing `zuz` in normal mode
 
 and are kept as is otherwise (by keeping the fold method set to `manual`). Each
 of these triggers for updating folds can be disabled by adding
 
 - `let g:fastfold_savehook = 0`, or
-- `let g:fastfold_togglehook = 0` (which is the default), or
+- `let g:fastfold_togglehook = 0` (default value), or
 - `let g:fastfold_map = 0`
 
 to the `.vimrc` file.
@@ -39,7 +39,7 @@ to the `.vimrc` file and installing this plug-in, the folds in a TeX, Vim, XML,
 PHP or Perl file are updated by the `syntax` fold method when saving the buffer
 or typing `zuz` in normal mode and are kept as is otherwise.
 
-==
+ **Configuration**
 
 - If you prefer that folds are only updated manually but not when saving the buffer,
   then add `let g:fastfold_savehook = 0` to your `.vimrc`.
@@ -56,10 +56,11 @@ or typing `zuz` in normal mode and are kept as is otherwise.
   A suggested setting is to add
   ```
   let g:fastfold_togglehook = 1
-  let g:fastfold_mapsuffixes = ['x','X']
+  let g:fastfold_mapsuffixes = ['x','X','a','A']
   ```
-  to your `.vimrc` file.
-
+  to your `.vimrc` file. This updates folds whenever you update (close all other) or toggle 
+  the fold where your cursor is (by `zx` or `za`).
+  
 - If you prefer that this plug-in does not add a normal mode mapping that updates
   folds (that defaults to `zuz`), then add `let g:fastfold_map = 0` to your
   `.vimrc`.
@@ -73,18 +74,9 @@ or typing `zuz` in normal mode and are kept as is otherwise.
 
 ==
 
-Note that this plug-in will overwrite your manual folds when saving the currently edited
-buffer, unless you either
+ **Addons**
 
-- explicitly tell this plug-in to refrain from it via `g:fastfold_skipfiles`, a
-  list of regular expressions against which the current file name is matched,
-  or
--  when entering the buffer the local and global `foldmethod` were equal to
-   `manual` and
-  * since then the local and global `foldmethod` have remained equal to `manual`, or
-  * since then the buffer has not been saved (if `let g:fastfold_savehook = 1`) and no fold has been toggled (if `let g:fastfold_savehook = 1`) and `zuz` (if `let g:fastfold_map = 1`) has not been typed in normal mode.
-
-===
+- `restore_view`
 
 `FastFold.vim` integrates with version 1.2 and above of the `restore_view.vim`
 plug-in that stores and restores the last folds by the `:mkview` and `:loadview`
@@ -95,7 +87,7 @@ A recent fork of it is available at
 
 http://www.github.com/Konfekt/restore_view
 
-==
+- `CustomFoldText`
 
 A `CustomFoldText()` function that displays the percentage of the number of buffer lines that the folded text takes up and indents folds according to their nesting level is available at
 
