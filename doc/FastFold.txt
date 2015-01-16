@@ -109,9 +109,6 @@ plug-in that stores and restores the last folds by the `:mkview` and `:loadview`
 if `restore_view.vim` is loaded AFTER `FastFold.vim`. (To ensure the correct
 autocmd execution order.)
 
-A recent fork of it is available at
-
-http://www.github.com/Konfekt/restore_view
 
 ------------------------------
 
