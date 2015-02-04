@@ -173,7 +173,6 @@ function! s:isValidBuffer()
   " From VIM-STAY:
   let bufnr = bufnr('%')
   return bufexists(bufnr)
-  \ && getbufvar(bufnr, 'stay_ignore', 0) isnot 1
   \ && index(['', 'acwrite'], getbufvar(bufnr, '&buftype')) isnot -1
   \ && getbufvar(bufnr, '&previewwindow') isnot 1
   \ && getbufvar(bufnr, '&diff') isnot 1
