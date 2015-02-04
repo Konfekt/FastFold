@@ -25,7 +25,6 @@ certain triggers are met:
 
 - `:FastFoldUpdate` updates all folds in the current buffer.
 - `:FastFoldUpdate!` updates all folds & echoes what fold method was used
-   (read off from the window local variable `w:lastdfm`).
 
 - The mapping `zuz` that invokes `:FastFoldUpdate!` can be changed to your
   favorite keystroke, say `<F5>`, by 
@@ -107,14 +106,21 @@ currently edited buffer, unless you either
   and no fold has been toggled (if `let g:fastfold_savehook = 1`) and `zuz`
   (if `let g:fastfold_map = 1`) has not been typed in normal mode.
 
+3.2 API ~
+
+The last used fold method by which FastFold updates the folds in the current
+buffer can be read off from the window local variable `w:lastdfm`.
+
 3.2 Related Plugins ~
 
-`FastFold.vim` integrates with version 1.2 and above of the `restore_view.vim`
-plug-in that stores and restores the last folds by the `:mkview` and `:loadview`
-if `restore_view.vim` is loaded AFTER `FastFold.vim`. (To ensure the correct
-autocmd execution order.)
+`FastFold` integrates with both `vim-stay` and `restore_view.vim` plug-in
+that both store and restore the last folds by the `:mkview` and `:loadview`.
+How they compare is discussed at 
 
+https://github.com/kopischke/vim-stay/issues/2
 
+Note that `restore_view.vim` integrates only from version 1.2 and above and
+must load AFTER `FastFold`. (To ensure the correct autocmd execution order.) 
 ------------------------------
 
 A `CustomFoldText()` function that displays the percentage of the number of
