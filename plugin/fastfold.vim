@@ -167,14 +167,19 @@ function! s:Skip()
   return 0
 endfunction
 
-" Copy of MakeViewCheck() in restore_view.vim by Yichao Zhou
 function! s:isValidBuffer()
-  if has('quickfix') && &buftype =~ 'nofile' | return 0 | endif
-  if expand('%') =~ '\[.*\]' | return 0 | endif
-  if empty(glob(expand('%:p'))) | return 0 | endif
   if &modifiable == 0 | return 0 | endif
 
-  return 1
+  " From VIM-STAY:
+  let bufnr = bufnr('%')
+  return bufexists(bufnr)
+  \ && getbufvar(bufnr, 'stay_ignore', 0) isnot 1
+  \ && index(['', 'acwrite'], getbufvar(bufnr, '&buftype')) isnot -1
+  \ && getbufvar(bufnr, '&previewwindow') isnot 1
+  \ && getbufvar(bufnr, '&diff') isnot 1
+  \ && getbufvar(bufnr, '&bufhidden') isnot# 'wipe'
+  \ && filereadable(fnamemodify(bufname(bufnr), ':p'))
+
 endfunction
 
 function! s:OverwriteMaps()
