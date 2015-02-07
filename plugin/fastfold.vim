@@ -173,11 +173,12 @@ function! s:isValidBuffer()
   " From VIM-STAY:
   let bufnr = bufnr('%')
   return bufexists(bufnr)
-  \ && index(['', 'acwrite'], getbufvar(bufnr, '&buftype')) isnot -1
-  \ && getbufvar(bufnr, '&previewwindow') isnot 1
-  \ && getbufvar(bufnr, '&diff') isnot 1
-  \ && getbufvar(bufnr, '&bufhidden') isnot# 'wipe'
-  \ && filereadable(fnamemodify(bufname(bufnr), ':p'))
+    \ && getbufvar(bufnr, '&buflisted') is 1
+    \ && index(['', 'acwrite'], getbufvar(bufnr, '&buftype')) isnot -1
+    \ && getbufvar(bufnr, '&previewwindow') isnot 1
+    \ && getbufvar(bufnr, '&diff') isnot 1
+    \ && index(['', 'hide'], getbufvar(bufnr, '&bufhidden')) isnot -1
+    \ && filereadable(fnamemodify(bufname(bufnr), ':p'))
 
 endfunction
 
