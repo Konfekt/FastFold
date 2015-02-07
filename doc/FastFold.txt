@@ -113,9 +113,9 @@ buffer can be read off from the window local variable `w:lastdfm`.
 
 3.2 Related Plugins ~
 
-`FastFold` integrates with both `vim-stay` and `restore_view.Vim` that both
-store and restore the last folds by the `:Mkview` and `:Loadview`.
-How they compare is discussed at 
+`FastFold` integrates with both `vim-stay` and `restore_view.vim` that both
+store and restore the last folds by `:mkview` and `:loadview`. How they
+compare is discussed at 
 
 https://github.com/kopischke/vim-stay/issues/2
 
