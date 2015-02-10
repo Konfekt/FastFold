@@ -13,11 +13,15 @@
 "
 " 0. Faites ce que vous voulez, j’en ai RIEN À BRANLER.
 
-if exists("g:loaded_fastfold")
+if exists("g:loaded_fastfold") || &cp
   finish
 endif
 
 let g:loaded_fastfold = 1
+
+let s:keepcpo           = &cpo
+set cpo&vim
+" ------------------------------------------------------------------------------
 
 if !exists('g:fastfold_force')
   let g:fastfold_force = 0
@@ -225,3 +229,6 @@ augroup FastFold
   endif
 augroup end
 
+" ------------------------------------------------------------------------------
+let &cpo= s:keepcpo
+unlet s:keepcpo
