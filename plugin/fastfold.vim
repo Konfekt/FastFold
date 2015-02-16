@@ -173,17 +173,9 @@ endfunction
 
 function! s:isValidBuffer()
   if &modifiable == 0 | return 0 | endif
+  if !(exists('b:isPersistent') && b:isPersistent) | return 0 | endif
 
-  " From VIM-STAY:
-  let bufnr = bufnr('%')
-  return bufexists(bufnr)
-    \ && getbufvar(bufnr, '&buflisted') is 1
-    \ && index(['', 'acwrite'], getbufvar(bufnr, '&buftype')) isnot -1
-    \ && getbufvar(bufnr, '&previewwindow') isnot 1
-    \ && getbufvar(bufnr, '&diff') isnot 1
-    \ && index(['', 'hide'], getbufvar(bufnr, '&bufhidden')) isnot -1
-    \ && filereadable(fnamemodify(bufname(bufnr), ':p'))
-
+  return 1
 endfunction
 
 function! s:OverwriteMaps()
