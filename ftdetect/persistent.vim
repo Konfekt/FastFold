@@ -1,4 +1,4 @@
-au BufRead,BufNewFile * if !exists('b:isPersistent') | let b:isPersistent = s:isPersistent() | endif
+au BufRead,BufNewFile,BufFilePost * let b:isPersistent = s:isPersistent()
 
 function! s:isPersistent()
     " From VIM-STAY:
