@@ -1,5 +1,5 @@
 au BufRead,BufNewFile * let b:isPersistent = get(b:, 'isPersistent', s:isPersistent())
-au BufFilePost * let b:isPersistent = s:isPersistent()
+au BufFilePost * let b:isPersistent = 1
 
 function! s:isPersistent()
     " From VIM-STAY:
