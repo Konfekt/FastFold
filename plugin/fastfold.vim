@@ -174,6 +174,7 @@ endfunction
 function! s:isValidBuffer()
   if &modifiable == 0 | return 0 | endif
   if !(exists('b:isPersistent') && b:isPersistent) | return 0 | endif
+  if exists('b:isTemporary') && b:isTemporary | return 0 | endif
 
   return 1
 endfunction

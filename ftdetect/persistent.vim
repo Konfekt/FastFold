@@ -1,3 +1,4 @@
+" Perhaps au BufRead,BufNewFile * let b:isPersistent = 1 already fine?
 au BufRead,BufNewFile * let b:isPersistent = get(b:, 'isPersistent', s:isPersistent())
 au BufFilePost * let b:isPersistent = 1
 
@@ -22,8 +23,6 @@ function! s:isPersistent()
 
     " buffers with a volatile file name
     if expand('%') =~ '\[.*\]' | return 0 | endif
-    if len($TEMP) && expand('%:p:h') == $TEMP | return 0 | endif
-    if len($TMP) && expand('%:p:h') == $TMP | return 0 | endif
 
     return 1
 endfunction
