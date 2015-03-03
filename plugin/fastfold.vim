@@ -23,25 +23,15 @@ let s:keepcpo           = &cpo
 set cpo&vim
 " ------------------------------------------------------------------------------
 
-if !exists('g:fastfold_force')
-  let g:fastfold_force = 0
-endif
+if !exists('g:fastfold_force') | let g:fastfold_force = 0 | endif
 
-if !exists('g:fastfold_map')
-  let g:fastfold_map = 1
-endif
+if !exists('g:fastfold_map') | let g:fastfold_map = 1 | endif
 
-if !exists('g:fastfold_togglehook')
-  let g:fastfold_togglehook = 0
-endif
+if !exists('g:fastfold_togglehook') | let g:fastfold_togglehook = 0 | endif
 
-if !exists('g:fastfold_savehook')
-  let g:fastfold_savehook = 1
-endif
+if !exists('g:fastfold_savehook') | let g:fastfold_savehook = 1 | endif
 
-if !exists("g:fastfold_skipfiles")
-  let g:fastfold_skipfiles = []
-endif
+if !exists("g:fastfold_skipfiles") | let g:fastfold_skipfiles = [] | endif
 
 function! s:locfdm()
   if &l:foldmethod !=# 'manual'
@@ -68,12 +58,11 @@ function! s:lastfdm()
 endfunction
 
 function! s:Enter()
-  let w:lastfdm = s:locfdm()
-
   if s:Skip()
     return
   endif
 
+  let w:lastfdm = s:locfdm()
   setlocal foldmethod=manual
 endfunction
 
@@ -134,8 +123,7 @@ function! s:UpdateBuf(feedback)
   call s:LeaveAllWinOfBuf()
   call s:EnterAllWinOfBuf()
 
-
-  if !s:Skip() && a:feedback
+  if a:feedback
     echo "updated '".w:lastfdm."' folds"
   endif
 endfunction
@@ -145,7 +133,7 @@ function! s:isReasonable()
     return 1
   endif
   " if !isValidBuf() then not exists('w:lastfdm')
-  if exists('w:lastfdm') && (w:lastfdm ==# 'syntax' || w:lastfdm ==# 'expr')
+  if &l:foldmethod ==# 'syntax' || &l:foldmethod ==# 'expr'
     return 1
   endif
   return 0
