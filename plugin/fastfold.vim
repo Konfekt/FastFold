@@ -77,6 +77,7 @@ function! s:WinDo( command )
 endfunction
 
 function! s:UpdateTab()
+  " WinEnter then TabEnter then BufEnter then BufWinEnter
   call s:WinDo("if exists('w:lastfdm') | call s:Enter() | endif")
   call s:WinDo("call s:Leave()")
 endfunction
@@ -87,13 +88,22 @@ function! s:UpdateBuf(feedback)
     return
   endif
 
-  let s:curbuf = bufnr('%')
-  call s:WinDo("if bufnr('%') == s:curbuf | call s:Enter() | endif")
-  call s:WinDo("if bufnr('%') == s:curbuf | call s:Leave() | endif")
+  call s:LeaveAllWinOfBuf()
+  call s:EnterAllWinOfBuf()
 
   if a:feedback
     echo "updated '".w:lastfdm."' folds"
   endif
+endfunction
+
+function! s:EnterAllWinOfBuf()
+  let s:curbuf = bufnr('%')
+  call s:WinDo("if bufnr('%') == s:curbuf | call s:Enter() | endif")
+endfunction
+
+function! s:LeaveAllWinOfBuf()
+  let s:curbuf = bufnr('%')
+  call s:WinDo("if bufnr('%') == s:curbuf | call s:Leave() | endif")
 endfunction
 
 function! s:isValidBuffer()
