@@ -116,20 +116,14 @@ function! s:isValidBuffer()
 endfunction
 
 function! s:Skip()
-  if !s:isReasonable()
-    return 1
-  endif
-  if s:inSkipList()
-    return 1
-  endif
+  if !s:isReasonable() | return 1 | endif
+  if s:inSkipList()    | return 1 | endif
+
   return 0
 endfunction
 
 function! s:isReasonable()
-  if g:fastfold_force
-    return 1
-  endif
-  " if !isValidBuf() then not exists('w:lastfdm')
+  if g:fastfold_force | return 1 | endif
   if &l:foldmethod ==# 'syntax' || &l:foldmethod ==# 'expr'
     return 1
   endif
