@@ -77,20 +77,8 @@ function! s:WinDo( command )
 endfunction
 
 function! s:UpdateTab()
-  call s:LeaveAllWinOfTab()
-  call s:EnterAllWinOfTab()
-endfunction
-
-function! s:EnterAllWinOfTab()
   call s:WinDo("if exists('w:lastfdm') | call s:Enter() | endif")
-endfunction
-
-function! s:LeaveAllWinOfTab()
-  " Because TabEnter triggers BEFORE the FileType (that sets local fdm) and
-  " BufWinEnter (that sets mode line fdm) are executed, check if window fdm
-  " already set up. But TabEnter triggers AFTER WinEnter, so w:Lastfdm check
-  " sufficient. (No b:Lastfdm).
-  call s:WinDo("if exists('w:lastfdm') | call s:Leave() | endif")
+  call s:WinDo("call s:Leave()")
 endfunction
 
 function! s:UpdateBuf(feedback)
@@ -99,22 +87,13 @@ function! s:UpdateBuf(feedback)
     return
   endif
 
-  call s:LeaveAllWinOfBuf()
-  call s:EnterAllWinOfBuf()
+  let s:curbuf = bufnr('%')
+  call s:WinDo("if bufnr('%') == s:curbuf | call s:Enter() | endif")
+  call s:WinDo("if bufnr('%') == s:curbuf | call s:Leave() | endif")
 
   if a:feedback
     echo "updated '".w:lastfdm."' folds"
   endif
-endfunction
-
-function! s:EnterAllWinOfBuf()
-  let s:curbuf = bufnr('%')
-  call s:WinDo("if bufnr('%') == s:curbuf | call s:Enter() | endif")
-endfunction
-
-function! s:LeaveAllWinOfBuf()
-  let s:curbuf = bufnr('%')
-  call s:WinDo("if bufnr('%') == s:curbuf | call s:Leave() | endif")
 endfunction
 
 function! s:isValidBuffer()
