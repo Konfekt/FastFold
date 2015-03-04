@@ -47,18 +47,6 @@ function! s:locfdm()
   return &g:foldmethod
 endfunction
 
-function! s:lastfdm()
-  if exists('w:lastfdm') && w:lastfdm !=# 'manual'
-    return w:lastfdm
-  endif
-
-  if &l:foldmethod !=# 'manual'
-    return &l:foldmethod
-  endif
-
-  return &g:foldmethod
-endfunction
-
 function! s:Enter()
   if s:Skip()
     return
@@ -69,12 +57,8 @@ function! s:Enter()
 endfunction
 
 function! s:Leave()
-  if s:Skip()
-    return
-  endif
-
-  if &l:foldmethod == 'manual'
-    let &l:foldmethod= s:lastfdm()
+  if exists('w:lastfdm') && &l:foldmethod == 'manual'
+    let &l:foldmethod= w:lastfdm
   endif
 endfunction
 
