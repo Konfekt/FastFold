@@ -8,9 +8,9 @@ function! s:isTemporary()
     " buffer name is file name independent. See discussion at
     " https://Github.Com/kopischke/vim-stay/issues/2
 
-    if len($TMPDIR) && expand('%:p:h') == $TMPDIR | return 1 | endif
-    if len($TEMP) && expand('%:p:h') == $TEMP | return 1 | endif
-    if len($TMP) && expand('%:p:h') == $TMP | return 1 | endif
+    if !empty($TMPDIR) && expand('%:p:h') == $TMPDIR | return 1 | endif
+    if !empty($TEMP) && expand('%:p:h') == $TEMP | return 1 | endif
+    if !empty($TMP) && expand('%:p:h') == $TMP | return 1 | endif
 
     return 0
 endfunction

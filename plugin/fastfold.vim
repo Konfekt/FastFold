@@ -16,25 +16,19 @@
 if exists("g:loaded_fastfold") || &cp
   finish
 endif
-
 let g:loaded_fastfold = 1
 
 let s:keepcpo         = &cpo
 set cpo&vim
 " ------------------------------------------------------------------------------
 
-if !exists('g:fastfold_map')         | let g:fastfold_map = 1        | endif
-
-if !exists('g:fastfold_savehook')    | let g:fastfold_savehook = 1   | endif
-
+if !exists('g:fastfold_map')         | let g:fastfold_map        = 1 | endif
+if !exists('g:fastfold_savehook')    | let g:fastfold_savehook   = 1 | endif
 if !exists('g:fastfold_togglehook')  | let g:fastfold_togglehook = 0 | endif
-
 if !exists('g:fastfold_mapsuffixes')
   let g:fastfold_mapsuffixes = ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']
 endif
-
-if !exists('g:fastfold_force')       | let g:fastfold_force = 0      | endif
-
+if !exists('g:fastfold_force')       | let g:fastfold_force     = 0  | endif
 if !exists("g:fastfold_skipfiles")   | let g:fastfold_skipfiles = [] | endif
 
 function! s:locfdm()
@@ -156,21 +150,22 @@ endif
 
 augroup FastFold
   autocmd!
-  " Default to last foldmethod of current buffer.
-  " This BufWinEnter autocmd must come before that calling s:Enter().
+  " Default to last foldmethod of current buffer. This BufWinEnter autocmd
+  " must come before that calling s:Enter().
   autocmd BufWinEnter ?* if exists('b:lastfdm') | let &l:foldmethod = b:lastfdm | endif
   autocmd WinLeave    *  if exists('w:lastfdm') | let b:lastfdm     = w:lastfdm | endif
 
-  " nonmodifiable buffers do not need fold updates
+  " isValidBuffer() = nonmodifiable and temp buffers do not need fold updates.
   autocmd BufWinEnter ?* if s:isValidBuffer() | call s:Enter() | endif
-  " for :makeview autocmd in BufWinLeave
+  " So that a :makeview autocmd loaded AFTER FastFold saves correct foldmethod.
   autocmd BufWinLeave ?* if s:isValidBuffer() | call s:Leave() | endif
-  " for :loadview
+  " So that FastFold functions correctly after :loadview.
   autocmd SessionLoadPost * call s:Enter()
 
   autocmd TabEnter * call s:UpdateTab()
 
-  " update folds on saving
+  " Update folds on saving. Split into Pre and Post event so that a :makeeview
+  " BufWrite(Pre) autocmd loaded AFTER FastFold can tap into it.
   if g:fastfold_savehook == 1
     autocmd BufWritePre     ?* call s:LeaveAllWinOfBuf()
     autocmd BufWritePost    ?* call s:EnterAllWinOfBuf()
