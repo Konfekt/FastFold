@@ -44,6 +44,11 @@ function! s:locfdm()
 endfunction
 
 function! s:Enter()
+  " skip if another session still loading
+  if exists('g:SessionLoad')
+    return
+  endif
+
   if s:Skip()
     if exists('w:lastfdm') | unlet w:lastfdm | endif
     return
