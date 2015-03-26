@@ -31,30 +31,18 @@ endif
 if !exists('g:fastfold_force')       | let g:fastfold_force     = 0  | endif
 if !exists("g:fastfold_skipfiles")   | let g:fastfold_skipfiles = [] | endif
 
-function! s:locfdm()
-  if &l:foldmethod !=# 'manual'
-    return &l:foldmethod
-  endif
-
-  if exists('w:lastfdm') && w:lastfdm !=# 'manual'
-    return w:lastfdm
-  endif
-
-  return &g:foldmethod
-endfunction
-
 function! s:Enter()
   " skip if another session still loading
-  if exists('g:SessionLoad')
-    return
-  endif
+  if exists('g:SessionLoad') | return | endif
+
+  if &l:foldmethod ==# 'manual' | return | endif
 
   if s:Skip()
     if exists('w:lastfdm') | unlet w:lastfdm | endif
     return
   endif
 
-  let w:lastfdm = s:locfdm()
+  let w:lastfdm = &l:foldmethod
   setlocal foldmethod=manual
 endfunction
 
