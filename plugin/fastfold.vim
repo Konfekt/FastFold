@@ -37,7 +37,7 @@ if exists('g:fastfold_mapsuffixes')
   echomsg 'FastFold: The variable g:fastfold_mapsuffixes is deprecated. Use g:fastfold_fold_command_suffixes instead'
   let g:fastfold_fold_command_suffixes = g:fastfold_mapsuffixes
 endif
-if exists('g:fastfold_togglehook') && g:fastfold_togglehook = 0
+if exists('g:fastfold_togglehook') && g:fastfold_togglehook == 0
   echomsg 'FastFold: The variable g:fastfold_togglehook is deprecated. Use g:fastfold_fold_command_suffixes=[] instead'
   let g:fastfold_fold_command_suffixes = []
 endif
