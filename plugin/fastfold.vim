@@ -24,12 +24,17 @@ set cpo&vim
 
 if !exists('g:fastfold_map')         | let g:fastfold_map        = 1 | endif
 if !exists('g:fastfold_savehook')    | let g:fastfold_savehook   = 1 | endif
-if !exists('g:fastfold_togglehook')  | let g:fastfold_togglehook = 0 | endif
-if !exists('g:fastfold_mapsuffixes')
-  let g:fastfold_mapsuffixes = ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']
+if !exists('g:fastfold_fold_command_suffixes')
+  let g:fastfold_fold_command_suffixes = ['x','X','a','A','o','O','c','C']
 endif
 if !exists('g:fastfold_force')       | let g:fastfold_force     = 0  | endif
 if !exists("g:fastfold_skipfiles")   | let g:fastfold_skipfiles = [] | endif
+
+" DEPRECATED VARIABLES
+if exists('g:fastfold_mapsuffixes')
+  echomsg 'FastFold: The variable g:fastfold_mapsuffixes is deprecated. Use g:fastfold_fold_command_suffixes instead'
+  let g:fastfold_fold_command_suffixes = g:fastfold_mapsuffixes
+endif
 
 function! s:Enter()
   " skip if another session still loading
@@ -133,11 +138,9 @@ if g:fastfold_map == 1 && !hasmapto('<Plug>(FastFoldUpdate)', 'n') && mapcheck('
   nmap zuz <Plug>(FastFoldUpdate)
 endif
 
-if g:fastfold_togglehook == 1
-  for mapsuffix in g:fastfold_mapsuffixes
-    execute 'nnoremap <silent> z'.mapsuffix.' :FastFoldUpdate<CR>z'.mapsuffix
-  endfor
-endif
+for suffix in g:fastfold_fold_command_suffixes
+  execute 'nnoremap <silent> z'.suffix.' :FastFoldUpdate<CR>z'.suffix
+endfor
 
 augroup FastFold
   autocmd!

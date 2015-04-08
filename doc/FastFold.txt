@@ -27,9 +27,13 @@ certain triggers are met:
 - `:FastFoldUpdate!` updates all folds & echoes what fold method was used
 
 - The mapping `zuz` that invokes `:FastFoldUpdate!` can be changed to your
-  favorite keystroke, say `<F5>`, by 
+  favorite keystroke, say `<F5>`, by adding
 >
     nmap <F5> <Plug>(FastFoldUpdate)
+<
+  to your `.vimrc`. It can be disabled by adding
+>
+    nmap <SID>(DisableFastFoldUpdate) <Plug>(FastFoldUpdate)
 <
 ===========================================================================
 2. Config ~
@@ -38,9 +42,9 @@ certain triggers are met:
 Each of the above triggers can be enabled or disabled by setting the
 matching global flags in your `.vimrc`. Default values are shown.
 >
+  nmap zuz <Plug>(FastFoldUpdate)
   let g:fastfold_savehook = 1
-  let g:fastfold_togglehook = 0
-  let g:fastfold_map = 1
+  let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
 <
 For example, by adding the following  to your `.vimrc`
 >
@@ -51,31 +55,23 @@ For example, by adding the following  to your `.vimrc`
   let g:xml_syntax_folding = 1
   let g:php_folding = 1
   let g:perl_fold = 1
-  let g:fastfold_map = 0
 <
 You will:
 - Enable syntax folding by default.
 - Enable tex, vim, xml, php and perl syntax folding.
-- Diable the zuz refresh so that only saving evaluates folds.
 
 -----------------------------
 
 - By default, the fold keystrokes associated with the toggle hook are:
-  zx, zX, za, zA, zo, zO, zc, zC, zr, zR, zm, zM, zi, zn, zN.
-  The corresponding mapsuffixes are:
+  zx, zX, za, zA, zo, zO, zc, zC. The corresponding suffixes are:
 >
-  let g:fastfold_mapsuffixes =  ['x','X','a','A','o','O','c','C',
-    'r','R','m','M','i','n','N']
-
-- The exact commands that trigger the toggle hook can be modified by the
-  `fastfold_mapsuffixes` variable. The list is suffixes of the fold commands
-  you want to trigger with. For example, if you wanted to intercept zo and zc.
->
-  let g:fastfold_mapsuffixes = ['o', 'c']
+  let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
 <
-- If you prefer that this plug-in does not add a normal mode mapping that updates
-  folds (defaults is `zuz`), then set `let g:fastfold_map = 0` to your
-  `.vimrc`.
+  If you wanted to intercept all possible fold commands, change this to:
+>
+  let g:fastfold_fold_command_suffixes =
+  ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']
+<
 
 -----------------------------
 
@@ -86,7 +82,6 @@ The option
 when set to 1, enables FastFold even for foldmethods other than 'syntax' and
 'expr'. Because these other fold methods require little computation, there is
 little benefit in forcing manual folds by FastFold, thence the default value '0'.
-
 
 ===========================================================================
 3. Extra Notes ~
@@ -99,12 +94,7 @@ currently edited buffer, unless you either
 - explicitly tell this plug-in to refrain from it via `g:fastfold_skipfiles`, a
   list of regular expressions against which the current file name is matched,
   or
--  when entering the buffer the local and global `foldmethod` were equal to
-   `manual` and
-  * since then the local and global `foldmethod` have remained equal to `manual`, or
-  * since then the buffer has not been saved (if `let g:fastfold_savehook = 1`)
-  and no fold has been toggled (if `let g:fastfold_savehook = 1`) and `zuz`
-  (if `let g:fastfold_map = 1`) has not been typed in normal mode.
+-  the local `foldmethod` has been `manual` since entering the buffer.
 
 3.2 API ~
 
@@ -115,12 +105,12 @@ buffer can be read off from the window local variable `w:lastdfm`.
 
 `FastFold` integrates with both `vim-stay` and `restore_view.vim` that both
 store and restore the last folds by `:mkview` and `:loadview`. How they
-compare is discussed at 
+compare is discussed at
 
 https://github.com/kopischke/vim-stay/issues/2
 
 Note that `restore_view.vim` integrates only from version 1.2 and above and
-must load AFTER `FastFold`. (To ensure the correct autocmd execution order.) 
+must load AFTER `FastFold`. (To ensure the correct autocmd execution order.)
 ------------------------------
 
 A `CustomFoldText()` function that displays the percentage of the number of
