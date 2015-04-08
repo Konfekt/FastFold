@@ -73,10 +73,18 @@ You will enable tex, vim, xml, php and perl syntax folding.
   let g:fastfold_fold_command_suffixes =
   ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']
 <
+  or if you wanted to disable all interceptions, change this to
+>
+  let g:fastfold_fold_command_suffixes = []
+<
 - By default FastFold updates all fold when you move or operate fold-wise by
   the commands zj,zk,[z or ]z. This is configured by the variable
 >
   let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
+<
+  and can be disabled by
+>
+  let g:fastfold_fold_movement_commands = []
 <
 -----------------------------
 
