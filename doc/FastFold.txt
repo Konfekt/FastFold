@@ -16,6 +16,7 @@ With this plug-in, the folds in the currently edited buffer are updated when
 certain triggers are met:
 - when saving the buffer
 - when closing or opening folds (zo, za, zc, etc...)
+- when moving or operating fold-wise (zj,zk,[z,]z)
 - when typing `zuz` in normal mode
 
 ===========================================================================
@@ -45,6 +46,7 @@ matching global flags in your `.vimrc`. Default values are shown.
   nmap zuz <Plug>(FastFoldUpdate)
   let g:fastfold_savehook = 1
   let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
+  let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
 <
 For example, by adding the following  to your `.vimrc`
 >
@@ -56,23 +58,26 @@ For example, by adding the following  to your `.vimrc`
   let g:php_folding = 1
   let g:perl_fold = 1
 <
-You will:
-- Enable syntax folding by default.
-- Enable tex, vim, xml, php and perl syntax folding.
+You will enable tex, vim, xml, php and perl syntax folding.
 
 -----------------------------
 
-- By default, the fold keystrokes associated with the toggle hook are:
-  zx, zX, za, zA, zo, zO, zc, zC. The corresponding suffixes are:
+- By default FastFold updates all fold when you open or close folds by
+  zx, zX, za, zA, zo, zO, zc, zC. This is configured by the variable
 >
   let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
 <
-  If you wanted to intercept all possible fold commands, change this to:
+  If you wanted to intercept all possible fold commands (such as zr,zm,...),
+  change this to:
 >
   let g:fastfold_fold_command_suffixes =
   ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']
 <
-
+- By default FastFold updates all fold when you move or operate fold-wise by
+  the commands zj,zk,[z or ]z. This is configured by the variable
+>
+  let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
+<
 -----------------------------
 
 The option
