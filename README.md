@@ -12,16 +12,18 @@ for a discussion.
 With this plug-in, the folds in the currently edited buffer are updated by an
 automatic fold method only
 
-- when saving the buffer, or
-- when closing or opening folds (off by default), or
+- when saving the buffer
+- when closing or opening folds (zo, za, zc, etc...)
+- when moving or operating fold-wise (zj,zk,[z,]z)
 - when typing `zuz` in normal mode
 
 and are kept as is otherwise (by keeping the fold method set to `manual`). Each
-of these triggers for updating folds can be disabled by adding
+of these triggers for updating folds can be modified or disabled by adding
 
-- `let g:fastfold_savehook = 0`, or
-- `let g:fastfold_togglehook = 0` (default value), or
-- `let g:fastfold_map = 0`
+- nmap zuz <Plug>(FastFoldUpdate)
+- let g:fastfold_savehook = 1
+- let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
+- let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
 
 to the `.vimrc` file.
 
@@ -36,8 +38,9 @@ let g:php_folding = 1
 let g:perl_fold = 1
 ```
 to the `.vimrc` file and installing this plug-in, the folds in a TeX, Vim, XML,
-PHP or Perl file are updated by the `syntax` fold method when saving the buffer
-or typing `zuz` in normal mode and are kept as is otherwise.
+PHP or Perl file are updated by the `syntax` fold method when saving the
+buffer, opening, closing, moving or operating on folds, or typing `zuz` in
+normal mode and are kept as is otherwise.
 
  **Configuration**
 
@@ -46,27 +49,20 @@ or typing `zuz` in normal mode and are kept as is otherwise.
 
 - If you prefer that folds are updated whenever you close or open folds by a
   standard keystroke such as `zx`,`zo` or `zc`, then add `let
-  g:fastfold_togglehook = 1` to your `.vimrc`.
+  g:fastfold_fold_command_suffixes = []` to your `.vimrc`.
 
-  The exact list of these standard keystrokes is
-  `zx,zX,za,zA,zo,zO,zc,zC,zr,zR,zm,zM,zi,zn,zN` and it can be customized by changing
-  the global variable `g:fastfold_mapsuffixes` (that defaults to `let g:fastfold_mapsuffixes =
-  ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']`).
+  The exact list of these standard keystrokes is `zx,zX,za,zA,zo,zO,zc,zC` and it can be customized by changing
+  the global variable `g:fastfold_mapsuffixes`. If you wanted to intercept all possible fold commands (such as zr,zm,...), change this to:
 
-  A suggested setting is to add
-  ```
-  let g:fastfold_togglehook = 1
-  let g:fastfold_mapsuffixes = ['x','X','a','A']
-  ```
-  to your `.vimrc` file. This updates folds whenever you update (close all other) or toggle 
-  the fold where your cursor is (by `zx` or `za`).
-  
+  let g:fastfold_fold_command_suffixes =
+  ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']
+
 - If you prefer that this plug-in does not add a normal mode mapping that updates
-  folds (that defaults to `zuz`), then add `let g:fastfold_map = 0` to your
-  `.vimrc`.
+  folds (that defaults to `zuz`), then add
+  `nmap <SID>(DisableFastFoldUpdate) <Plug>(FastFoldUpdate) ` to your `.vimrc`.
 
-  You can remap `zuz` to your favorite keystroke, say `<F5>`, by adding `nmap
-  <F5> <Plug>(FastFoldUpdate)` to your `.Vimrc`.
+  You can remap `zuz` to your favorite keystroke, say `<F5>`, by adding
+  `nmap <F5> <Plug>(FastFoldUpdate)` to your `.Vimrc`.
 
   There is also a command `FastFoldUpdate` that updates all folds and its
   variant `FastFoldUpdate!` that updates all folds and echos by which fold
@@ -80,12 +76,12 @@ or typing `zuz` in normal mode and are kept as is otherwise.
 
 `FastFold` integrates with both `vim-stay` and `restore_view.Vim` that both
 store and restore the last folds by the `:Mkview` and `:Loadview`.
-How they compare is discussed at 
+How they compare is discussed at
 
 https://github.com/kopischke/vim-stay/issues/2
 
 Note that `restore_view.vim` integrates only from version 1.2 and above and
-must load AFTER `FastFold`. (To ensure the correct autocmd execution order.) 
+must load AFTER `FastFold`. (To ensure the correct autocmd execution order.)
 
 - `CustomFoldText`
 
