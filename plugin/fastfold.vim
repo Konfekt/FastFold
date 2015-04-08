@@ -33,6 +33,10 @@ if !exists('g:fastfold_force')       | let g:fastfold_force     = 0  | endif
 if !exists("g:fastfold_skipfiles")   | let g:fastfold_skipfiles = [] | endif
 
 " DEPRECATED VARIABLES
+if exists('g:fastfold_map') && g:fastfold_map == 0
+" echomsg 'FastFold: The variable g:fastfold_map is deprecated. Use nmap <SID>(DisableFastFoldUpdate) <Plug>(FastFoldUpdate) instead'
+  nmap <SID>(DisableFastFoldUpdate) <Plug>(FastFoldUpdate)
+endif
 if exists('g:fastfold_mapsuffixes')
   " echomsg 'FastFold: The variable g:fastfold_mapsuffixes is deprecated. Use g:fastfold_fold_command_suffixes instead'
   let g:fastfold_fold_command_suffixes = g:fastfold_mapsuffixes
