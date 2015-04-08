@@ -26,6 +26,9 @@ if !exists('g:fastfold_savehook')    | let g:fastfold_savehook   = 1 | endif
 if !exists('g:fastfold_fold_command_suffixes')
   let g:fastfold_fold_command_suffixes = ['x','X','a','A','o','O','c','C']
 endif
+if !exists('g:fastfold_fold_movement_commands')
+  let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
+endif
 if !exists('g:fastfold_force')       | let g:fastfold_force     = 0  | endif
 if !exists("g:fastfold_skipfiles")   | let g:fastfold_skipfiles = [] | endif
 
@@ -143,6 +146,12 @@ endif
 
 for suffix in g:fastfold_fold_command_suffixes
   execute 'nnoremap <silent> z'.suffix.' :FastFoldUpdate<CR>z'.suffix
+endfor
+
+for cmd in g:fastfold_fold_movement_commands
+  exe "nnoremap <silent><expr> " . cmd. " ':<c-u>FastFoldUpdate<CR>'.v:count." . "'".cmd."'"
+  exe "xnoremap <silent><expr> " . cmd. " ':<c-u>FastFoldUpdate<CR>gv'.v:count." . "'".cmd."'"
+  exe "onoremap <silent><expr> " . cmd. " '<esc>:<c-u>FastFoldUpdate<CR>'.v:operator.v:count1." . "'".cmd."'"
 endfor
 
 augroup FastFold
