@@ -22,7 +22,6 @@ let s:keepcpo         = &cpo
 set cpo&vim
 " ------------------------------------------------------------------------------
 
-if !exists('g:fastfold_map')         | let g:fastfold_map        = 1 | endif
 if !exists('g:fastfold_savehook')    | let g:fastfold_savehook   = 1 | endif
 if !exists('g:fastfold_fold_command_suffixes')
   let g:fastfold_fold_command_suffixes = ['x','X','a','A','o','O','c','C']
@@ -134,7 +133,7 @@ command! -bar -bang FastFoldUpdate call s:UpdateBuf(<bang>0)
 
 nnoremap <silent> <Plug>(FastFoldUpdate) :FastFoldUpdate!<CR>
 
-if g:fastfold_map == 1 && !hasmapto('<Plug>(FastFoldUpdate)', 'n') && mapcheck('zuz', 'n') ==# ''
+if !hasmapto('<Plug>(FastFoldUpdate)', 'n') && mapcheck('zuz', 'n') ==# ''
   nmap zuz <Plug>(FastFoldUpdate)
 endif
 
