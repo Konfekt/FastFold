@@ -142,14 +142,14 @@ endfunction
 
 command! -bar -bang FastFoldUpdate call s:UpdateBuf(<bang>0)
 
-nnoremap <silent> <Plug>(FastFoldUpdate) :FastFoldUpdate!<CR>
+nnoremap <silent> <Plug>(FastFoldUpdate) :<c-u>FastFoldUpdate!<CR>
 
 if !hasmapto('<Plug>(FastFoldUpdate)', 'n') && mapcheck('zuz', 'n') ==# ''
   nmap zuz <Plug>(FastFoldUpdate)
 endif
 
 for suffix in g:fastfold_fold_command_suffixes
-  execute 'nnoremap <silent> z'.suffix.' :FastFoldUpdate<CR>z'.suffix
+  execute 'nnoremap <silent> z'.suffix.' :<c-u>FastFoldUpdate<CR>z'.suffix
 endfor
 
 for cmd in g:fastfold_fold_movement_commands
