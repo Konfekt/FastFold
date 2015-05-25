@@ -33,7 +33,7 @@ if !exists('g:fastfold_force')       | let g:fastfold_force     = 0  | endif
 if !exists("g:fastfold_skipfiles")   | let g:fastfold_skipfiles = [] | endif
 
 " DEPRECATED VARIABLES
-if exists('g:fastfold_map') && g:fastfold_map == 0
+if exists('g:fastfold_map') && !g:fastfold_map
 " echomsg 'FastFold: The variable g:fastfold_map is deprecated. Use nmap <SID>(DisableFastFoldUpdate) <Plug>(FastFoldUpdate) instead'
   nmap <SID>(DisableFastFoldUpdate) <Plug>(FastFoldUpdate)
 endif
@@ -41,7 +41,7 @@ if exists('g:fastfold_mapsuffixes')
   " echomsg 'FastFold: The variable g:fastfold_mapsuffixes is deprecated. Use g:fastfold_fold_command_suffixes instead'
   let g:fastfold_fold_command_suffixes = g:fastfold_mapsuffixes
 endif
-if exists('g:fastfold_togglehook') && g:fastfold_togglehook == 0
+if exists('g:fastfold_togglehook') && !g:fastfold_togglehook
   " echomsg 'FastFold: The variable g:fastfold_togglehook is deprecated. Use g:fastfold_fold_command_suffixes=[] instead'
   let g:fastfold_fold_command_suffixes = []
 endif
@@ -49,8 +49,6 @@ endif
 function! s:Enter()
   " skip if another session still loading
   if exists('g:SessionLoad') | return | endif
-
-  if &l:foldmethod ==# 'manual' | return | endif
 
   if s:Skip()
     if exists('w:lastfdm') | unlet w:lastfdm | endif
@@ -92,9 +90,9 @@ function! s:UpdateBuf(feedback)
   if !a:feedback | return | endif
 
   if !exists('w:lastfdm')
-    echomsg "'".&l:foldmethod."'"." folds already continuously updated"
+    echomsg "'" . &l:foldmethod . "' folds already continuously updated"
   else
-    echomsg "updated '".w:lastfdm."' folds"
+    echomsg "updated '" . w:lastfdm . "' folds"
   endif
 endfunction
 
@@ -108,14 +106,8 @@ function! s:LeaveAllWinOfBuf()
   call s:WinDo("if bufnr('%') == s:curbuf | call s:Leave() | endif")
 endfunction
 
-function! s:isValidBuffer()
-  if exists('b:lastfdm')                           | return 1 | endif
-  if &modifiable == 0                              | return 0 | endif
-
-  return 1
-endfunction
-
 function! s:Skip()
+  if !&l:modifiable    | return 1 | endif
   if !s:isReasonable() | return 1 | endif
   if s:inSkipList()    | return 1 | endif
 
@@ -162,13 +154,13 @@ augroup FastFold
   autocmd!
   " Default to last foldmethod of current buffer. This BufWinEnter autocmd
   " must come before that calling s:Enter().
-  autocmd BufWinEnter ?* if exists('b:lastfdm') | let &l:foldmethod = b:lastfdm | endif
-  autocmd WinLeave    *  if exists('w:lastfdm') | let b:lastfdm     = w:lastfdm | endif
+  autocmd BufWinEnter * if exists('b:lastfdm') | let &l:foldmethod = b:lastfdm | endif
+  autocmd BufLeave    *  if exists('w:lastfdm') | let b:lastfdm     = w:lastfdm | endif
 
-  " isValidBuffer() = nonmodifiable and temp buffers do not need fold updates.
-  autocmd BufWinEnter ?* if s:isValidBuffer() | call s:Enter() | endif
+  autocmd BufWinEnter * call s:Enter()
+  autocmd FileType * call s:Leave() | call s:Enter()
   " So that a :makeview autocmd loaded AFTER FastFold saves correct foldmethod.
-  autocmd BufWinLeave ?* if s:isValidBuffer() | call s:Leave() | endif
+  autocmd BufWinLeave * call s:Leave()
   " So that FastFold functions correctly after :loadview.
   autocmd SessionLoadPost * call s:Enter()
 
@@ -176,7 +168,7 @@ augroup FastFold
 
   " Update folds on saving. Split into Pre and Post event so that a :makeeview
   " BufWrite(Pre) autocmd loaded AFTER FastFold can tap into it.
-  if g:fastfold_savehook == 1
+  if g:fastfold_savehook
     autocmd BufWritePre     ?* call s:LeaveAllWinOfBuf()
     autocmd BufWritePost    ?* call s:EnterAllWinOfBuf()
   endif
