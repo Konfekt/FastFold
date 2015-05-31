@@ -107,18 +107,21 @@ function! s:LeaveAllWinOfBuf()
 endfunction
 
 function! s:Skip()
-  if !&l:modifiable    | return 1 | endif
   if !s:isReasonable() | return 1 | endif
   if s:inSkipList()    | return 1 | endif
+  if !&l:modifiable    | return 1 | endif
 
   return 0
 endfunction
 
 function! s:isReasonable()
+  if &l:foldmethod ==# 'manual' | return 0 | endif
+
   if g:fastfold_force | return 1 | endif
   if &l:foldmethod ==# 'syntax' || &l:foldmethod ==# 'expr'
     return 1
   endif
+
   return 0
 endfunction
 
