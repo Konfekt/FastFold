@@ -60,7 +60,7 @@ function! s:Enter()
 endfunction
 
 function! s:Leave()
-  if exists('w:lastfdm') && &l:foldmethod == 'manual'
+  if exists('w:lastfdm') && &l:foldmethod ==# 'manual'
     let &l:foldmethod= w:lastfdm
   endif
 endfunction
@@ -160,12 +160,12 @@ augroup FastFold
   autocmd BufWinEnter * if exists('b:lastfdm') | let &l:foldmethod = b:lastfdm | endif
   autocmd BufLeave    *  if exists('w:lastfdm') | let b:lastfdm     = w:lastfdm | endif
 
-  autocmd BufWinEnter * call s:Enter()
+  autocmd BufWinEnter * call s:Leave() | call s:Enter()
   autocmd FileType * call s:Leave() | call s:Enter()
+  " So that FastFold functions correctly after :loadview.
+  autocmd SessionLoadPost * call s:Leave() | call s:Enter()
   " So that a :makeview autocmd loaded AFTER FastFold saves correct foldmethod.
   autocmd BufWinLeave * call s:Leave()
-  " So that FastFold functions correctly after :loadview.
-  autocmd SessionLoadPost * call s:Enter()
 
   autocmd TabEnter * call s:UpdateTab()
 
