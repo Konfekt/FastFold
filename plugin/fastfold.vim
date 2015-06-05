@@ -47,9 +47,6 @@ if exists('g:fastfold_togglehook') && !g:fastfold_togglehook
 endif
 
 function! s:Enter()
-  " skip if another session still loading
-  if exists('g:SessionLoad') | return | endif
-
   if s:Skip()
     if exists('w:lastfdm') | unlet w:lastfdm | endif
     return
@@ -79,13 +76,18 @@ endfunction
 
 function! s:UpdateTab()
   " WinEnter then TabEnter then BufEnter then BufWinEnter
-  call s:WinDo("if exists('w:lastfdm') | call s:Enter() | endif")
-  call s:WinDo("call s:Leave()")
+  call s:WinDo("call s:UpdateWin()")
 endfunction
 
-function! s:UpdateBuf(feedback)
-  call s:LeaveAllWinOfBuf()
-  call s:EnterAllWinOfBuf()
+function! s:UpdateWin()
+  " skip if another session still loading
+  if exists('g:SessionLoad') | return | endif
+  call s:Leave() | call s:Enter()
+endfunction
+
+function! s:UpdateAllWinOfBuf(feedback)
+  let s:curbuf = bufnr('%')
+  call s:WinDo("if bufnr('%') == s:curbuf | call s:UpdateWin() | endif")
 
   if !a:feedback | return | endif
 
@@ -94,16 +96,6 @@ function! s:UpdateBuf(feedback)
   else
     echomsg "updated '" . w:lastfdm . "' folds"
   endif
-endfunction
-
-function! s:EnterAllWinOfBuf()
-  let s:curbuf = bufnr('%')
-  call s:WinDo("if bufnr('%') == s:curbuf | call s:Enter() | endif")
-endfunction
-
-function! s:LeaveAllWinOfBuf()
-  let s:curbuf = bufnr('%')
-  call s:WinDo("if bufnr('%') == s:curbuf | call s:Leave() | endif")
 endfunction
 
 function! s:Skip()
@@ -135,7 +127,7 @@ function! s:inSkipList()
   return 0
 endfunction
 
-command! -bar -bang FastFoldUpdate call s:UpdateBuf(<bang>0)
+command! -bar -bang FastFoldUpdate call s:UpdateAllWinOfBuf(<bang>0)
 
 nnoremap <silent> <Plug>(FastFoldUpdate) :<c-u>FastFoldUpdate!<CR>
 
@@ -157,11 +149,11 @@ augroup FastFold
   autocmd!
   " Default to last foldmethod of current buffer. This BufWinEnter autocmd
   " must come before that calling s:Enter().
-  autocmd BufWinEnter * if exists('b:lastfdm') | let &l:foldmethod = b:lastfdm | endif
-  autocmd BufLeave    *  if exists('w:lastfdm') | let b:lastfdm     = w:lastfdm | endif
+  autocmd WinEnter * if exists('b:lastfdm') && !exists('w:lastfdm') | let w:lastfdm= b:lastfdm | call s:UpdateWin() | endif
+  autocmd WinLeave    *  if exists('w:lastfdm') | let b:lastfdm     = w:lastfdm | endif
 
-  autocmd BufWinEnter * call s:Leave() | call s:Enter()
-  autocmd FileType * call s:Leave() | call s:Enter()
+  autocmd BufWinEnter * call s:UpdateWin()
+  autocmd FileType * call s:UpdateWin()
   " So that FastFold functions correctly after :loadview.
   autocmd SessionLoadPost * call s:Leave() | call s:Enter()
   " So that a :makeview autocmd loaded AFTER FastFold saves correct foldmethod.
@@ -170,10 +162,9 @@ augroup FastFold
   autocmd TabEnter * call s:UpdateTab()
 
   " Update folds on saving. Split into Pre and Post event so that a :makeeview
-  " BufWrite(Pre) autocmd loaded AFTER FastFold can tap into it.
+  " BufWrite(Pre) autocmd loaded AFTER FastFold can tap into it?
   if g:fastfold_savehook
-    autocmd BufWritePre     ?* call s:LeaveAllWinOfBuf()
-    autocmd BufWritePost    ?* call s:EnterAllWinOfBuf()
+    autocmd BufWrite     ?* call s:UpdateAllWinOfBuf(0)
   endif
 augroup end
 
