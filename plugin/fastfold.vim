@@ -74,8 +74,17 @@ function! s:WinDo( command )
   execute currwin . 'wincmd w'
 endfunction
 
+" WinEnter then TabEnter then BufEnter then BufWinEnter
+function! s:UpdateWin()
+  " skip if another session still loading
+  if exists('g:SessionLoad') | return | endif
+  call s:LeaveWin() | call s:EnterWin()
+endfunction
+
 function! s:UpdateBuf(feedback)
-  call s:UpdateBufWindows()
+  let s:curbuf = bufnr('%')
+  call s:WinDo("if bufnr('%') == s:curbuf | call s:LeaveWin() | endif")
+  call s:WinDo("if bufnr('%') == s:curbuf | call s:EnterWin() | endif")
 
   if !a:feedback | return | endif
 
@@ -84,22 +93,6 @@ function! s:UpdateBuf(feedback)
   else
     echomsg "updated '" . w:lastfdm . "' folds"
   endif
-endfunction
-
-function! s:UpdateWin()
-  " skip if another session still loading
-  if exists('g:SessionLoad') | return | endif
-  call s:LeaveWin() | call s:EnterWin()
-endfunction
-
-" WinEnter then TabEnter then BufEnter then BufWinEnter
-function! s:UpdateBufWindows()
-  " skip if another session still loading
-  if exists('g:SessionLoad') | return | endif
-
-  let s:curbuf = bufnr('%')
-  call s:WinDo("if bufnr('%') == s:curbuf | call s:LeaveWin() | endif")
-  call s:WinDo("if bufnr('%') == s:curbuf | call s:EnterWin() | endif")
 endfunction
 
 function! s:UpdateTab()
@@ -176,7 +169,7 @@ augroup FastFold
   " Update folds on saving. Split into Pre and Post event so that a :makeeview
   " BufWrite(Pre) autocmd loaded AFTER FastFold can tap into it?
   if g:fastfold_savehook
-    autocmd BufWrite     ?* call s:UpdateBufWindows()
+    autocmd BufWrite     ?* call s:UpdateBuf(0)
   endif
 augroup end
 
