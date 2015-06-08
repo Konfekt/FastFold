@@ -105,8 +105,8 @@ endfunction
 
 function! s:Skip()
   if !s:isReasonable() | return 1 | endif
-  if s:inSkipList()    | return 1 | endif
   if !&l:modifiable    | return 1 | endif
+  if s:inSkipList()    | return 1 | endif
 
   return 0
 endfunction
@@ -125,7 +125,7 @@ endfunction
 function! s:inSkipList()
   let file_name = expand('%:p')
   for ifiles in g:fastfold_skipfiles
-    if file_name =~? ifiles
+    if file_name =~# ifiles
       return 1
     endif
   endfor
@@ -161,16 +161,17 @@ augroup FastFold
   autocmd FileType * call s:UpdateWin()
   " So that FastFold functions correctly after :loadview.
   autocmd SessionLoadPost * call s:LeaveWin() | call s:EnterWin()
-  " So that a :makeview autocmd loaded AFTER FastFold saves correct foldmethod.
-  autocmd BufWinLeave * call s:LeaveWin()
 
   autocmd TabEnter * call s:UpdateTab()
 
-  " Update folds on saving. Split into Pre and Post event so that a :makeeview
-  " BufWrite(Pre) autocmd loaded AFTER FastFold can tap into it?
+  " Update folds on saving.
   if g:fastfold_savehook
     autocmd BufWrite     ?* call s:UpdateBuf(0)
   endif
+  " Split into Pre and Post event so that a :makeeview BufWrite(Pre) autocmd
+  " loaded AFTER FastFold can tap into it?
+  " So that a :makeview autocmd loaded AFTER FastFold saves correct foldmethod.
+  " autocmd BufWinLeave * call s:LeaveWin()
 augroup end
 
 " ------------------------------------------------------------------------------
