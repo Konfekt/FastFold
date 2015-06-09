@@ -74,14 +74,8 @@ normal mode and are kept as is otherwise.
 
 - `Related Plug-ins`
 
-`FastFold` integrates with both `vim-stay` and `restore_view.Vim` that both
-store and restore the last folds by the `:Mkview` and `:Loadview`.
-How they compare is discussed at
-
-https://github.com/kopischke/vim-stay/issues/2
-
-Note that `restore_view.vim` integrates only from version 1.2 and above and
-must load AFTER `FastFold`. (To ensure the correct autocmd execution order.)
+`FastFold` integrates with `vim-stay` that stores and restores the last folds
+by `:mkview` and `:loadview`.
 
 - `CustomFoldText`
 

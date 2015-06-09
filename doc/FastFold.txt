@@ -116,14 +116,9 @@ buffer can be read off from the window local variable `w:lastdfm`.
 
 3.2 Related Plugins ~
 
-`FastFold` integrates with both `vim-stay` and `restore_view.vim` that both
-store and restore the last folds by `:mkview` and `:loadview`. How they
-compare is discussed at
+`FastFold` integrates with `vim-stay` that stores and restores the last folds
+by `:mkview` and `:loadview`.
 
-https://github.com/kopischke/vim-stay/issues/2
-
-Note that `restore_view.vim` integrates only from version 1.2 and above and
-must load AFTER `FastFold`. (To ensure the correct autocmd execution order.)
 ------------------------------
 
 A `CustomFoldText()` function that displays the percentage of the number of
@@ -135,6 +130,7 @@ http://www.github.com/Konfekt/FoldText
 3.3 Thanks go to... ~
 
 - starcraftman for providing this documentation, and
-- blueyed, willywampa and kopischke for code improvements.
+- blueyed, kopischke, sabauma, willywampa, and many others for reporting
+issues and suggesting code improvements.
 
 vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl
