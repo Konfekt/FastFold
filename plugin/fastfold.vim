@@ -166,7 +166,7 @@ augroup FastFold
 
   " Update folds on saving.
   if g:fastfold_savehook
-    autocmd BufWrite     ?* call s:UpdateBuf(0)
+    autocmd BufWritePost ?* call s:UpdateBuf(0)
   endif
   " Split into Pre and Post event so that a :makeeview BufWrite(Pre) autocmd
   " loaded AFTER FastFold can tap into it?
