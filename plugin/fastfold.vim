@@ -32,20 +32,6 @@ endif
 if !exists('g:fastfold_force')       | let g:fastfold_force     = 0  | endif
 if !exists("g:fastfold_skipfiles")   | let g:fastfold_skipfiles = [] | endif
 
-" DEPRECATED VARIABLES
-if exists('g:fastfold_map') && !g:fastfold_map
-" echomsg 'FastFold: The variable g:fastfold_map is deprecated. Use nmap <SID>(DisableFastFoldUpdate) <Plug>(FastFoldUpdate) instead'
-  nmap <SID>(DisableFastFoldUpdate) <Plug>(FastFoldUpdate)
-endif
-if exists('g:fastfold_mapsuffixes')
-  " echomsg 'FastFold: The variable g:fastfold_mapsuffixes is deprecated. Use g:fastfold_fold_command_suffixes instead'
-  let g:fastfold_fold_command_suffixes = g:fastfold_mapsuffixes
-endif
-if exists('g:fastfold_togglehook') && !g:fastfold_togglehook
-  " echomsg 'FastFold: The variable g:fastfold_togglehook is deprecated. Use g:fastfold_fold_command_suffixes=[] instead'
-  let g:fastfold_fold_command_suffixes = []
-endif
-
 function! s:EnterWin()
   if s:Skip()
     if exists('w:lastfdm') | unlet w:lastfdm | endif
@@ -168,10 +154,6 @@ augroup FastFold
   if g:fastfold_savehook
     autocmd BufWritePost ?* call s:UpdateBuf(0)
   endif
-  " Split into Pre and Post event so that a :makeeview BufWrite(Pre) autocmd
-  " loaded AFTER FastFold can tap into it?
-  " So that a :makeview autocmd loaded AFTER FastFold saves correct foldmethod.
-  " autocmd BufWinLeave * call s:LeaveWin()
 augroup end
 
 " ------------------------------------------------------------------------------
