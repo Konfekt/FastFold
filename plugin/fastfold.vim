@@ -39,12 +39,12 @@ function! s:EnterWin()
   endif
 
   let w:lastfdm = &l:foldmethod
-  setlocal foldmethod=manual
+  silent setlocal foldmethod=manual
 endfunction
 
 function! s:LeaveWin()
   if exists('w:lastfdm') && &l:foldmethod ==# 'manual'
-    let &l:foldmethod= w:lastfdm
+    silent let &l:foldmethod= w:lastfdm
   endif
 endfunction
 
@@ -143,8 +143,8 @@ augroup FastFold
   autocmd WinEnter * if exists('b:lastfdm') && !exists('w:lastfdm') | let w:lastfdm= b:lastfdm | call s:UpdateWin() | endif
   autocmd WinLeave    *  if exists('w:lastfdm') | let b:lastfdm     = w:lastfdm | endif
 
-  autocmd BufWinEnter * call s:UpdateWin()
-  autocmd FileType * call s:UpdateWin()
+  autocmd BufWinEnter * call s:UpdateBuf(0)
+  autocmd FileType * call s:UpdateBuf(0)
   " So that FastFold functions correctly after :loadview.
   autocmd SessionLoadPost * call s:LeaveWin() | call s:EnterWin()
 
