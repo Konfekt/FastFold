@@ -64,7 +64,10 @@ endfunction
 function! s:UpdateWin()
   " skip if another session still loading
   if exists('g:SessionLoad') | return | endif
-  call s:LeaveWin() | call s:EnterWin()
+
+  let s:curwin = winnr()
+  call s:WinDo("if winnr() == s:curwin | call s:LeaveWin() | endif")
+  call s:WinDo("if winnr() == s:curwin | call s:EnterWin() | endif")
 endfunction
 
 function! s:UpdateBuf(feedback)
@@ -143,10 +146,10 @@ augroup FastFold
   autocmd WinEnter * if exists('b:lastfdm') && !exists('w:lastfdm') | let w:lastfdm= b:lastfdm | call s:UpdateWin() | endif
   autocmd WinLeave    *  if exists('w:lastfdm') | let b:lastfdm     = w:lastfdm | endif
 
-  autocmd BufWinEnter * call s:UpdateBuf(0)
-  autocmd FileType * call s:UpdateBuf(0)
+  autocmd BufWinEnter * call s:UpdateWin()
+  autocmd FileType * call s:UpdateWin()
   " So that FastFold functions correctly after :loadview.
-  autocmd SessionLoadPost * call s:LeaveWin() | call s:EnterWin()
+  autocmd SessionLoadPost * call s:UpdateWin()
 
   autocmd TabEnter * call s:UpdateTab()
 
