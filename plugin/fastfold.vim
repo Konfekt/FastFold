@@ -134,9 +134,9 @@ for suffix in g:fastfold_fold_command_suffixes
 endfor
 
 for cmd in g:fastfold_fold_movement_commands
-  exe "nnoremap <silent><expr> " . cmd. " ':<c-u>FastFoldUpdate<CR>'.v:count." . "'".cmd."'"
-  exe "xnoremap <silent><expr> " . cmd. " ':<c-u>FastFoldUpdate<CR>gv'.v:count." . "'".cmd."'"
-  exe "onoremap <silent><expr> " . cmd. " '<esc>:<c-u>FastFoldUpdate<CR>'.v:operator.v:count1." . "'".cmd."'"
+  exe "nnoremap <silent><expr> " . cmd. " ':<c-u>call <SID>UpdateWin()<CR>'.v:count." . "'".cmd."'"
+  exe "xnoremap <silent><expr> " . cmd. " ':<c-u>call <SID>UpdateWin()<CR>gv'.v:count." . "'".cmd."'"
+  exe "onoremap <silent><expr> " . cmd. " '<esc>:<c-u>call <SID>UpdateWin()<CR>'.v:operator.v:count1." . "'".cmd."'"
 endfor
 
 augroup FastFold
