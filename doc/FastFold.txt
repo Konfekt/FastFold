@@ -14,6 +14,7 @@ for a discussion.
 
 With this plug-in, the folds in the currently edited buffer are updated when
 certain triggers are met:
+
 - when saving the buffer
 - when closing or opening folds (zo, za, zc, etc...)
 - when moving or operating fold-wise (zj,zk,[z,]z)
@@ -50,8 +51,6 @@ matching global flags in your `.vimrc`. Default values are shown.
 <
 For example, by adding the following  to your `.vimrc`
 >
-  set foldmethod=syntax
-
   let g:tex_fold_enabled=1
   let g:vimsyn_folding='af'
   let g:xml_syntax_folding = 1
@@ -99,22 +98,7 @@ little benefit in forcing manual folds by FastFold, thence the default value '0'
 ===========================================================================
 3. Extra Notes ~
 
-3.1 Warnings ~
-
-Note: This plug-in will overwrite your manual folds when saving the
-currently edited buffer, unless you either
-
-- explicitly tell this plug-in to refrain from it via `g:fastfold_skipfiles`, a
-  list of regular expressions against which the current file name is matched,
-  or
--  the local `foldmethod` has been `manual` since entering the buffer.
-
-3.2 API ~
-
-The last used fold method by which FastFold updates the folds in the current
-buffer can be read off from the window local variable `w:lastdfm`.
-
-3.2 Related Plugins ~
+3.1 Related Plugins ~
 
 `FastFold` integrates with `vim-stay` that stores and restores the last folds
 by `:mkview` and `:loadview`.
@@ -127,7 +111,22 @@ their nesting level is available at
 
 http://www.github.com/Konfekt/FoldText
 
-3.3 Thanks go to... ~
+3.2 Warnings ~
+
+Note: This plug-in will overwrite your manual folds when saving the
+currently edited buffer, unless you either
+
+- explicitly tell this plug-in to refrain from it via `g:fastfold_skipfiles`, a
+  list of regular expressions against which the current file name is matched,
+  or
+-  the local `foldmethod` has been `manual` since entering the buffer.
+
+3.3 API ~
+
+The last used fold method by which FastFold updates the folds in the current
+buffer can be read off from the window local variable `w:lastdfm`.
+
+3.4 Thanks go to... ~
 
 - starcraftman for providing this documentation, and
 - blueyed, kopischke, sabauma, willywampa, and many others for reporting
