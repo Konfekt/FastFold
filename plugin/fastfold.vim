@@ -61,7 +61,10 @@ function! s:WinDo( command )
 endfunction
 
 " WinEnter then TabEnter then BufEnter then BufWinEnter
-function! s:UpdateWin()
+function! s:UpdateWin(check)
+  " skip if another session still loading
+  if a:check && exists('g:SessionLoad') | return | endif
+
   let s:curwin = winnr()
   call s:WinDo("if winnr() == s:curwin | call s:LeaveWin() | endif")
   call s:WinDo("if winnr() == s:curwin | call s:EnterWin() | endif")
@@ -131,23 +134,23 @@ for suffix in g:fastfold_fold_command_suffixes
 endfor
 
 for cmd in g:fastfold_fold_movement_commands
-  exe "nnoremap <silent><expr> " . cmd. " ':<c-u>call <SID>UpdateWin()<CR>'.v:count." . "'".cmd."'"
-  exe "xnoremap <silent><expr> " . cmd. " ':<c-u>call <SID>UpdateWin()<CR>gv'.v:count." . "'".cmd."'"
-  exe "onoremap <silent><expr> " . cmd. " '<esc>:<c-u>call <SID>UpdateWin()<CR>'.v:operator.v:count1." . "'".cmd."'"
+  exe "nnoremap <silent><expr> " . cmd. " ':<c-u>call <SID>UpdateWin(0)<CR>'.v:count." . "'".cmd."'"
+  exe "xnoremap <silent><expr> " . cmd. " ':<c-u>call <SID>UpdateWin(0)<CR>gv'.v:count." . "'".cmd."'"
+  exe "onoremap <silent><expr> " . cmd. " '<esc>:<c-u>call <SID>UpdateWin(0)<CR>'.v:operator.v:count1." . "'".cmd."'"
 endfor
 
 augroup FastFold
   autocmd!
   " Default to last foldmethod of current buffer. This BufWinEnter autocmd
   " must come before that calling s:EnterWin().
-  autocmd WinEnter * if exists('b:lastfdm') && !exists('w:lastfdm') | let w:lastfdm= b:lastfdm | call s:UpdateWin() | endif
+  autocmd WinEnter * if exists('b:lastfdm') && !exists('w:lastfdm') | let w:lastfdm= b:lastfdm | call s:UpdateWin(1) | endif
   autocmd WinLeave    *  if exists('w:lastfdm') | let b:lastfdm     = w:lastfdm | endif
 
   " skip if another session still loading
-  autocmd BufWinEnter * if !exists('g:SessionLoad') | call s:UpdateWin() | endif
-  autocmd FileType * if !exists('g:SessionLoad') | call s:UpdateWin() | endif
+  autocmd BufWinEnter * call s:UpdateWin(1) 
+  autocmd FileType * call s:UpdateWin(1)
   " So that FastFold functions correctly after :loadview.
-  autocmd SessionLoadPost * call s:UpdateWin()
+  autocmd SessionLoadPost * call s:UpdateWin(0)
 
   autocmd TabEnter * call s:UpdateTab()
 
