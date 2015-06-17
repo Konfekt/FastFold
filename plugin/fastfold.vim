@@ -62,7 +62,6 @@ endfunction
 
 " WinEnter then TabEnter then BufEnter then BufWinEnter
 function! s:UpdateWin(check)
-  if pumvisible() == 0 | return | endif
   " skip if another session still loading
   if a:check && exists('g:SessionLoad') | return | endif
 
