@@ -39,12 +39,12 @@ function! s:EnterWin()
   endif
 
   let w:lastfdm = &l:foldmethod
-  silent setlocal foldmethod=manual
+  setlocal foldmethod=manual
 endfunction
 
 function! s:LeaveWin()
   if exists('w:lastfdm') && &l:foldmethod ==# 'manual'
-    silent let &l:foldmethod= w:lastfdm
+    let &l:foldmethod= w:lastfdm
   endif
 endfunction
 
@@ -55,9 +55,9 @@ function! s:WinDo( command )
   " See https://groups.google.com/forum/#!topic/vim_dev/LLTw8JV6wKg
   let curaltwin = winnr('#') ? winnr('#') : 1
   let currwin=winnr()
-  execute 'keepjumps noautocmd windo ' . a:command
-  execute curaltwin . 'wincmd w'
-  execute currwin . 'wincmd w'
+  silent! execute 'keepjumps noautocmd windo ' . a:command
+  silent! execute curaltwin . 'wincmd w'
+  silent! execute currwin . 'wincmd w'
 endfunction
 
 " WinEnter then TabEnter then BufEnter then BufWinEnter
