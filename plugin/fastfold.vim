@@ -86,7 +86,6 @@ function! s:UpdateBuf(feedback)
 endfunction
 
 function! s:UpdateTab()
-  if pumvisible() == 0 | return | endif
   " skip if another session still loading
   if exists('g:SessionLoad') | return | endif
 
