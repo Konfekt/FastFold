@@ -55,6 +55,10 @@ function! s:WinDo( command )
   " See https://groups.google.com/forum/#!topic/vim_dev/LLTw8JV6wKg
   let curaltwin = winnr('#') ? winnr('#') : 1
   let currwin=winnr()
+  " avoid errors in CmdWin
+  if getcmdwintype() != ''
+    return
+  endif
   silent! execute 'keepjumps noautocmd windo ' . a:command
   silent! execute curaltwin . 'wincmd w'
   silent! execute currwin . 'wincmd w'
