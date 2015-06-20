@@ -56,7 +56,7 @@ function! s:WinDo( command )
   let curaltwin = winnr('#') ? winnr('#') : 1
   let currwin=winnr()
   " avoid errors in CmdWin
-  if getcmdwintype() != ''
+  if exists('*getcmdwintype') && getcmdwintype() != ''
     return
   endif
   silent! execute 'keepjumps noautocmd windo ' . a:command
