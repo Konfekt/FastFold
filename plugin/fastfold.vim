@@ -92,8 +92,8 @@ function! s:UpdateTab()
   " skip if another session still loading
   if exists('g:SessionLoad') | return | endif
 
-  call s:WinDo("call s:EnterWin()")
   call s:WinDo("call s:LeaveWin()")
+  call s:WinDo("call s:EnterWin()")
 endfunction
 
 function! s:Skip()
