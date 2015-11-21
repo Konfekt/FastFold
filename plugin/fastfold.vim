@@ -143,6 +143,9 @@ for cmd in g:fastfold_fold_movement_commands
   exe "onoremap <silent><expr> " . cmd. " '<esc>:<c-u>call <SID>UpdateWin(0)<CR>'.v:operator.v:count1." . "'".cmd."'"
 endfor
 
+autocmd VimEnter * call s:augroup()
+
+function! s:augroup()
 augroup FastFold
   autocmd!
   " Default to last foldmethod of current buffer. This BufWinEnter autocmd
@@ -163,6 +166,7 @@ augroup FastFold
     autocmd BufWritePost ?* call s:UpdateBuf(0)
   endif
 augroup end
+endfunction
 
 " ------------------------------------------------------------------------------
 let &cpo= s:keepcpo
