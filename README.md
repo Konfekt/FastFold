@@ -76,12 +76,12 @@ normal mode and are kept as is otherwise.
 
 - `Related Plug-ins`
 
-`FastFold` integrates with `vim-stay` that stores and restores the last folds
+`FastFold` integrates with [vim-stay](https://github.com/kopischke/vim-stay/issues) that stores and restores the last folds
 by `:mkview` and `:loadview`.
 
 - `CustomFoldText`
 
-A `CustomFoldText()` function that displays the percentage of the number of buffer lines that the folded text takes up and indents folds according to their nesting level is available at
+A `CustomFoldText()` function that displays the percentage of the number of buffer lines that the folded text takes up and indents folds according to their nesting level, similar to [that](http://www.gregsexton.org/2011/03/improving-the-text-displayed-in-a-fold/) by Greg Sexton, is available at
 
 http://www.github.com/Konfekt/FoldText
 
