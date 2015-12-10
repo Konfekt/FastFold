@@ -143,31 +143,29 @@ for cmd in g:fastfold_fold_movement_commands
   exe "onoremap <silent><expr> " . cmd. " '<esc>:<c-u>call <SID>UpdateWin(0)<CR>'.v:operator.v:count1." . "'".cmd."'"
 endfor
 
-augroup FastFold
-  autocmd!
-  autocmd VimEnter * call s:augroup()
-augroup end
+autocmd VimEnter * call s:augroup()
 
 function! s:augroup()
-  augroup FastFold
-    autocmd!
-    " Make &l:foldmethod local to Buffer and NOT Window.
-    " UpdateWin(1) = Skip if another session still loading.
-    " BufWinEnter/Leave = to change &l:foldmethod by modelines.
-    autocmd BufWinEnter,BufEnter,WinEnter * if exists('b:lastfdm') | let w:lastfdm = b:lastfdm | endif | call s:UpdateWin(1)
-    autocmd BufWinLeave,BufLeave,WinLeave * if exists('w:lastfdm') | let b:lastfdm = w:lastfdm | endif
+augroup FastFold
+  autocmd!
+  " Default to last foldmethod of current buffer. This BufWinEnter autocmd
+  " must come before that calling s:EnterWin().
+  autocmd WinEnter * if exists('b:lastfdm') && !exists('w:lastfdm') | let w:lastfdm= b:lastfdm | call s:UpdateWin(1) | endif
+  autocmd WinLeave    *  if exists('w:lastfdm') | let b:lastfdm     = w:lastfdm | endif
 
-    autocmd FileType                      * call s:UpdateWin(1)
-    " So that FastFold functions correctly after :loadview.
-    autocmd SessionLoadPost               * call s:UpdateWin(0)
+  " skip if another session still loading
+  autocmd BufWinEnter * call s:UpdateWin(1) 
+  autocmd FileType * call s:UpdateWin(1)
+  " So that FastFold functions correctly after :loadview.
+  autocmd SessionLoadPost * call s:UpdateWin(0)
 
-    autocmd TabEnter                      * call s:UpdateTab()
+  autocmd TabEnter * call s:UpdateTab()
 
-    " Update folds on saving.
-    if g:fastfold_savehook
-      autocmd BufWritePost                * call s:UpdateBuf(0)
-    endif
-  augroup end
+  " Update folds on saving.
+  if g:fastfold_savehook
+    autocmd BufWritePost ?* call s:UpdateBuf(0)
+  endif
+augroup end
 endfunction
 
 " ------------------------------------------------------------------------------
