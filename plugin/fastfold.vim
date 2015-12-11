@@ -158,7 +158,8 @@ function! s:augroup()
       \ if exists('b:lastfdm') | let w:lastfdm = b:lastfdm | call s:UpdateWin(1) | endif
     autocmd BufLeave,WinLeave             *
       \ call s:LeaveWin() | call s:EnterWin() |
-      \ if exists('w:lastfdm') | let b:lastfdm = w:lastfdm | endif
+      \ if exists('w:lastfdm')     | let b:lastfdm = w:lastfdm |
+      \ elseif exists('b:lastfdm') | unlet b:lastfdm | endif
 
     autocmd FileType                      * call s:UpdateWin(1)
     " So that FastFold functions correctly after :loadview.
