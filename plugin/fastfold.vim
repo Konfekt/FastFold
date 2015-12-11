@@ -153,9 +153,9 @@ function! s:augroup()
     autocmd!
     " Make &l:foldmethod local to Buffer and NOT Window.
     " UpdateWin(1) = Skip if another session still loading.
-    " BufWinEnter/Leave = to change &l:foldmethod by modelines.
+    " BufWinEnter = to change &l:foldmethod by modelines.
     autocmd BufWinEnter,BufEnter,WinEnter * if exists('b:lastfdm') | let w:lastfdm = b:lastfdm | endif | call s:UpdateWin(1)
-    autocmd BufWinLeave,BufLeave,WinLeave * if exists('w:lastfdm') | let b:lastfdm = w:lastfdm | endif
+    autocmd BufLeave,WinLeave * if exists('w:lastfdm') | let b:lastfdm = w:lastfdm | endif
 
     autocmd FileType                      * call s:UpdateWin(1)
     " So that FastFold functions correctly after :loadview.
