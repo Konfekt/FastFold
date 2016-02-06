@@ -155,11 +155,15 @@ function! s:augroup()
     " UpdateWin(1) = Skip if another session still loading.
     " BufWinEnter = to change &l:foldmethod by modelines.
     autocmd BufWinEnter,BufEnter,WinEnter *
-      \ if exists('b:lastfdm') | let w:lastfdm = b:lastfdm | call s:LeaveWin() | call s:EnterWin() | endif
+      \ if !pumvisible() |
+      \   if exists('b:lastfdm') | let w:lastfdm = b:lastfdm | call s:LeaveWin() | call s:EnterWin() | endif |
+      \ endif
     autocmd BufLeave,WinLeave             *
-      \ call s:LeaveWin() | call s:EnterWin() |
-      \ if exists('w:lastfdm')     | let b:lastfdm = w:lastfdm |
-      \ elseif exists('b:lastfdm') | unlet b:lastfdm | endif
+      \ if !pumvisible() |
+      \   call s:LeaveWin() | call s:EnterWin() |
+      \   if exists('w:lastfdm')     | let b:lastfdm = w:lastfdm |
+      \   elseif exists('b:lastfdm') | unlet b:lastfdm | endif |
+      \ endif
 
     autocmd FileType                      * call s:UpdateWin(1)
     " So that FastFold functions correctly after :loadview.
