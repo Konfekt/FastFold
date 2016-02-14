@@ -145,10 +145,11 @@ endfor
 
 augroup FastFold
   autocmd!
-  autocmd VimEnter * call s:augroup()
+  autocmd VimEnter * call s:init()
 augroup end
 
-function! s:augroup()
+function! s:init()
+  FastFoldUpdate
   augroup FastFold
     autocmd!
     " Make &l:foldmethod local to Buffer and NOT Window.
