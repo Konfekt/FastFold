@@ -149,7 +149,7 @@ augroup FastFold
 augroup end
 
 function! s:init()
-  FastFoldUpdate
+  call s:UpdateTab()
   augroup FastFold
     autocmd!
     " Make &l:foldmethod local to Buffer and NOT Window.
