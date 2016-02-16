@@ -134,7 +134,7 @@ if !hasmapto('<Plug>(FastFoldUpdate)', 'n') && mapcheck('zuz', 'n') ==# ''
 endif
 
 for suffix in g:fastfold_fold_command_suffixes
-  execute 'nnoremap <silent> z'.suffix.' :<c-u>call <SID>UpdateBuf(0)<CR>z'.suffix
+  execute 'nnoremap <silent> z'.suffix.' :<c-u>call <SID>UpdateWin(0)<CR>z'.suffix
 endfor
 
 for cmd in g:fastfold_fold_movement_commands
