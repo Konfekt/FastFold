@@ -152,6 +152,9 @@ function! s:init()
   call s:UpdateTab()
   augroup FastFold
     autocmd!
+    if exists('##OptionSet')
+      autocmd OptionSet foldmethod call s:UpdateBuf(0)
+    endif
     " Make &l:foldmethod local to Buffer and NOT Window.
     " UpdateWin(1) = Skip if another session still loading.
     " BufWinEnter = to change &l:foldmethod by modelines.
