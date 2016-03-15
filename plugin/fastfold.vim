@@ -157,15 +157,15 @@ function! s:init()
     endif
     " Make &l:foldmethod local to Buffer and NOT Window.
     " UpdateWin(1) = Skip if another session still loading.
-    " BufWinEnter = to change &l:foldmethod by modelines.
-    autocmd BufWinEnter,BufEnter,WinEnter *
+    autocmd BufEnter,WinEnter *
       \ if exists('b:lastfdm') | let w:lastfdm = b:lastfdm | call s:LeaveWin() | call s:EnterWin() | endif
     autocmd BufLeave,WinLeave             *
       \ call s:LeaveWin() | call s:EnterWin() |
       \ if exists('w:lastfdm')     | let b:lastfdm = w:lastfdm |
       \ elseif exists('b:lastfdm') | unlet b:lastfdm | endif
 
-    autocmd FileType                      * call s:UpdateWin(1)
+    " BufWinEnter = to change &l:foldmethod by modelines.
+    autocmd BufWinEnter,FileType          * call s:UpdateWin(1)
     " So that FastFold functions correctly after :loadview.
     autocmd SessionLoadPost               * call s:UpdateWin(0)
 
