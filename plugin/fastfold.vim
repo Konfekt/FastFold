@@ -34,12 +34,26 @@ if !exists("g:fastfold_skipfiles")   | let g:fastfold_skipfiles = [] | endif
 
 function! s:EnterWin()
   if s:Skip()
-    if exists('w:lastfdm') | unlet w:lastfdm | endif
-    return
-  endif
+    if exists('w:predifffdm')
+      if (empty(&l:foldmethod) || &l:foldmethod ==# 'manual')
+        let w:lastfdm = w:predifffdm
+        setlocal foldmethod=manual
+        return
+      else
+        unlet w:predifffdm
+      endif
+    endif
 
-  let w:lastfdm = &l:foldmethod
-  setlocal foldmethod=manual
+    if exists('w:lastfdm')
+      if &l:foldmethod ==# 'diff'
+          let w:predifffdm = w:lastfdm
+      endif
+      unlet w:lastfdm
+    endif
+  else
+    let w:lastfdm = &l:foldmethod
+    setlocal foldmethod=manual
+  endif
 endfunction
 
 function! s:LeaveWin()
