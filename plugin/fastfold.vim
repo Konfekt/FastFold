@@ -29,25 +29,25 @@ endif
 if !exists('g:fastfold_fold_movement_commands')
   let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
 endif
-if !exists('g:fastfold_force')       | let g:fastfold_force     = 0  | endif
 if !exists("g:fastfold_skipfiles")   | let g:fastfold_skipfiles = [] | endif
 
 function! s:EnterWin()
-  if s:Skip()
-    if exists('w:predifffdm')
-      if (empty(&l:foldmethod) || &l:foldmethod ==# 'manual')
-        let w:lastfdm = w:predifffdm
-        setlocal foldmethod=manual
-        return
-      else
-        unlet w:predifffdm
-      endif
+  if exists('w:predifffdm')
+    if empty(&l:foldmethod) || &l:foldmethod is# 'manual'
+      let w:lastfdm = w:predifffdm
+      setlocal foldmethod=manual
+      return
+    elseif &l:foldmethod isnot# 'diff'
+      unlet w:predifffdm
     endif
+  endif
 
+  if exists('w:lastfdm') && &l:foldmethod is# 'diff'
+    let w:predifffdm = w:lastfdm
+  endif
+
+  if s:Skip()
     if exists('w:lastfdm')
-      if &l:foldmethod ==# 'diff'
-          let w:predifffdm = w:lastfdm
-      endif
       unlet w:lastfdm
     endif
   else
@@ -57,8 +57,8 @@ function! s:EnterWin()
 endfunction
 
 function! s:LeaveWin()
-  if exists('w:lastfdm') && &l:foldmethod ==# 'manual'
-    let &l:foldmethod= w:lastfdm
+  if exists('w:lastfdm') && &l:foldmethod is# 'manual'
+    let &l:foldmethod = w:lastfdm
   endif
 endfunction
 
@@ -70,7 +70,7 @@ function! s:WinDo( command )
   let curaltwin = winnr('#') ? winnr('#') : 1
   let currwin=winnr()
   " avoid errors in CmdWin
-  if exists('*getcmdwintype') && getcmdwintype() != ''
+  if exists('*getcmdwintype') && !empty(getcmdwintype())
     return
   endif
   silent! execute 'keepjumps noautocmd windo ' . a:command
@@ -84,14 +84,14 @@ function! s:UpdateWin(check)
   if a:check && exists('g:SessionLoad') | return | endif
 
   let s:curwin = winnr()
-  call s:WinDo("if winnr() == s:curwin | call s:LeaveWin() | endif")
-  call s:WinDo("if winnr() == s:curwin | call s:EnterWin() | endif")
+  call s:WinDo("if winnr() is s:curwin | call s:LeaveWin() | endif")
+  call s:WinDo("if winnr() is s:curwin | call s:EnterWin() | endif")
 endfunction
 
 function! s:UpdateBuf(feedback)
   let s:curbuf = bufnr('%')
-  call s:WinDo("if bufnr('%') == s:curbuf | call s:LeaveWin() | endif")
-  call s:WinDo("if bufnr('%') == s:curbuf | call s:EnterWin() | endif")
+  call s:WinDo("if bufnr('%') is s:curbuf | call s:LeaveWin() | endif")
+  call s:WinDo("if bufnr('%') is s:curbuf | call s:EnterWin() | endif")
 
   if !a:feedback | return | endif
 
@@ -119,14 +119,11 @@ function! s:Skip()
 endfunction
 
 function! s:isReasonable()
-  if &l:foldmethod ==# 'manual' | return 0 | endif
-
-  if g:fastfold_force | return 1 | endif
-  if &l:foldmethod ==# 'syntax' || &l:foldmethod ==# 'expr'
+  if &l:foldmethod is# 'syntax' || &l:foldmethod is# 'expr'
     return 1
+  else
+    return 0
   endif
-
-  return 0
 endfunction
 
 function! s:inSkipList()
@@ -143,7 +140,7 @@ command! -bar -bang FastFoldUpdate call s:UpdateBuf(<bang>0)
 
 nnoremap <silent> <Plug>(FastFoldUpdate) :<c-u>FastFoldUpdate!<CR>
 
-if !hasmapto('<Plug>(FastFoldUpdate)', 'n') && mapcheck('zuz', 'n') ==# ''
+if !hasmapto('<Plug>(FastFoldUpdate)', 'n') && empty(mapcheck('zuz', 'n'))
   nmap zuz <Plug>(FastFoldUpdate)
 endif
 

@@ -85,15 +85,6 @@ You will enable tex, vim, xml, php and perl syntax folding.
 >
   let g:fastfold_fold_movement_commands = []
 <
------------------------------
-
-The option
->
-  let g:fastfold_force = 0
-<
-when set to 1, enables FastFold even for foldmethods other than 'syntax' and
-'expr'. Because these other fold methods require little computation, there is
-little benefit in forcing manual folds by FastFold, thence the default value '0'.
 
 ===========================================================================
 3. Extra Notes ~
