@@ -46,6 +46,7 @@ function! s:LeaveWin()
   if exists('w:predifffdm')
     if empty(&l:foldmethod) || &l:foldmethod is# 'manual'
       let &l:foldmethod = w:predifffdm
+      unlet w:predifffdm
       return
     elseif &l:foldmethod isnot# 'diff'
       unlet w:predifffdm
@@ -166,13 +167,17 @@ function! s:init()
       autocmd OptionSet foldmethod call s:UpdateBuf(0)
     endif
     " Make &l:foldmethod local to Buffer and NOT Window.
-    " UpdateWin(1) = Skip if another session still loading.
+    " UpdateBuf/Win(1) = skip if another session is still loading.
     autocmd BufEnter,WinEnter *
-      \ if exists('b:lastfdm') | let w:lastfdm = b:lastfdm | call s:LeaveWin() | call s:EnterWin() | endif
+          \ if exists('b:lastfdm') | let w:lastfdm = b:lastfdm | call s:LeaveWin() | call s:EnterWin() | endif
     autocmd BufLeave,WinLeave             *
-      \ call s:LeaveWin() | call s:EnterWin() |
-      \ if exists('w:lastfdm')     | let b:lastfdm = w:lastfdm |
-      \ elseif exists('b:lastfdm') | unlet b:lastfdm | endif
+          \ call s:LeaveWin() | call s:EnterWin() |
+          \ if exists('w:lastfdm')     | let b:lastfdm = w:lastfdm |
+          \ elseif exists('b:lastfdm') | unlet b:lastfdm | endif
+    autocmd BufEnter,WinEnter *
+          \ if &l:foldmethod isnot# 'diff' && exists('b:predifffdm') | call s:UpdateBuf(0) | unlet b:predifffdm | endif
+    autocmd BufLeave,WinLeave *
+          \ if exists('w:predifffdm') | let b:predifffdm = w:predifffdm | endif
 
     " BufWinEnter = to change &l:foldmethod by modelines.
     autocmd BufWinEnter,FileType          * call s:UpdateWin(1)
