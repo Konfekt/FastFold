@@ -175,9 +175,10 @@ function! s:init()
           \ if exists('w:lastfdm')     | let b:lastfdm = w:lastfdm |
           \ elseif exists('b:lastfdm') | unlet b:lastfdm | endif
     autocmd BufEnter,WinEnter *
-          \ if &l:foldmethod isnot# 'diff' && exists('b:predifffdm') | call s:UpdateBuf(0) | unlet b:predifffdm | endif
+          \ if &l:foldmethod isnot# 'diff' && exists('b:predifffdm') | call s:UpdateBuf(0) | endif
     autocmd BufLeave,WinLeave *
-          \ if exists('w:predifffdm') | let b:predifffdm = w:predifffdm | endif
+          \ if exists('w:predifffdm') | let b:predifffdm = w:predifffdm |
+          \ elseif exists('b:predifffdm') | unlet b:predifffdm | endif
 
     " BufWinEnter = to change &l:foldmethod by modelines.
     autocmd BufWinEnter,FileType          * call s:UpdateWin(1)
