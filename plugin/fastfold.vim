@@ -1,3 +1,5 @@
+scriptencoding utf-8
+
 " LICENCE PUBLIQUE RIEN À BRANLER
 " Version 1, Mars 2009
 "
@@ -13,7 +15,7 @@
 "
 " 0. Faites ce que vous voulez, j’en ai RIEN À BRANLER.
 
-if exists("g:loaded_fastfold") || &cp
+if exists('g:loaded_fastfold') || &cp
   finish
 endif
 let g:loaded_fastfold = 1
@@ -29,7 +31,7 @@ endif
 if !exists('g:fastfold_fold_movement_commands')
   let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
 endif
-if !exists("g:fastfold_skipfiles")   | let g:fastfold_skipfiles = [] | endif
+if !exists('g:fastfold_skipfiles')   | let g:fastfold_skipfiles = [] | endif
 
 function! s:EnterWin()
   if s:Skip()
@@ -84,8 +86,8 @@ function! s:UpdateWin(check)
   if a:check && exists('g:SessionLoad') | return | endif
 
   let s:curwin = winnr()
-  call s:WinDo("if winnr() is s:curwin | call s:LeaveWin() | endif")
-  call s:WinDo("if winnr() is s:curwin | call s:EnterWin() | endif")
+  call s:WinDo('if winnr() is s:curwin | call s:LeaveWin() | endif')
+  call s:WinDo('if winnr() is s:curwin | call s:EnterWin() | endif')
 endfunction
 
 function! s:UpdateBuf(feedback)
@@ -106,8 +108,8 @@ function! s:UpdateTab()
   " skip if another session still loading
   if exists('g:SessionLoad') | return | endif
 
-  call s:WinDo("call s:LeaveWin()")
-  call s:WinDo("call s:EnterWin()")
+  call s:WinDo('call s:LeaveWin()')
+  call s:WinDo('call s:EnterWin()')
 endfunction
 
 function! s:Skip()
