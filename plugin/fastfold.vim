@@ -183,7 +183,7 @@ function! s:init()
           \ elseif exists('b:predifffdm') | unlet b:predifffdm | endif
 
     " BufWinEnter = to change &l:foldmethod by modelines.
-    autocmd BufReadPre,BufWinEnter,FileType          * call s:UpdateWin(1)
+    autocmd BufReadPost,BufWinEnter,FileType          * call s:UpdateWin(1)
     " So that FastFold functions correctly after :loadview.
     autocmd SessionLoadPost               * call s:UpdateWin(0)
 
