@@ -183,12 +183,16 @@ function! s:init()
           \ elseif exists('b:predifffdm') | unlet b:predifffdm | endif
 
     " BufWinEnter = to change &l:foldmethod by modelines.
-    autocmd BufReadPost,BufWinEnter,FileType          * call s:UpdateWin(1)
+    autocmd BufWinEnter,FileType          * call s:UpdateWin(1)
     " So that FastFold functions correctly after :loadview.
     autocmd SessionLoadPost               * call s:UpdateWin(0)
 
     autocmd TabEnter                      * call s:UpdateTab()
 
+    " Update folds on reload.
+    autocmd BufReadPost                   * 
+          \ if     !exists('b:already_loaded') | let b:already_loaded = 1 |
+          \ else | call s:UpdateBuf(0) | endif
     " Update folds on saving.
     if g:fastfold_savehook
       autocmd BufWritePost                * call s:UpdateBuf(0)
