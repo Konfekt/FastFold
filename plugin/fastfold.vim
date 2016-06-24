@@ -24,6 +24,7 @@ let s:keepcpo         = &cpo
 set cpo&vim
 " ------------------------------------------------------------------------------
 
+if !exists('g:fastfold_fdmhook')    | let g:fastfold_fdmhook   = 0 | endif
 if !exists('g:fastfold_savehook')    | let g:fastfold_savehook   = 1 | endif
 if !exists('g:fastfold_fold_command_suffixes')
   let g:fastfold_fold_command_suffixes = ['x','X','a','A','o','O','c','C']
@@ -165,9 +166,6 @@ function! s:init()
   call s:UpdateTab()
   augroup FastFold
     autocmd!
-    if exists('##OptionSet')
-      autocmd OptionSet foldmethod call s:UpdateBuf(0)
-    endif
     " Make &l:foldmethod local to Buffer and NOT Window.
     " UpdateBuf/Win(1) = skip if another session is still loading.
     autocmd BufEnter,WinEnter *
@@ -196,6 +194,11 @@ function! s:init()
     " Update folds on saving.
     if g:fastfold_savehook
       autocmd BufWritePost                * call s:UpdateBuf(0)
+    endif
+    if g:fastfold_fdmhook
+      if exists('##OptionSet')
+        autocmd OptionSet foldmethod call s:UpdateBuf(0)
+      endif
     endif
   augroup end
 endfunction

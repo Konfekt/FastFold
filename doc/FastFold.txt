@@ -44,8 +44,9 @@ certain triggers are met:
 Each of the above triggers can be enabled or disabled by setting the
 matching global flags in your `.vimrc`. Default values are shown.
 >
-  nmap zuz <Plug>(FastFoldUpdate)
   let g:fastfold_savehook = 1
+  let g:fastfold_fdmhook = 0
+  nmap zuz <Plug>(FastFoldUpdate)
   let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
   let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
 <
@@ -76,6 +77,7 @@ You will enable tex, vim, xml, php and perl syntax folding.
 >
   let g:fastfold_fold_command_suffixes = []
 <
+
 - By default FastFold updates all fold when you move or operate fold-wise by
   the commands zj,zk,[z or ]z. This is configured by the variable
 >
@@ -85,6 +87,23 @@ You will enable tex, vim, xml, php and perl syntax folding.
 >
   let g:fastfold_fold_movement_commands = []
 <
+
+- By default FastFold updates all fold when you save a buffer. This is
+  configured by the variable
+>
+  let g:fastfold_savehook = 1
+<
+
+- If you want FastFold to intercept every change of the current fold method by
+>
+  :setlocal foldmethod=...
+<
+  where ... is in 'foldmethod' then add
+>
+  let g:fastfold_fdmhook = 1
+<
+  to your 'vimrc'. This is disabled by default as it could interfere with other
+  plugins such as `easymotion`.
 
 ===========================================================================
 3. Extra Notes ~
