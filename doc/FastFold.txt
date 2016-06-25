@@ -60,6 +60,10 @@ For example, by adding the following  to your `.vimrc`
 <
 You will enable tex, vim, xml, php and perl syntax folding.
 
+Set fold methods for every file type only! Setting it globally risks that
+FastFold assumes the wrong, global, fold method instead of that intended by the
+file type plug-in, for example TagList.
+
 -----------------------------
 
 - By default FastFold updates all fold when you open or close folds by

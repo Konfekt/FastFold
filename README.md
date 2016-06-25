@@ -42,6 +42,8 @@ PHP or Perl file are updated by the `syntax` fold method when saving the
 buffer, opening, closing, moving or operating on folds, or typing `zuz` in
 normal mode and are kept as is otherwise.
 
+*Set fold methods for every file type only*! Setting it globally risks that FastFold assumes the wrong, global, fold method instead of that intended by the file type plug-in, for example TagList.
+
  **Configuration**
 
 - If you prefer that folds are only updated manually but not when saving the buffer,
