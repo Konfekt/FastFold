@@ -130,7 +130,7 @@ http://www.github.com/Konfekt/FoldText
 Note: This plug-in will overwrite your manual folds when saving the
 currently edited buffer, unless you either
 
-- explicitly tell this plug-in to refrain from it via `g:fastfold_skipfiles`, a
+- explicitly tell this plug-in to refrain from it via `g:fastfold_skip_filetypes`, a
   list of regular expressions against which the current file name is matched,
   or
 -  the local `foldmethod` has been `manual` since entering the buffer.

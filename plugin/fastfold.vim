@@ -32,7 +32,7 @@ endif
 if !exists('g:fastfold_fold_movement_commands')
   let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
 endif
-if !exists('g:fastfold_skipfiles')   | let g:fastfold_skipfiles = [] | endif
+if !exists('g:fastfold_skip_filetypes')   | let g:fastfold_skip_filetypes = [] | endif
 
 function! s:EnterWin()
   if s:Skip()
@@ -130,9 +130,8 @@ function! s:isReasonable()
 endfunction
 
 function! s:inSkipList()
-  let file_name = expand('%:p')
-  for ifiles in g:fastfold_skipfiles
-    if file_name =~# ifiles
+  for ifiles in g:fastfold_skip_filetypes
+    if index(g:fastfold_skip_filetypes, &l:filetype) >= 0
       return 1
     endif
   endfor
