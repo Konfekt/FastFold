@@ -66,56 +66,56 @@ file type plug-in, for example TagList.
 
 -----------------------------
 
-- By default FastFold updates all fold when you open or close folds by
-  zx, zX, za, zA, zo, zO, zc, zC. This is configured by the variable
+- FastFold updates all folds when you open or close folds by the commands
+  zx, zX, za, zA, zo, zO, zc, zC. This list of commands is configured by
 >
   let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
 <
-  If you wanted to intercept all possible fold commands (such as zr,zm,...),
-  change this to:
+  To intercept all possible fold commands (such as zr,zm,...),change this to
 >
   let g:fastfold_fold_command_suffixes =
   ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']
 <
-  or if you wanted to disable all interceptions, change this to
+  To disable all interceptions, change this to
 >
   let g:fastfold_fold_command_suffixes = []
 <
-
-- By default FastFold updates all fold when you move or operate fold-wise by
-  the commands zj,zk,[z or ]z. This is configured by the variable
+- FastFold updates all fold when you move or operate fold-wise by
+  the commands zj,zk,[z or ]z. This list of commands is configured by
 >
   let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
 <
-  and can be disabled by
+  It can be disabled by
 >
   let g:fastfold_fold_movement_commands = []
 <
-
-- By default FastFold updates all fold when you save a buffer. This is
-  configured by the variable
+- FastFold updates all folds when you save a buffer. This hook is set by
 >
   let g:fastfold_savehook = 1
 <
-
-- If you want FastFold to intercept every change of the current fold method by
->
-  :setlocal foldmethod=...
-<
-  where ... is in 'foldmethod' then add
+- FastFold intercepts every change of the fold method by
 >
   let g:fastfold_fdmhook = 1
 <
-  to your 'vimrc'. This is disabled by default as it could interfere with other
-  plugins such as `easymotion`.
+  This is disabled by default as it could interfere with other plugins such as
+  `easymotion`.
+
+- To disable FastFold for a list of file types, such as 'taglist', add
+>
+` let g:fastfold_skip_filetypes`= [ 'taglist' ]
+<
+  to your 'vimrc'. Default value is [].
 
 ===========================================================================
 3. Extra Notes ~
 
 3.1 Related Plugins ~
 
-`FastFold` integrates with `vim-stay` that stores and restores the last folds
-by `:mkview` and `:loadview`.
+`FastFold` integrates with the plug-in `vim-stay` available at
+
+https://github.com/kopischke/vim-stay
+
+that stores and restores the last folds by `:mkview` and `:loadview`.
 
 ------------------------------
 
@@ -125,15 +125,13 @@ their nesting level is available at
 
 http://www.github.com/Konfekt/FoldText
 
-3.2 Warnings ~
+3.2 Warning ~
 
-Note: This plug-in will overwrite your manual folds when saving the
-currently edited buffer, unless you either
+FastFold overwrites your manual folds when saving the currently edited buffer,
+unless
 
-- explicitly tell this plug-in to refrain from it via `g:fastfold_skip_filetypes`, a
-  list of regular expressions against which the current file name is matched,
-  or
--  the local `foldmethod` has been `manual` since entering the buffer.
+- FastFold is disabled for this filetype by `g:fastfold_skip_filetypes`, or
+- the `foldmethod=manual` since having entered the buffer.
 
 3.3 API ~
 
