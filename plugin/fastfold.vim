@@ -68,14 +68,14 @@ endfunction
 " Like windo but restore the current buffer.
 " See http://vim.wikia.com/wiki/Run_a_command_in_multiple_buffers#Restoring_position
 function! s:WinDo( command )
-  " Work around Vim bug.
-  " See https://groups.google.com/forum/#!topic/vim_dev/LLTw8JV6wKg
-  let curaltwin = winnr('#') ? winnr('#') : 1
-  let currwin=winnr()
   " avoid errors in CmdWin
   if exists('*getcmdwintype') && !empty(getcmdwintype())
     return
   endif
+  " Work around Vim bug.
+  " See https://groups.google.com/forum/#!topic/vim_dev/LLTw8JV6wKg
+  let curaltwin = winnr('#') ? winnr('#') : 1
+  let currwin=winnr()
   if &scrollopt =~# '\<jump\>'
     set scrollopt-=jump
     let l:restore = 'set scrollopt+=jump'
