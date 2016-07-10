@@ -76,9 +76,16 @@ function! s:WinDo( command )
   if exists('*getcmdwintype') && !empty(getcmdwintype())
     return
   endif
+  if &scrollopt =~# '\<jump\>'
+    set scrollopt-=jump
+    let l:restore = 'set scrollopt+=jump'
+  endif
   silent! execute 'keepjumps noautocmd windo ' . a:command
   silent! execute curaltwin . 'wincmd w'
   silent! execute currwin . 'wincmd w'
+  if exists('l:restore')
+    exe l:restore
+  endif
 endfunction
 
 " WinEnter then TabEnter then BufEnter then BufWinEnter
