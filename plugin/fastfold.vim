@@ -81,8 +81,8 @@ function! s:WinDo( command )
     let l:restore = 'set scrollopt+=jump'
   endif
   silent! execute 'keepjumps noautocmd windo ' . a:command
-  silent! execute curaltwin . 'wincmd w'
-  silent! execute currwin . 'wincmd w'
+  silent! execute 'noautocmd ' . curaltwin . 'wincmd w'
+  silent! execute 'noautocmd ' . currwin . 'wincmd w'
   if exists('l:restore')
     exe l:restore
   endif
