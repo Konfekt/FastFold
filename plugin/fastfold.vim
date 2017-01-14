@@ -35,7 +35,9 @@ endif
 if !exists('g:fastfold_skip_filetypes')   | let g:fastfold_skip_filetypes = [] | endif
 
 function! s:EnterWin()
-  if s:Skip()
+  if exists('w:unchanged')
+    unlet w:unchanged
+  elseif s:Skip()
     if exists('w:lastfdm')
       unlet w:lastfdm
     endif
@@ -60,8 +62,13 @@ function! s:LeaveWin()
     let w:predifffdm = w:lastfdm
   endif
 
-  if exists('w:lastfdm') && &l:foldmethod is# 'manual'
-    let &l:foldmethod = w:lastfdm
+  if exists('w:lastfdm') && &l:foldmethod is# 'manual' 
+    if b:changedtick > b:last_changedtick
+      let &l:foldmethod = w:lastfdm
+      let b:last_changedtick = b:changedtick
+    else
+      let w:unchanged = 1
+    endif
   endif
 endfunction
 
@@ -174,9 +181,10 @@ function! s:init()
     autocmd!
     " Make &l:foldmethod local to Buffer and NOT Window.
     " UpdateBuf/Win(1) = skip if another session is still loading.
+    autocmd BufEnter          * let b:last_changedtick = b:changedtick
     autocmd BufEnter,WinEnter *
           \ if exists('b:lastfdm') | let w:lastfdm = b:lastfdm | call s:LeaveWin() | call s:EnterWin() | endif
-    autocmd BufLeave,WinLeave             *
+    autocmd BufLeave,WinLeave *
           \ call s:LeaveWin() | call s:EnterWin() |
           \ if exists('w:lastfdm')     | let b:lastfdm = w:lastfdm |
           \ elseif exists('b:lastfdm') | unlet b:lastfdm | endif
