@@ -181,7 +181,8 @@ function! s:init()
     autocmd!
     " Make &l:foldmethod local to Buffer and NOT Window.
     " UpdateBuf/Win(1) = skip if another session is still loading.
-    autocmd BufEnter          * let b:last_changedtick = b:changedtick
+    autocmd BufEnter,WinEnter * 
+          \ if !exists('b:last_changedtick') | let b:last_changedtick = b:changedtick | endif
     autocmd BufEnter,WinEnter *
           \ if exists('b:lastfdm') | let w:lastfdm = b:lastfdm | call s:LeaveWin() | call s:EnterWin() | endif
     autocmd BufLeave,WinLeave *
