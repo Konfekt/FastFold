@@ -183,16 +183,18 @@ function! s:init()
     " UpdateBuf/Win(1) = skip if another session is still loading.
     autocmd BufEnter,WinEnter * 
           \ if !exists('b:last_changedtick') | let b:last_changedtick = b:changedtick | endif
+    silent bufdo! let b:last_changedtick = b:changedtick 
     autocmd BufEnter,WinEnter *
           \ if exists('b:lastfdm') | let w:lastfdm = b:lastfdm | call s:LeaveWin() | call s:EnterWin() | endif
     autocmd BufLeave,WinLeave *
           \ call s:LeaveWin() | call s:EnterWin() |
           \ if exists('w:lastfdm')     | let b:lastfdm = w:lastfdm |
           \ elseif exists('b:lastfdm') | unlet b:lastfdm | endif
+
     autocmd BufEnter,WinEnter *
           \ if &l:foldmethod isnot# 'diff' && exists('b:predifffdm') | call s:UpdateBuf(0) | endif
     autocmd BufLeave,WinLeave *
-          \ if exists('w:predifffdm') | let b:predifffdm = w:predifffdm |
+          \ if exists('w:predifffdm')     | let b:predifffdm = w:predifffdm |
           \ elseif exists('b:predifffdm') | unlet b:predifffdm | endif
 
     " BufWinEnter = to change &l:foldmethod by modelines.
@@ -204,8 +206,8 @@ function! s:init()
 
     " Update folds on reload.
     autocmd BufReadPost                   * 
-          \ if     !exists('b:already_loaded') | let b:already_loaded = 1 |
-          \ else | call s:UpdateBuf(0) | endif
+          \ if !exists('b:lready_loaded') | let b:already_loaded = 1 |
+          \ else                          | call s:UpdateBuf(0) | endif
     " Update folds on saving.
     if g:fastfold_savehook
       autocmd BufWritePost                * call s:UpdateBuf(0)
