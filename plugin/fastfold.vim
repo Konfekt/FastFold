@@ -173,17 +173,16 @@ endfor
 augroup FastFold
   autocmd!
   autocmd VimEnter * call s:init()
+  autocmd BufEnter,WinEnter * 
+        \ if !exists('b:last_changedtick') | let b:last_changedtick = b:changedtick | endif
 augroup end
 
 function! s:init()
   call s:UpdateTab()
-  augroup FastFold
+  augroup FastFoldEnter
     autocmd!
     " Make &l:foldmethod local to Buffer and NOT Window.
     " UpdateBuf/Win(1) = skip if another session is still loading.
-    autocmd BufEnter,WinEnter * 
-          \ if !exists('b:last_changedtick') | let b:last_changedtick = b:changedtick | endif
-    silent bufdo! let b:last_changedtick = b:changedtick 
     autocmd BufEnter,WinEnter *
           \ if exists('b:lastfdm') | let w:lastfdm = b:lastfdm | call s:LeaveWin() | call s:EnterWin() | endif
     autocmd BufLeave,WinLeave *
