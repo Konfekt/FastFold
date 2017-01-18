@@ -205,7 +205,7 @@ function! s:init()
 
     " Update folds on reload.
     autocmd BufReadPost                   * 
-          \ if !exists('b:lready_loaded') | let b:already_loaded = 1 |
+          \ if !exists('b:already_loaded') | let b:already_loaded = 1 |
           \ else                          | call s:UpdateBuf(0) | endif
     " Update folds on saving.
     if g:fastfold_savehook
