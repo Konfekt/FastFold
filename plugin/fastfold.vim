@@ -173,7 +173,7 @@ endfor
 augroup FastFold
   autocmd!
   autocmd VimEnter * call s:init()
-  autocmd BufEnter,WinEnter * 
+  autocmd BufEnter * 
         \ if !exists('b:last_changedtick') | let b:last_changedtick = b:changedtick | endif
 augroup end
 
@@ -182,7 +182,6 @@ function! s:init()
   augroup FastFoldEnter
     autocmd!
     " Make &l:foldmethod local to Buffer and NOT Window.
-    " UpdateBuf/Win(1) = skip if another session is still loading.
     autocmd BufEnter,WinEnter *
           \ if exists('b:lastfdm') | let w:lastfdm = b:lastfdm | call s:LeaveWin() | call s:EnterWin() | endif
     autocmd BufLeave,WinLeave *
@@ -196,12 +195,13 @@ function! s:init()
           \ if exists('w:predifffdm')     | let b:predifffdm = w:predifffdm |
           \ elseif exists('b:predifffdm') | unlet b:predifffdm | endif
 
+    " UpdateBuf/Win(1) = skip if another session is still loading.
+    autocmd TabEnter                      * call s:UpdateTab()
+
     " BufWinEnter = to change &l:foldmethod by modelines.
     autocmd BufWinEnter,FileType          * call s:UpdateWin(1)
     " So that FastFold functions correctly after :loadview.
     autocmd SessionLoadPost               * call s:UpdateWin(0)
-
-    autocmd TabEnter                      * call s:UpdateTab()
 
     " Update folds on reload.
     autocmd BufReadPost                   * 
