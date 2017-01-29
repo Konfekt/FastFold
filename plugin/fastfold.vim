@@ -173,7 +173,7 @@ endfor
 augroup FastFold
   autocmd!
   autocmd VimEnter * call s:init()
-  autocmd BufEnter * 
+  autocmd BufEnter,WinEnter * 
         \ if !exists('b:last_changedtick') | let b:last_changedtick = b:changedtick | endif
 augroup end
 
