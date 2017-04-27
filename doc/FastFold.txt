@@ -106,6 +106,18 @@ file type plug-in, for example TagList.
 <
   to your 'vimrc'. Default value is [].
 
+- Add a fold text-object, mapped to `iz` and `az`, by adding the lines
+
+  xnoremap iz :<c-u>FastFoldUpdate<cr><esc>:<c-u>normal! ]zv[z<cr>
+  xnoremap az :<c-u>FastFoldUpdate<cr><esc>:<c-u>normal! ]zV[z<cr>
+  onoremap <expr> iz \
+    ':<c-u>FastFoldUpdate<cr>' . '<esc>' . \
+    '"' v:register . v:operator . ':<c-u>normal! [zv]z<cr>'
+  onoremap <expr> az \
+    ':<c-u>FastFoldUpdate<cr>' . '<esc>' . \
+    '"' v:register . v:operator . ':<c-u>normal! [zV]z<cr>'
+
+    to your 'vimrc'.
 ===========================================================================
 3. Extra Notes ~
 
@@ -119,9 +131,9 @@ that stores and restores the last folds by `:mkview` and `:loadview`.
 
 ------------------------------
 
-A `CustomFoldText()` function that displays the percentage of the number of
-buffer lines that the folded text takes up and indents folds according to
-their nesting level is available at
+A fold-text function `CustomFoldText()` that displays the percentage of the
+number of buffer lines that the folded text takes up and indents folds
+according to their nesting level is available at
 
 http://www.github.com/Konfekt/FoldText
 
