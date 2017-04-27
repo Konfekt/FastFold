@@ -100,8 +100,6 @@ Create a fold text object, mapped to `iz` and `az`, by adding the lines
 ```vim
 xnoremap iz :<c-u>FastFoldUpdate<cr><esc>:<c-u>normal! ]zv[z<cr>
 xnoremap az :<c-u>FastFoldUpdate<cr><esc>:<c-u>normal! ]zV[z<cr>
-onoremap <expr> iz ':<c-u>FastFoldUpdate<cr>' . '<esc>' . '"' . v:register . v:operator . ':<c-u>normal! [zv]z<cr>'
-onoremap <expr> az ':<c-u>FastFoldUpdate<cr>' . '<esc>' . '"' . v:register . v:operator . ':<c-u>normal! [zV]z<cr>'
 ```
 
 to the file `~/.vimrc` (respectively `%USERPROFILE%/_vimrc` on Microsoft Windows).

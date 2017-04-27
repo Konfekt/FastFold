@@ -110,12 +110,6 @@ file type plug-in, for example TagList.
 
   xnoremap iz :<c-u>FastFoldUpdate<cr><esc>:<c-u>normal! ]zv[z<cr>
   xnoremap az :<c-u>FastFoldUpdate<cr><esc>:<c-u>normal! ]zV[z<cr>
-  onoremap <expr> iz \
-    ':<c-u>FastFoldUpdate<cr>' . '<esc>' . \
-    '"' v:register . v:operator . ':<c-u>normal! [zv]z<cr>'
-  onoremap <expr> az \
-    ':<c-u>FastFoldUpdate<cr>' . '<esc>' . \
-    '"' v:register . v:operator . ':<c-u>normal! [zV]z<cr>'
 
     to your 'vimrc'.
 ===========================================================================
