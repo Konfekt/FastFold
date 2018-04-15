@@ -136,7 +136,7 @@ function! s:Skip()
 endfunction
 
 function! s:isReasonable()
-  if &l:foldmethod is# 'syntax' || &l:foldmethod is# 'expr'
+  if &l:foldmethod is# 'syntax' || &l:foldmethod is# 'expr' || &l:foldmethod is# 'marker' || &l:foldmethod is# 'indent'
     return 1
   else
     return 0
