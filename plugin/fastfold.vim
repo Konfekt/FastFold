@@ -24,15 +24,17 @@ let s:keepcpo         = &cpo
 set cpo&vim
 " ------------------------------------------------------------------------------
 
-if !exists('g:fastfold_fdmhook')    | let g:fastfold_fdmhook   = 0 | endif
-if !exists('g:fastfold_savehook')    | let g:fastfold_savehook   = 1 | endif
+if !exists('g:fastfold_fdmhook')        | let g:fastfold_fdmhook        = 0  | endif
+if !exists('g:fastfold_savehook')       | let g:fastfold_savehook       = 1  | endif
+if !exists('g:fastfold_force')          | let g:fastfold_force          = 0  | endif
+
+if !exists('g:fastfold_skip_filetypes') | let g:fastfold_skip_filetypes = [] | endif
 if !exists('g:fastfold_fold_command_suffixes')
   let g:fastfold_fold_command_suffixes = ['x','X','a','A','o','O','c','C']
 endif
 if !exists('g:fastfold_fold_movement_commands')
   let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
 endif
-if !exists('g:fastfold_skip_filetypes')   | let g:fastfold_skip_filetypes = [] | endif
 
 function! s:EnterWin()
   if exists('w:unchanged')
@@ -136,7 +138,7 @@ function! s:Skip()
 endfunction
 
 function! s:isReasonable()
-  if &l:foldmethod is# 'syntax' || &l:foldmethod is# 'expr'
+  if (&l:foldmethod is# 'syntax' || &l:foldmethod is# 'expr') || g:fastfold_force == 1
     return 1
   else
     return 0

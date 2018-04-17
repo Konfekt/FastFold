@@ -54,14 +54,14 @@ normal mode and are kept as is otherwise.
 - If you prefer that folds are only updated manually but not when saving the buffer,
   then add `let g:fastfold_savehook = 0` to your `.vimrc`.
 
--   If you prefer that folds are updated whenever you close or open folds by a
-    standard keystroke such as `zx`,`zo` or `zc`, then add `let
-    g:fastfold_fold_command_suffixes = []` to your `.vimrc`.
+- If you prefer that folds are updated whenever you close or open folds by a
+  standard keystroke such as `zx`,`zo` or `zc`, then add `let
+  g:fastfold_fold_command_suffixes = []` to your `.vimrc`.
 
-    The exact list of these standard keystrokes is `zx,zX,za,zA,zo,zO,zc,zC` and
-    it can be customized by changing the global variable
-    `g:fastfold_mapsuffixes`. If you wanted to intercept all possible fold
-    commands (such as zr,zm,...), change this to:
+  The exact list of these standard keystrokes is `zx,zX,za,zA,zo,zO,zc,zC` and
+  it can be customized by changing the global variable
+  `g:fastfold_mapsuffixes`. If you wanted to intercept all possible fold
+  commands (such as zr,zm,...), change this to:
 
     ```vim
     let g:fastfold_fold_command_suffixes =
@@ -78,6 +78,10 @@ normal mode and are kept as is otherwise.
   There is also a command `FastFoldUpdate` that updates all folds and its
   variant `FastFoldUpdate!` that updates all folds and echos by which fold
   method the folds were updated.
+
+- FastFold by default only prevents the expression and syntax fold methods
+  from recomputing on every buffer change. To prevent all fold methods (except
+  manual) from doing so, add `let g:fastfold_force = 1` to your `.vimrc`.
 
 # Addons
 

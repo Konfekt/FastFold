@@ -93,6 +93,12 @@ file type plug-in, for example TagList.
 >
   let g:fastfold_savehook = 1
 <
+- FastFold by default only prevents the expression and syntax fold methods
+  from recomputing on every buffer change. To prevent all fold methods (except
+  manual) from doing so, set
+>
+  let g:fastfold_force = 1
+<
 - FastFold intercepts every change of the fold method by
 >
   let g:fastfold_fdmhook = 1
