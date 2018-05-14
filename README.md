@@ -35,19 +35,22 @@ to the file `~/.vimrc` (respectively `%USERPROFILE%/_vimrc` on Microsoft Windows
 For example, by adding
 
 ```vim
-let g:tex_fold_enabled=1
-let g:vimsyn_folding='af'
+let g:markdown_folding = 1
+let g:tex_fold_enabled = 1
+let g:vimsyn_folding = 'af'
 let g:xml_syntax_folding = 1
-let g:php_folding = 1
+let g:javaScript_fold = 1
+let g:sh_fold_enabled= 7
+let g:ruby_fold = 1
 let g:perl_fold = 1
+let g:perl_fold_blocks = 1
+let g:r_syntax_folding = 1
+let g:rust_fold = 1
+let g:php_folding = 1
 ```
 
-to the `.vimrc` file and installing this plug-in, the folds in a TeX, Vim, XML,
-PHP or Perl file are updated by the `syntax` fold method when saving the
-buffer, opening, closing, moving or operating on folds, or typing `zuz` in
-normal mode and are kept as is otherwise.
-
-*Set fold methods for every file type only*! Setting it globally risks that FastFold assumes the wrong, global, fold method instead of that intended by the file type plug-in, for example TagList.
+to the `.vimrc` file and installing this plug-in, the folds in a `TeX`, `Vim`, `XML`, `JavaScript`, `R`, `PHP` or `Perl` file are updated by the `syntax` fold method when saving the buffer, opening, closing, moving or operating on folds, or typing `zuz` in normal mode and are kept as is otherwise.
+(Likewise, in a `Markdown` or `Rust` file, by the `expression` fold method.)
 
 # Configuration
 
