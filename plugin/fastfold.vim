@@ -146,12 +146,11 @@ function! s:isReasonable()
 endfunction
 
 function! s:inSkipList()
-  for ifiles in g:fastfold_skip_filetypes
-    if index(g:fastfold_skip_filetypes, &l:filetype) >= 0
-      return 1
-    endif
-  endfor
-  return 0
+  if index(g:fastfold_skip_filetypes, &l:filetype) >= 0
+    return 1
+  else
+    return 0
+  endif
 endfunction
 
 command! -bar -bang FastFoldUpdate call s:UpdateBuf(<bang>0)
