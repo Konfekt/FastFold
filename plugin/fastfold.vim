@@ -37,9 +37,7 @@ if !exists('g:fastfold_fold_movement_commands')
 endif
 
 function! s:EnterWin()
-  if exists('w:unchanged')
-    unlet w:unchanged
-  elseif s:Skip()
+  if s:Skip()
     if exists('w:lastfdm')
       unlet w:lastfdm
     endif
@@ -64,13 +62,8 @@ function! s:LeaveWin()
     let w:predifffdm = w:lastfdm
   endif
 
-  if exists('w:lastfdm') && &l:foldmethod is# 'manual' 
-    if !exists('b:last_changedtick') || b:changedtick > b:last_changedtick
-      let &l:foldmethod = w:lastfdm
-      let b:last_changedtick = b:changedtick
-    else
-      let w:unchanged = 1
-    endif
+  if exists('w:lastfdm') && &l:foldmethod is# 'manual'
+    let &l:foldmethod = w:lastfdm
   endif
 endfunction
 
@@ -98,16 +91,16 @@ function! s:WinDo( command )
 endfunction
 
 " WinEnter then TabEnter then BufEnter then BufWinEnter
-function! s:UpdateWin(check)
-  " skip if another session still loading
-  if a:check && exists('g:SessionLoad') | return | endif
-
+function! s:UpdateWin()
   let s:curwin = winnr()
   call s:WinDo('if winnr() is s:curwin | call s:LeaveWin() | endif')
   call s:WinDo('if winnr() is s:curwin | call s:EnterWin() | endif')
 endfunction
 
 function! s:UpdateBuf(feedback)
+  " skip if another session still loading
+  if exists('g:SessionLoad') | return | endif
+
   let s:curbuf = bufnr('%')
   call s:WinDo("if bufnr('%') is s:curbuf | call s:LeaveWin() | endif")
   call s:WinDo("if bufnr('%') is s:curbuf | call s:EnterWin() | endif")
@@ -162,20 +155,18 @@ if !hasmapto('<Plug>(FastFoldUpdate)', 'n') && empty(mapcheck('zuz', 'n'))
 endif
 
 for suffix in g:fastfold_fold_command_suffixes
-  execute 'nnoremap <silent> z'.suffix.' :<c-u>call <SID>UpdateWin(0)<CR>z'.suffix
+  execute 'nnoremap <silent> z'.suffix.' :<c-u>call <SID>UpdateWin()<CR>z'.suffix
 endfor
 
 for cmd in g:fastfold_fold_movement_commands
-  exe "nnoremap <silent><expr> " . cmd. " ':<c-u>call <SID>UpdateWin(0)<CR>'.v:count." . "'".cmd."'"
-  exe "xnoremap <silent><expr> " . cmd. " ':<c-u>call <SID>UpdateWin(0)<CR>gv'.v:count." . "'".cmd."'"
-  exe "onoremap <silent><expr> " . cmd. " '<esc>:<c-u>call <SID>UpdateWin(0)<CR>' . '\"' . v:register . v:operator . v:count1 . " . "'".cmd."'"
+  exe "nnoremap <silent><expr> " . cmd. " ':<c-u>call <SID>UpdateWin()<CR>'.v:count." . "'".cmd."'"
+  exe "xnoremap <silent><expr> " . cmd. " ':<c-u>call <SID>UpdateWin()<CR>gv'.v:count." . "'".cmd."'"
+  exe "onoremap <silent><expr> " . cmd. " '<esc>:<c-u>call <SID>UpdateWin()<CR>' . '\"' . v:register . v:operator . v:count1 . " . "'".cmd."'"
 endfor
 
 augroup FastFold
   autocmd!
   autocmd VimEnter * call s:init()
-  autocmd BufEnter,WinEnter * 
-        \ if !exists('b:last_changedtick') | let b:last_changedtick = b:changedtick | endif
 augroup end
 
 function! s:init()
@@ -200,14 +191,10 @@ function! s:init()
     autocmd TabEnter                      * call s:UpdateTab()
 
     " BufWinEnter = to change &l:foldmethod by modelines.
-    autocmd BufWinEnter,FileType          * call s:UpdateWin(1)
+    autocmd BufWinEnter,FileType          * call s:UpdateBuf(0)
     " So that FastFold functions correctly after :loadview.
-    autocmd SessionLoadPost               * call s:UpdateWin(0)
+    autocmd SessionLoadPost               * call s:UpdateBuf(0)
 
-    " Update folds on reload.
-    autocmd BufReadPost                   * 
-          \ if !exists('b:already_loaded') | let b:already_loaded = 1 |
-          \ else                          | call s:UpdateBuf(0) | endif
     " Update folds on saving.
     if g:fastfold_savehook
       autocmd BufWritePost                * call s:UpdateBuf(0)
