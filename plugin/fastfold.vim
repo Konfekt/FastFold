@@ -192,7 +192,7 @@ function! s:init()
     autocmd TabEnter                      * call s:UpdateTab()
 
     " BufWinEnter = to change &l:foldmethod by modelines.
-    autocmd BufRead,FileType          * call s:UpdateBuf(0)
+    autocmd FileType                      * call s:UpdateBuf(0)
     " So that FastFold functions correctly after :loadview.
     autocmd SessionLoadPost               * call s:UpdateBuf(0)
 
@@ -200,11 +200,18 @@ function! s:init()
     if g:fastfold_savehook
       autocmd BufWritePost                * call s:UpdateBuf(0)
     endif
-    if g:fastfold_fdmhook
-      if exists('##OptionSet')
-        " takes care of changing &l:foldmethod by modelines.
-        autocmd OptionSet foldmethod call s:UpdateBuf(0)
-      endif
+    if g:fastfold_fdmhook && exists('##OptionSet')
+      " takes care of changing &l:foldmethod by modelines.
+      autocmd OptionSet foldmethod call s:UpdateBuf(0)
+      autocmd BufRead            * call s:UpdateBuf(0)
+    else
+      " takes care of changing &l:foldmethod by modelines.
+      autocmd BufWinEnter        *
+          \ if !exists('b:fastfold') |
+          \   call s:UpdateBuf(0) |
+          \ else |
+          \   let b:fastfold = 1 |
+          \ endif
     endif
   augroup end
 endfunction
