@@ -188,9 +188,6 @@ function! s:init()
           \ if exists('w:predifffdm')     | let b:predifffdm = w:predifffdm |
           \ elseif exists('b:predifffdm') | unlet b:predifffdm | endif
 
-    " UpdateBuf/Win(1) = skip if another session is still loading.
-    autocmd TabEnter                      * call s:UpdateTab()
-
     " BufWinEnter = to change &l:foldmethod by modelines.
     autocmd FileType                      * call s:UpdateBuf(0)
     " So that FastFold functions correctly after :loadview.
