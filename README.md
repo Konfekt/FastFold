@@ -91,7 +91,7 @@ to the `.vimrc` file and installing this plug-in, the folds in a `TeX`, `Vim`, `
 ## Vim-Stay
 
 `FastFold` integrates with the plug-in
-[vim-stay](https://github.com/kopischke/vim-stay/issues) that restores the
+[vim-stay](https://github.com/zhimsel/vim-stay) that restores the
 folds of a file buffer by `:mkview` and `:loadview`.
 
 ## Custom Fold Text
