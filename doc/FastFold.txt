@@ -112,6 +112,12 @@ perl files.
 <
   to your 'vimrc'. Default value is [].
 
+- To disable FastFold for files smaller than certain number of lines, add
+>
+` let g:fastfold_minlines`= 800
+<
+  to your 'vimrc'. Default value is 0 (enabled for all files).
+
 - Add a fold text-object, mapped to `iz` and `az`, by adding the lines
 
   xnoremap iz :<c-u>FastFoldUpdate<cr><esc>:<c-u>normal! ]zv[z<cr>
