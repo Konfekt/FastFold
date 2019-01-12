@@ -124,8 +124,9 @@ endfunction
 
 function! s:Skip()
   if !s:isReasonable() | return 1 | endif
-  if !&l:modifiable    | return 1 | endif
   if s:inSkipList()    | return 1 | endif
+  if !empty(&l:buftype)| return 1 | endif
+  if !&l:modifiable    | return 1 | endif
 
   return 0
 endfunction
