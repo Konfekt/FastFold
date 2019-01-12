@@ -112,11 +112,13 @@ perl files.
 <
   to your 'vimrc'. Default value is [].
 
-- To disable FastFold for files smaller than certain number of lines, add
+- FastFold is by default enabled for files that have more than a certain
+  number of lines, by default set to 200. To change this number, for example,
+  to enable FastFold independent of the number of lines of a file, add
 >
-` let g:fastfold_minlines`= 800
+` let g:fastfold_minlines`= 0
 <
-  to your 'vimrc'. Default value is 0 (enabled for all files).
+  to your 'vimrc'.
 
 - Add a fold text-object, mapped to `iz` and `az`, by adding the lines
 

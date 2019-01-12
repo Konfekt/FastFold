@@ -29,7 +29,7 @@ if !exists('g:fastfold_savehook')       | let g:fastfold_savehook       = 1  | e
 if !exists('g:fastfold_force')          | let g:fastfold_force          = 0  | endif
 
 if !exists('g:fastfold_skip_filetypes') | let g:fastfold_skip_filetypes = [] | endif
-if !exists('g:fastfold_minlines') | let g:fastfold_minlines = 0 | endif
+if !exists('g:fastfold_minlines') | let g:fastfold_minlines = 200 | endif
 if !exists('g:fastfold_fold_command_suffixes')
   let g:fastfold_fold_command_suffixes = ['x','X','a','A','o','O','c','C']
 endif
@@ -150,7 +150,7 @@ function! s:inSkipList()
 endfunction
 
 function! s:isSmall()
-  if g:fastfold_minlines && line('$') <= g:fastfold_minlines
+  if line('$') <= g:fastfold_minlines
     return 1
   else
     return 0

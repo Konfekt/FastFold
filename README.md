@@ -76,7 +76,7 @@ to the `.vimrc` file and installing this plug-in, the folds in a `TeX`, `Vim`, `
   `nmap <SID>(DisableFastFoldUpdate) <Plug>(FastFoldUpdate) ` to your `.vimrc`.
 
   You can remap `zuz` to your favorite keystroke, say `<F5>`, by adding
-  `nmap <F5> <Plug>(FastFoldUpdate)` to your `.Vimrc`.
+  `nmap <F5> <Plug>(FastFoldUpdate)` to your `.vimrc`.
 
   There is also a command `FastFoldUpdate` that updates all folds and its
   variant `FastFoldUpdate!` that updates all folds and echos by which fold
@@ -85,6 +85,11 @@ to the `.vimrc` file and installing this plug-in, the folds in a `TeX`, `Vim`, `
 - FastFold by default only prevents the expression and syntax fold methods
   from recomputing on every buffer change. To prevent all fold methods (except
   manual) from doing so, add `let g:fastfold_force = 1` to your `.vimrc`.
+
+- FastFold is by default enabled for files that have more than a certain
+  number of lines, by default set to 200. To change this number, for example,
+  to enable FastFold independent of the number of lines of a file, add
+  `let g:fastfold_minlines = 0` to your `.vimrc`.
 
 # Addons
 
