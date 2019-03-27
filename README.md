@@ -91,6 +91,17 @@ to the `.vimrc` file and installing this plug-in, the folds in a `TeX`, `Vim`, `
   to enable FastFold independent of the number of lines of a file, add
   `let g:fastfold_minlines = 0` to your `.vimrc`.
 
+# Warnings
+
+FastFold overwrites your manual folds when saving the currently edited buffer,
+unless
+
+- FastFold is disabled for this filetype by `g:fastfold_skip_filetypes`, or
+- the `foldmethod=manual` since having entered the buffer.
+
+To ensure that sessions do not override the default fold method of the buffer file type (by the value `manual`), set `sessionoptions-=localoptions` in your `vimrc`.
+For a thorougher solution, install [vim-stay](https://github.com/zhimsel/vim-stay) discussed below.
+
 # Addons
 
 ## Vim-Stay

@@ -133,7 +133,7 @@ perl files.
 
 `FastFold` integrates with the plug-in `vim-stay` available at
 
-https://github.com/kopischke/vim-stay
+https://github.com/zhimsel/vim-stay
 
 that stores and restores the last folds by `:mkview` and `:loadview`.
 
@@ -152,6 +152,10 @@ unless
 
 - FastFold is disabled for this filetype by `g:fastfold_skip_filetypes`, or
 - the `foldmethod=manual` since having entered the buffer.
+
+To ensure that sessions do not override the default fold method of the buffer
+file type (by the value `manual`), set `sessionoptions-=localoptions` in your
+`vimrc`. For a thorougher solution, install `vim-stay` discussed above.
 
 3.3 API ~
 
