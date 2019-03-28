@@ -145,7 +145,7 @@ according to their nesting level is available at
 
 http://www.github.com/Konfekt/FoldText
 
-3.2 Warning ~
+3.2 Caveats ~
 
 FastFold overwrites your manual folds when saving the currently edited buffer,
 unless
@@ -154,7 +154,7 @@ unless
 - the `foldmethod=manual` since having entered the buffer.
 
 To ensure that sessions do not override the default fold method of the buffer
-file type (by the value `manual`), set `sessionoptions-=localoptions` in your
+file type (by the value `manual`), set `sessionoptions-=folds` in your
 `vimrc`. For a thorougher solution, install `vim-stay` discussed above.
 
 3.3 API ~
