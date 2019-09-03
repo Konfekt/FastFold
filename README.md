@@ -57,7 +57,7 @@ to the `.vimrc` file and installing this plug-in, the folds in a `TeX`, `Vim`, `
 - If you prefer that folds are only updated manually but not when saving the buffer,
   then add `let g:fastfold_savehook = 0` to your `.vimrc`.
 
-- If you prefer that folds are updated whenever you close or open folds by a
+- If you prefer that folds are not updated whenever you close or open folds by a
   standard keystroke such as `zx`,`zo` or `zc`, then add `let
   g:fastfold_fold_command_suffixes = []` to your `.vimrc`.
 
