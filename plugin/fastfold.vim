@@ -185,17 +185,14 @@ function! s:init()
   augroup FastFoldEnter
     autocmd!
     " Make &l:foldmethod local to Buffer and NOT Window.
-    autocmd BufEnter,WinEnter *
+    autocmd WinEnter *
           \ if exists('b:lastfdm') |
           \   let w:lastfdm = b:lastfdm |
           \ endif
-    autocmd BufLeave,WinLeave *
+    autocmd WinLeave *
           \ if exists('w:lastfdm')     | let b:lastfdm = w:lastfdm |
           \ elseif exists('b:lastfdm') | unlet b:lastfdm | endif
-
-    autocmd BufEnter,WinEnter *
-          \ if &l:foldmethod isnot# 'diff' && exists('b:predifffdm') | call s:UpdateBuf(0) | endif
-    autocmd BufLeave,WinLeave *
+    autocmd WinLeave *
           \ if exists('w:predifffdm')     | let b:predifffdm = w:predifffdm |
           \ elseif exists('b:predifffdm') | unlet b:predifffdm | endif
 
@@ -203,23 +200,26 @@ function! s:init()
     autocmd FileType                      * call s:UpdateBuf(0)
     " So that FastFold functions correctly after :loadview.
     autocmd SessionLoadPost               * call s:UpdateBuf(0)
-
-    " Update folds on saving.
-    if g:fastfold_savehook
-      autocmd BufWritePost                * call s:UpdateBuf(0)
-    endif
+    " takes care of changing &l:foldmethod by modelines.
     if g:fastfold_fdmhook && exists('##OptionSet')
-      " takes care of changing &l:foldmethod by modelines.
       autocmd OptionSet foldmethod call s:UpdateBuf(0)
       autocmd BufRead            * call s:UpdateBuf(0)
     else
-      " takes care of changing &l:foldmethod by modelines.
       autocmd BufWinEnter        *
           \ if !exists('b:fastfold') |
           \   call s:UpdateBuf(0) |
           \ else |
           \   let b:fastfold = 1 |
           \ endif
+    endif
+    " Update folds on entering a changed buffer
+    autocmd BufEnter *
+          \ if !exists('b:lastchangedtick') | let b:lastchangedtick = b:changedtick | endif |
+          \ if b:changedtick != b:lastchangedtick && (&l:foldmethod isnot# 'diff' && exists('b:predifffdm')) | call s:UpdateBuf(0) | endif
+
+    " Update folds on saving.
+    if g:fastfold_savehook
+      autocmd BufWritePost                * call s:UpdateBuf(0)
     endif
   augroup end
 endfunction
