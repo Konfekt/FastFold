@@ -184,7 +184,7 @@ function! s:init()
   call s:UpdateTab()
   augroup FastFoldEnter
     autocmd!
-    " Make &l:foldmethod local to Buffer and NOT Window.
+    " Make foldmethod local to buffer instead of window
     autocmd WinEnter *
           \ if exists('b:lastfdm') |
           \   let w:lastfdm = b:lastfdm |
@@ -195,12 +195,11 @@ function! s:init()
     autocmd WinLeave *
           \ if exists('w:predifffdm')     | let b:predifffdm = w:predifffdm |
           \ elseif exists('b:predifffdm') | unlet b:predifffdm | endif
-
-    " BufWinEnter = to change &l:foldmethod by modelines.
+    " Update folds after foldmethod set by filetype autocmd
     autocmd FileType                      * call s:UpdateBuf(0)
-    " So that FastFold functions correctly after :loadview.
+    " Update folds after foldmethod set by :loadview or :source Session.vim
     autocmd SessionLoadPost               * call s:UpdateBuf(0)
-    " takes care of changing &l:foldmethod by modelines.
+    " Update folds after foldmethod set by modeline
     if g:fastfold_fdmhook && exists('##OptionSet')
       autocmd OptionSet foldmethod call s:UpdateBuf(0)
       autocmd BufRead            * call s:UpdateBuf(0)
@@ -208,16 +207,15 @@ function! s:init()
       autocmd BufWinEnter        *
           \ if !exists('b:fastfold') |
           \   call s:UpdateBuf(0) |
-          \ else |
           \   let b:fastfold = 1 |
           \ endif
     endif
-    " Update folds on entering a changed buffer
+    " Update folds after entering a changed buffer
     autocmd BufEnter *
           \ if !exists('b:lastchangedtick') | let b:lastchangedtick = b:changedtick | endif |
           \ if b:changedtick != b:lastchangedtick && (&l:foldmethod isnot# 'diff' && exists('b:predifffdm')) | call s:UpdateBuf(0) | endif
-
-    " Update folds on saving.
+    autocmd BufLeave * let b:lastchangedtick = b:changedtick
+    " Update folds after saving
     if g:fastfold_savehook
       autocmd BufWritePost                * call s:UpdateBuf(0)
     endif
