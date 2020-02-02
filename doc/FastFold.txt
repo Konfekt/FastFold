@@ -130,17 +130,28 @@ You can add a visual fold text-object, mapped to iz and az, by
 
 FastFold integrates with the plug-in vim-stay available at
 
-https://github.com/zhimsel/vim-stay
+  https://github.com/zhimsel/vim-stay
 
 that stores and restores the last folds by :mkview and :loadview.
 
 ------------------------------
 
+`FastFold` integrates with the plug-in NrrwRgn available at
+
+  https://github.com/chrisbra/NrrwRgn/
+  
+that lets you edit a selection in a new temporary buffer by adding to your
+vimrc the line
+>
+  autocmd BufWinEnter * let b:nrrw_aucmd_create = "let w:lastfdm = getwinvar(winnr('#'), 'lastfdm')"
+<
+--------------------------------
+
 A fold-text function CustomFoldText() that displays the percentage of the
 number of buffer lines that the folded text takes up and indents folds
 according to their nesting level is available at
 
-http://www.github.com/Konfekt/FoldText
+  http://www.github.com/Konfekt/FoldText
 
 3.2 Caveats ~
 

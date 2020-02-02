@@ -116,6 +116,15 @@ A `CustomFoldText()` function that displays the percentage of the number of buff
 
 http://www.github.com/Konfekt/FoldText
 
+## NrrwRgn
+
+`FastFold` integrates with the plug-in
+[NrrwRgn](https://github.com/chrisbra/NrrwRgn/) that lets you edit a selection in a new temporary buffer by adding to your `vimrc` the line
+
+```vim
+  autocmd BufWinEnter * let b:nrrw_aucmd_create = "let w:lastfdm = getwinvar(winnr('#'), 'lastfdm')"
+```
+
 ## Fold Text-Object
 
 Create a fold text object, mapped to `iz` and `az`, by adding the lines
