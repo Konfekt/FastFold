@@ -13,7 +13,7 @@ scriptencoding utf-8
 " CONDITIONS DE COPIE, DISTRIBUTON ET MODIFICATION
 " DE LA LICENCE PUBLIQUE RIEN À BRANLER
 "
-" 0. Faites ce que vous voulez, j’en ai RIEN À BRANLER.
+" 0. Faites ce que vous voulez, j'en ai RIEN À BRANLER.
 
 if exists('g:loaded_fastfold') || &cp
   finish
