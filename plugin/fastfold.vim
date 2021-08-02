@@ -190,7 +190,7 @@ function! s:init()
           \ if exists('b:lastfdm') |
           \   let w:lastfdm = b:lastfdm |
           \ endif
-    autocmd BufWinEnter *
+    autocmd BufEnter *
           \ if exists('w:winenterbuf') |
           \   if w:winenterbuf != bufnr() |
           \     unlet! w:lastfdm |
