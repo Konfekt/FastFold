@@ -186,13 +186,13 @@ function! s:init()
     autocmd!
     " Make foldmethod local to buffer instead of window
     autocmd WinEnter *
-          \ let w:winenterbuf = bufnr() |
+          \ let w:winenterbuf = bufnr('%') |
           \ if exists('b:lastfdm') |
           \   let w:lastfdm = b:lastfdm |
           \ endif
     autocmd BufEnter *
           \ if exists('w:winenterbuf') |
-          \   if w:winenterbuf != bufnr() |
+          \   if w:winenterbuf != bufnr('%') |
           \     unlet! w:lastfdm |
           \   endif |
           \   unlet w:winenterbuf |
