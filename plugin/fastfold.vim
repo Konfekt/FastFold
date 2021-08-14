@@ -83,12 +83,17 @@ function! s:WinDo( command )
     set scrollopt-=jump
     let l:restore = 'set scrollopt+=jump'
   endif
+  " Work around Vim bug.
+  " See https://github.com/vim/vim/issues/4622#issuecomment-508985573
+  let l:currwinwidth = &winwidth
+  let &winwidth = 1
   silent! execute 'keepjumps noautocmd windo ' . a:command
   silent! execute 'noautocmd ' . curaltwin . 'wincmd w'
   silent! execute 'noautocmd ' . currwin . 'wincmd w'
   if exists('l:restore')
     exe l:restore
   endif
+  let &winwidth = l:currwinwidth
 endfunction
 
 " WinEnter then TabEnter then BufEnter then BufWinEnter
