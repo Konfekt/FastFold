@@ -130,8 +130,8 @@ http://www.github.com/Konfekt/FoldText
 Create a fold text object, mapped to `iz` and `az`, by adding the lines
 
 ```vim
-xnoremap iz :<c-u>FastFoldUpdate<cr><esc>:<c-u>normal! ]zv[z<cr>
-xnoremap az :<c-u>FastFoldUpdate<cr><esc>:<c-u>normal! ]zV[z<cr>
+onoremap iz :<c-u>normal! ]zv[z<cr>
+onoremap az :<c-u>normal! ]zV[z<cr>
 ```
 
 to the file `~/.vimrc` (respectively `%USERPROFILE%/_vimrc` on Microsoft Windows).
