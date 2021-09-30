@@ -147,11 +147,13 @@ vimrc the line
 <
 --------------------------------
 
-A fold-text function CustomFoldText() that displays the percentage of the
-number of buffer lines that the folded text takes up and indents folds
-according to their nesting level is available at
+Replace the standard `&foldtext`
 
-  http://www.github.com/Konfekt/FoldText
+- by one that displays the percentage of the number of buffer lines that the
+  folded text takes up and indents folds according to their nesting level,
+  available at http://www.github.com/Konfekt/FoldText, or
+- by one that shows the most pertinent initial text of the fold (including fold
+  level and number of lines), availabe at https://github.com/kaile256/vim-foldpeek
 
 3.2 Caveats ~
 

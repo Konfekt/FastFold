@@ -112,9 +112,10 @@ folds of a file buffer by `:mkview` and `:loadview`.
 
 ## Custom Fold Text
 
-A `CustomFoldText()` function that displays the percentage of the number of buffer lines that the folded text takes up and indents folds according to their nesting level, similar to [that](http://www.gregsexton.org/2011/03/improving-the-text-displayed-in-a-fold/) by Greg Sexton, is available at
+Replace the standard `&foldtext`
 
-http://www.github.com/Konfekt/FoldText
+- by [one](http://www.github.com/Konfekt/FoldText) that displays the percentage of the number of buffer lines that the folded text takes up and indents folds according to their nesting level, [originally by Greg Sexton](https://web.archive.org/web/20161017143651/http://www.gregsexton.org:80/2011/03/improving-the-text-displayed-in-a-fold/), or
+- by [one](https://github.com/kaile256/vim-foldpeek) that previews the most pertinent initial text of the fold (together with the fold level and number of lines).
 
 ## NrrwRgn
 
