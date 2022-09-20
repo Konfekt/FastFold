@@ -150,8 +150,8 @@ Replace the standard `&foldtext`
 Create a fold text object, mapped to `iz` and `az`, by adding the lines
 
 ```vim
-xnoremap iz :<c-u>FastFoldUpdate<cr><esc>:<c-u>normal! ]zv[z<cr>
-xnoremap az :<c-u>FastFoldUpdate<cr><esc>:<c-u>normal! ]zV[z<cr>
+xnoremap <silent> iz :<c-u>FastFoldUpdate<cr>]z<up>$v[z<down>^
+xnoremap <silent> az :<c-u>FastFoldUpdate<cr>]zV[z
 ```
 
 to the file `~/.vimrc` (respectively `%USERPROFILE%/_vimrc` on Microsoft Windows).
