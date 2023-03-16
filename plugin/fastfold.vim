@@ -86,7 +86,7 @@ function! s:WinDo( command )
   " Work around Vim bug.
   " See https://github.com/vim/vim/issues/4622#issuecomment-508985573
   let l:currwinwidth = &winwidth
-  let &winwidth = 1
+  let &winwidth = &winminwidth
   silent! execute 'keepjumps noautocmd windo ' . a:command
   silent! execute 'noautocmd ' . curaltwin . 'wincmd w'
   silent! execute 'noautocmd ' . currwin . 'wincmd w'
