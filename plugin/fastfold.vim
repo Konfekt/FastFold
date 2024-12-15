@@ -26,8 +26,12 @@ set cpo&vim
 
 if !exists('g:fastfold_fdmhook')        | let g:fastfold_fdmhook        = 0  | endif
 if !exists('g:fastfold_savehook')       | let g:fastfold_savehook       = 1  | endif
-if !exists('g:fastfold_force')          | let g:fastfold_force          = 0  | endif
-
+" translate this setting for backwards compatibility
+if get(g:, 'fastfold_force', 0) == 1
+  let g:fastfold_foldmethods = ['syntax', 'expr']
+else
+  let g:fastfold_foldmethods = ['syntax']
+endif
 if !exists('g:fastfold_skip_filetypes') | let g:fastfold_skip_filetypes = [] | endif
 if !exists('g:fastfold_minlines') | let g:fastfold_minlines = 100 | endif
 if !exists('g:fastfold_fold_command_suffixes')
@@ -139,11 +143,7 @@ function! s:Skip()
 endfunction
 
 function! s:isReasonable()
-  if (&l:foldmethod is# 'syntax' || &l:foldmethod is# 'expr') || g:fastfold_force == 1
-    return 1
-  else
-    return 0
-  endif
+  return index(g:fastfold_foldmethods, &l:foldmethod) >= 0
 endfunction
 
 function! s:inSkipList()

@@ -96,6 +96,17 @@ perl files.
 >
   let g:fastfold_force = 1
 <
+- FastFold by default only prevents the |syntax| fold methods from recomputing
+  on every buffer change. These can be customized by *g:fastfold_foldmethods*
+  in your *vimrc*, for example >
+
+    let g:fastfold_foldmethods = ['syntax', 'expr']
+<
+  (equivalent to g:fastfold_force = 1) also applies this to |expr| folds.
+  This should only be necessary for inefficient foldexprs, though:
+
+    https://github.com/lervag/vimtex/pull/3054
+<
 - To intercept every change of the fold method, toggle the default value 0 of
   *g:fastfold_fdmhook* by:
 >

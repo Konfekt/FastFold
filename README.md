@@ -101,9 +101,11 @@ to your `vimrc` mostly suffices, though installing [SimplyFold](https://github.c
   variant `FastFoldUpdate!` that updates all folds and echos by which fold
   method the folds were updated.
 
-- FastFold by default only prevents the expression and syntax fold methods
-  from recomputing on every buffer change. To prevent all fold methods (except
-  manual) from doing so, add `let g:fastfold_force = 1` to your `.vimrc`.
+- FastFold by default only prevents the `syntax` fold methods from recomputing
+  on every buffer change. These can be customized by `g:fastfold_foldmethods`
+  in your `.vimrc`, for example `g:fastfold_foldmethods = ['syntax', 'expr']`
+  (equivalent to `let g:fastfold_force = 1`) also applies this to `expr` folds.
+  This should only be necessary for [inefficient foldexprs, though](https://github.com/lervag/vimtex/pull/3054).
 
 - FastFold is by default enabled for files that have more than a certain
   number of lines, by default set to 200. To change this number, for example,
