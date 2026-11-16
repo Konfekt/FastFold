@@ -9,7 +9,7 @@ from manual - bog down VIM considerably in insert mode. Also, they are often
 re-evaluated prematurely for example, when inserting an opening fold marker
 whose closing counterpart has yet to be added to complete the fold.
 
-See http://vim.wikia.com/wiki/Keep_folds_closed_while_inserting_text
+See https://vim.fandom.com/wiki/Keep_folds_closed_while_inserting_text
 for a discussion.
 
 With this plug-in, the folds in the currently edited buffer are updated when
@@ -90,23 +90,16 @@ perl files.
 >
   let g:fastfold_savehook = 0
 <
-- FastFold by default only prevents the expression and syntax fold methods
-  from recomputing on every buffer change. To prevent all fold methods (except
-  manual) from doing so, toggle the default value 0 of *g:fastfold_force* by:
+- FastFold by default only prevents the |fold-syntax| fold method from
+  recomputing on every buffer change. The list of fold methods it applies to
+  is configured by *g:fastfold_foldmethods* , for example
 >
-  let g:fastfold_force = 1
+  let g:fastfold_foldmethods = ['syntax', 'expr']
 <
-- FastFold by default only prevents the |syntax| fold methods from recomputing
-  on every buffer change. These can be customized by *g:fastfold_foldmethods*
-  in your *vimrc*, for example >
+  also applies it to |fold-expr| folds. Setting *g:fastfold_force* to 1 is a
+  shorthand for this list. This should only be necessary for inefficient
+  foldexprs, though; see https://github.com/lervag/vimtex/pull/3054
 
-    let g:fastfold_foldmethods = ['syntax', 'expr']
-<
-  (equivalent to g:fastfold_force = 1) also applies this to |expr| folds.
-  This should only be necessary for inefficient foldexprs, though:
-
-    https://github.com/lervag/vimtex/pull/3054
-<
 - To intercept every change of the fold method, toggle the default value 0 of
   *g:fastfold_fdmhook* by:
 >
@@ -120,10 +113,9 @@ perl files.
 >
  let g:fastfold_skip_filetypes = [ 'taglist' ]
 <
-- FastFold by default only prevents the expression and syntax fold methods
-  from recomputing on for files that have more than a certain
-  number of lines. To change the default value of 200 of *g:fastfold_minlines*
-  to, for example, 0:
+- FastFold is by default only enabled for files that have more than a certain
+  number of lines. To change the default value 100 of *g:fastfold_minlines*
+  to, for example, 0 (enable it independent of the number of lines):
 >
   let g:fastfold_minlines = 0
 <
@@ -150,7 +142,7 @@ that stores and restores the last folds by :mkview and :loadview.
 `FastFold` integrates with the plug-in NrrwRgn available at
 
   https://github.com/chrisbra/NrrwRgn/
-  
+
 that lets you edit a selection in a new temporary buffer by adding to your
 vimrc the line
 >
@@ -164,7 +156,7 @@ Replace the standard `&foldtext`
   folded text takes up and indents folds according to their nesting level,
   available at http://www.github.com/Konfekt/FoldText, or
 - by one that shows the most pertinent initial text of the fold (including fold
-  level and number of lines), availabe at https://github.com/kaile256/vim-foldpeek
+  level and number of lines), available at https://github.com/kaile256/vim-foldpeek
 
 3.2 Caveats ~
 
@@ -181,7 +173,7 @@ vimrc. For a thorougher solution, install vim-stay discussed above.
 3.3 API ~
 
 The last used fold method by which FastFold updates the folds in the current
-buffer can be read off from the window local variable w:lastdfm.
+buffer can be read off from the window local variable w:lastfdm.
 
 3.4 Thanks go to... ~
 
