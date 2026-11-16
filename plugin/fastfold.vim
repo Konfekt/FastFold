@@ -26,14 +26,12 @@ set cpo&vim
 
 if !exists('g:fastfold_fdmhook')        | let g:fastfold_fdmhook        = 0  | endif
 if !exists('g:fastfold_savehook')       | let g:fastfold_savehook       = 1  | endif
-" translate this setting for backwards compatibility
-if get(g:, 'fastfold_force', 0) == 1
-  let g:fastfold_foldmethods = ['syntax', 'expr']
-else
-  let g:fastfold_foldmethods = ['syntax']
+if !exists('g:fastfold_foldmethods')
+  " g:fastfold_force = 1 is kept as a shorthand for ['syntax', 'expr']
+  let g:fastfold_foldmethods = get(g:, 'fastfold_force', 0) == 1 ? ['syntax', 'expr'] : ['syntax']
 endif
 if !exists('g:fastfold_skip_filetypes') | let g:fastfold_skip_filetypes = [] | endif
-if !exists('g:fastfold_minlines') | let g:fastfold_minlines = 100 | endif
+if !exists('g:fastfold_minlines')       | let g:fastfold_minlines       = 100 | endif
 if !exists('g:fastfold_fold_command_suffixes')
   let g:fastfold_fold_command_suffixes = ['x','X','a','A','o','O','c','C']
 endif
@@ -100,23 +98,27 @@ function! s:WinDo( command )
   let &winwidth = l:currwinwidth
 endfunction
 
+" Recompute the folds of all windows for which the expression a:cond holds.
+function! s:Refresh(cond)
+  call s:WinDo('if ' . a:cond . ' | call s:LeaveWin() | endif')
+  call s:WinDo('if ' . a:cond . ' | call s:EnterWin() | endif')
+endfunction
+
 " WinEnter then TabEnter then BufEnter then BufWinEnter
 function! s:UpdateWin()
   let s:curwin = winnr()
-  call s:WinDo('if winnr() is s:curwin | call s:LeaveWin() | endif')
-  call s:WinDo('if winnr() is s:curwin | call s:EnterWin() | endif')
+  call s:Refresh('winnr() == s:curwin')
 endfunction
 
 function! s:UpdateBuf(feedback)
   " skip if in TelescopeResults and TelescopePrompt UI buffers
-  if has('nvim') && &l:filetype[0:8] ==# 'Telescope' | return | endif
+  if has('nvim') && &l:filetype =~# '^Telescope' | return | endif
 
   " skip if another session still loading
   if exists('g:SessionLoad') | return | endif
 
   let s:curbuf = bufnr('%')
-  call s:WinDo("if bufnr('%') is s:curbuf | call s:LeaveWin() | endif")
-  call s:WinDo("if bufnr('%') is s:curbuf | call s:EnterWin() | endif")
+  call s:Refresh("bufnr('%') == s:curbuf")
 
   if !a:feedback | return | endif
 
@@ -131,38 +133,21 @@ function! s:UpdateTab()
   " skip if another session still loading
   if exists('g:SessionLoad') | return | endif
 
-  call s:WinDo('call s:LeaveWin()')
-  call s:WinDo('call s:EnterWin()')
+  call s:Refresh('1')
 endfunction
 
 function! s:Skip()
-  if s:isSmall()       | return 1 | endif
-  if !s:isReasonable() | return 1 | endif
-  if s:inSkipList()    | return 1 | endif
-  if !empty(&l:buftype)| return 1 | endif
-  if !&l:modifiable    | return 1 | endif
-
-  return 0
+  return line('$') <= g:fastfold_minlines
+        \ || index(g:fastfold_foldmethods, &l:foldmethod) < 0
+        \ || index(g:fastfold_skip_filetypes, &l:filetype) >= 0
+        \ || !empty(&l:buftype)
+        \ || !&l:modifiable
 endfunction
 
-function! s:isReasonable()
-  return index(g:fastfold_foldmethods, &l:foldmethod) >= 0
-endfunction
-
-function! s:inSkipList()
-  if index(g:fastfold_skip_filetypes, &l:filetype) >= 0
-    return 1
-  else
-    return 0
-  endif
-endfunction
-
-function! s:isSmall()
-  if line('$') <= g:fastfold_minlines
-    return 1
-  else
-    return 0
-  endif
+" The count to pass on to a remapped fold command; an empty count must not
+" turn into the motion 0 (go to first column).
+function! s:Count()
+  return v:count ? v:count : ''
 endfunction
 
 command! -bar -bang FastFoldUpdate call s:UpdateBuf(<bang>0)
@@ -173,15 +158,21 @@ if !hasmapto('<Plug>(FastFoldUpdate)', 'n') && empty(mapcheck('zuz', 'n'))
   nmap zuz <Plug>(FastFoldUpdate)
 endif
 
-for suffix in g:fastfold_fold_command_suffixes
-  execute 'nnoremap <silent> z'.suffix.' :<c-u>call <SID>UpdateWin()<CR>z'.suffix
+for s:suffix in g:fastfold_fold_command_suffixes
+  execute 'nnoremap <silent><expr> z' . s:suffix
+        \ . " ':<c-u>call <SID>UpdateWin()<CR>' . <SID>Count() . " . string('z' . s:suffix)
 endfor
+unlet! s:suffix
 
-for cmd in g:fastfold_fold_movement_commands
-  exe "nnoremap <silent><expr> " . cmd. " ':<c-u>call <SID>UpdateWin()<CR>'.v:count." . "'".cmd."'"
-  exe "xnoremap <silent><expr> " . cmd. " ':<c-u>call <SID>UpdateWin()<CR>gv'.v:count." . "'".cmd."'"
-  exe "onoremap <silent><expr> " . cmd. " '<esc>:<c-u>call <SID>UpdateWin()<CR>' . '\"' . v:register . v:operator . v:count1 . " . "'".cmd."'"
+for s:cmd in g:fastfold_fold_movement_commands
+  execute 'nnoremap <silent><expr> ' . s:cmd
+        \ . " ':<c-u>call <SID>UpdateWin()<CR>' . <SID>Count() . " . string(s:cmd)
+  execute 'xnoremap <silent><expr> ' . s:cmd
+        \ . " ':<c-u>call <SID>UpdateWin()<CR>gv' . <SID>Count() . " . string(s:cmd)
+  execute 'onoremap <silent><expr> ' . s:cmd
+        \ . " '<esc>:<c-u>call <SID>UpdateWin()<CR>\"' . v:register . v:operator . v:count1 . " . string(s:cmd)
 endfor
+unlet! s:cmd
 
 augroup FastFold
   autocmd!
