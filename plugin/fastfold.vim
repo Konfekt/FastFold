@@ -174,11 +174,6 @@ for s:cmd in g:fastfold_fold_movement_commands
 endfor
 unlet! s:cmd
 
-augroup FastFold
-  autocmd!
-  autocmd VimEnter * call s:init()
-augroup end
-
 function! s:init()
   call s:UpdateTab()
   augroup FastFoldEnter
@@ -228,6 +223,17 @@ function! s:init()
     endif
   augroup end
 endfunction
+
+" Set up once Vim has started, or right away when the plug-in is loaded
+" later (e.g. by :packadd or a plug-in manager that loads it lazily).
+if get(v:, 'vim_did_enter', 0)
+  call s:init()
+else
+  augroup FastFold
+    autocmd!
+    autocmd VimEnter * call s:init()
+  augroup end
+endif
 
 " ------------------------------------------------------------------------------
 let &cpo= s:keepcpo

@@ -13,8 +13,10 @@ for bin in "${VIM_BIN:-vim}" "${NVIM_BIN:-nvim}"; do
   fi
   echo "== $bin"
   : >"$log"
-  FASTFOLD_TEST_OUT=$log "$bin" -Nu NONE -i NONE -es -S test_fastfold.vim </dev/null
-  rc=$?
+  rc=0
+  for test in test_fastfold.vim test_lateload.vim; do
+    FASTFOLD_TEST_OUT=$log "$bin" -Nu NONE -i NONE -es -S "$test" </dev/null || rc=1
+  done
   cat "$log"
   [ "$rc" -eq 0 ] || status=1
 done
