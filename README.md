@@ -55,7 +55,7 @@ let g:baan_fold=1
 ```
 
 to the `.vimrc` file and installing this plug-in, the folds in a `TeX`, `Vim`, `XML`, `JavaScript`, `(Z)SH`, `R`, `PHP`, `Ruby`, `Perl`, `Fortran`, `Clojure`  or `Baan` file are updated by the `syntax` fold method when saving the buffer, opening, closing, moving or operating on folds, or typing `zuz` in normal mode and are kept as is otherwise.
-(Likewise, in a `Markdown`, `RST` or `Rust` file, by the `expression` fold method.)
+(Likewise, in a `Markdown`, `RST` or `Rust` file, by the `expr` fold method, once `expr` is added to `g:fastfold_foldmethods`; see below.)
 Syntax folding  for `C` and `C++` files can be enabled by adding
 
 ```vim
@@ -87,7 +87,7 @@ to your `vimrc` mostly suffices, though installing [SimpylFold](https://github.c
 
     ```vim
     let g:fastfold_fold_command_suffixes =
-    ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']
+    \ ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']
     ```
 
 - If you prefer that this plug-in does not add a normal mode mapping that updates

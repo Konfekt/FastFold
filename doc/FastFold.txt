@@ -72,7 +72,7 @@ perl files.
   commands (such as zr,zm,...), change it to:
 >
   let g:fastfold_fold_command_suffixes =
-  ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']
+  \ ['x','X','a','A','o','O','c','C','r','R','m','M','i','n','N']
 <
   or, to disable all interceptions, to:
 >
@@ -123,10 +123,11 @@ perl files.
 ===========================================================================
 3. Extra Notes ~
 
-You can add a visual fold text-object, mapped to iz and az, by
+You can add a visual fold text-object, mapped to iz (the fold without its
+first and last line) and az (the whole fold), by
 >
-  xnoremap iz :<c-u>FastFoldUpdate<cr><esc>:<c-u>normal! ]zv[z<cr>
-  xnoremap az :<c-u>FastFoldUpdate<cr><esc>:<c-u>normal! ]zV[z<cr>
+  xnoremap <silent> iz :<c-u>FastFoldUpdate<cr>]z<up>$v[z<down>^
+  xnoremap <silent> az :<c-u>FastFoldUpdate<cr>]zV[z
 <
 
 3.1 Related Plugins ~
